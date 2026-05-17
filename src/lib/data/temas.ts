@@ -1,6 +1,6 @@
 import type { TemaContenido } from "@/lib/types"
 
-export const TEMAS: TemaContenido[] = [
+const TEMAS_RAW: TemaContenido[] = [
   // ---------------------------------------------------------
   // PRÁCTICOS 1 a 3
   // ---------------------------------------------------------
@@ -1002,3 +1002,39 @@ export const TEMAS: TemaContenido[] = [
     ],
   },
 ]
+
+// Orden lógico-temático (estilo Cát. Pino ex Mozzi):
+//   "presenta la materia no en orden cronológico por la obra freudiana,
+//    sino lógico (es decir, por temas)" — descripción oficial de la cátedra.
+//
+// Sigue la progresión que toman los parciales:
+//   Fundamento histórico → la defensa como núcleo → método clínico →
+//   las formaciones del inconsciente → la metapsicología.
+//
+// 1. P6   · Originalidad del descubrimiento (Charcot, Janet, ruptura)
+// 2. P1-3 · El conflicto psíquico (defensa, retorno, Emma) ← núcleo del primer parcial
+// 3. P7b  · Neuropsicosis de defensa (fórmula 1896, destinos del afecto)
+// 4. P7a  · Psicoterapia de la histeria (resistencia, transferencia)
+// 5. P8   · Despliegue del inconsciente (sueño, trabajo, ombligo)
+// 6. P4-5 · Formaciones cotidianas (olvido, chiste — agrupado con sueño)
+// 7. P9a  · Primera ordenación metapsicológica (aparato psíquico, regresión)
+// 8. P9b  · Experiencia de satisfacción (deseo, principio de placer)
+const ORDEN_TEMATICO = [
+  "p6",
+  "p1_3",
+  "p7b",
+  "p7a",
+  "p8",
+  "p4_5",
+  "p9a",
+  "p9b",
+] as const
+
+export const TEMAS: TemaContenido[] = (() => {
+  const byId = new Map(TEMAS_RAW.map((t) => [t.id, t]))
+  return ORDEN_TEMATICO.map((id) => {
+    const t = byId.get(id)
+    if (!t) throw new Error(`Tema no encontrado: ${id}`)
+    return t
+  })
+})()
