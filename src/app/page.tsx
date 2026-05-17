@@ -1,5 +1,5 @@
-import { RepasoApp } from "@/components/repaso/RepasoApp"
+import { EstudioApp } from "@/components/estudio/EstudioApp"
 
 export default function Home() {
-  return <RepasoApp />
+  return <EstudioApp />
 }
