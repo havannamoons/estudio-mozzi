@@ -1,52 +1,45 @@
+export type Vista = "repasar" | "reforzar" | "agregar" | "importar" | "todas"
+
 export type Tema = "dark" | "light"
 
-export type Tab = "teoria" | "quiz"
+export type TipoCarta = "abierta" | "opciones"
 
-export type Modo = "estudio" | "simulacro"
+export type FaseReforzar = "estudiar" | "probar"
 
-export type FaseSimulacro = "setup" | "play" | "resultados"
-
-export interface BloqueTeoria {
-  titulo: string
-  contenido: string
-  clinico?: string
+export interface Opcion {
+  texto: string
+  correcta: boolean
 }
 
-export interface Pregunta {
-  q: string
-  opciones: string[]
-  correcta: number
-  exp: string
-}
-
-export interface TemaContenido {
+export interface Carta {
   id: string
-  practico: string
-  titulo: string
-  subtitulo: string
-  teoria: BloqueTeoria[]
-  biblio?: string
-  tipParcial?: string
-  preguntas: Pregunta[]
+  front: string
+  back: string
+  tipo: TipoCarta
+  opciones: Opcion[]
+  caja: number
+  proximaRevision: string
+  creadaEn: string
+  tag: string
+  aciertos: number
+  fallos: number
+  aciertosSeguidos: number
 }
 
-export interface RespuestaQuiz {
-  elegida: number
-  correcta: boolean
+export interface Stats {
+  ultimaFecha: string | null
+  racha: number
+  repasoHoy: number
+  aciertosHoy: number
+  aciertosTotal: number
+  fallosTotal: number
 }
 
-export type ProgresoQuiz = Record<string, Record<number, RespuestaQuiz>>
-
-export interface PreguntaSimulacro {
-  temaId: string
-  preguntaIdx: number
-}
-
-export interface RespuestaSimulacro {
-  temaId: string
-  preguntaIdx: number
-  elegida: number
-  correcta: boolean
+export interface HistorialItem {
+  cartaId: string
+  opciones: Opcion[]
+  opcionElegida: number | null
+  modoReforzar: boolean
 }
 
 export interface ToastMsg {
@@ -54,3 +47,5 @@ export interface ToastMsg {
   texto: string
   tipo: "success" | "error"
 }
+
+export type CartaInput = Partial<Carta> & { front: string }

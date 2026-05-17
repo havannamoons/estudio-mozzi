@@ -52,12 +52,12 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "¿En qué sentido la defensa 'anticipa la producción conceptual del inconsciente'?",
         opciones: [
-          "Porque la defensa es el inconsciente.",
           "Porque la operación de la defensa (expulsar lo incompatible) hace falta antes de que pueda formularse el inconsciente como un lugar psíquico al que se expulsa.",
+          "Porque la defensa es el inconsciente.",
           "Porque Freud no creía en el inconsciente al principio.",
           "Porque la defensa es consciente.",
         ],
-        correcta: 1,
+        correcta: 0,
         exp: "Primero aparece la operación clínica (la defensa, observable en la histeria), después la conceptualización del lugar (el inconsciente como sistema). La defensa, en los textos de 1894-1896, ya implica un 'a dónde' va lo expulsado — y eso es lo que después se teoriza como inconsciente.",
       },
       {
@@ -86,22 +86,22 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "El síntoma es 'fracaso de la defensa' porque:",
         opciones: [
           "La defensa no existió.",
-          "El éxito de la defensa habría sido que lo reprimido no retorne; el síntoma muestra que sí retornó, aunque deformado.",
           "El paciente no se defendió bien.",
+          "El éxito de la defensa habría sido que lo reprimido no retorne; el síntoma muestra que sí retornó, aunque deformado.",
           "El analista falló.",
         ],
-        correcta: 1,
+        correcta: 2,
         exp: "La defensa quiere mantener cerrada la puerta. El síntoma es la evidencia de que la puerta cedió: lo reprimido pasó, aunque de forma sustitutiva. Por eso el síntoma es índice del fracaso de la defensa, no de su éxito.",
       },
       {
         q: "La primera fórmula freudiana del desarrollo de una neurosis (1896) es:",
         opciones: [
-          "Síntoma → análisis → cura.",
           "Defensa → represión → retorno de lo reprimido (síntoma).",
+          "Síntoma → análisis → cura.",
           "Trauma → fijación → regresión.",
           "Pulsión → represión → sublimación.",
         ],
-        correcta: 1,
+        correcta: 0,
         exp: "Tres tiempos lógicos: defensa (expulsión), represión (mantenimiento de la expulsión), retorno (síntoma como vía sustitutiva). La fórmula sirve para varios cuadros — lo que varía es cómo retorna lo reprimido.",
       },
       {
@@ -119,11 +119,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "En el caso Cäcilie M., ¿qué muestra la formación del síntoma?",
         opciones: [
           "Que el síntoma se reduce a un problema neurológico.",
-          "Que las expresiones verbales (metáforas, modismos) tomadas al pie de la letra se inscriben como síntomas somáticos — simbolización en el cuerpo.",
           "Que las mujeres son más histéricas.",
           "Que la hipnosis cura todos los síntomas.",
+          "Que las expresiones verbales (metáforas, modismos) tomadas al pie de la letra se inscriben como síntomas somáticos — simbolización en el cuerpo.",
         ],
-        correcta: 1,
+        correcta: 3,
         exp: 'Cäcilie M. muestra cómo el lenguaje produce cuerpo: una expresión metafórica vivida en un contexto conflictivo (por ejemplo "una bofetada en la cara") se literaliza en un síntoma somático real. La simbolización no es solo psíquica, atraviesa el cuerpo.',
       },
       {
@@ -197,12 +197,12 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "¿Por qué el acto fallido es una formación del inconsciente?",
         opciones: [
-          "Porque es un error sin importancia.",
           "Porque tiene la misma estructura que el síntoma y el sueño: un propósito inconsciente se impone al propósito consciente y se realiza de forma deformada.",
+          "Porque es un error sin importancia.",
           "Porque solo aparece en pacientes neuróticos.",
           "Porque es genético.",
         ],
-        correcta: 1,
+        correcta: 0,
         exp: 'El acto fallido (lapsus, olvido, equivocación) no es ruido aleatorio. Es la realización de un propósito otro — inconsciente — que se impone sobre el consciente. Su estructura es la misma que la del síntoma: formación de compromiso, realización deformada de un deseo reprimido. Por eso opera en la "vida cotidiana" de cualquiera.',
       },
       {
@@ -231,11 +231,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: '¿Qué es "famillonär" / familionario en la técnica del chiste?',
         opciones: [
           "Una palabra alemana común.",
-          "Una formación sustitutiva por condensación: une 'familiär' (familiar) + 'Millionär' (millonario) en un neologismo que representa a los dos a la vez.",
           "Un error de Heine.",
           "Una traducción incorrecta.",
+          "Una formación sustitutiva por condensación: une 'familiär' (familiar) + 'Millionär' (millonario) en un neologismo que representa a los dos a la vez.",
         ],
-        correcta: 1,
+        correcta: 3,
         exp: 'El neologismo no existe en alemán: es una invención. Pero condensa dos palabras reales (familiär + Millionär) en una sola, que representa el sentido completo ("me trató con la familiaridad de un millonario frente a un pobretón"). Es exactamente el mecanismo de la condensación del sueño, en el campo del lenguaje.',
       },
       {
@@ -371,11 +371,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "Charcot fue importante para Freud porque demostró que:",
         opciones: [
           "La histeria es siempre traumática.",
-          "El síntoma histérico puede tener una causa psíquica, no neurológica, e incluso en hombres.",
           "Toda neurosis se cura con hipnosis.",
           "La sexualidad infantil determina la histeria.",
+          "El síntoma histérico puede tener una causa psíquica, no neurológica, e incluso en hombres.",
         ],
-        correcta: 1,
+        correcta: 3,
         exp: "Charcot inducía y suprimía síntomas histéricos con hipnosis (origen psíquico) y demostró la histeria masculina (refuta el origen uterino). Freud retiene eso, pero después abandona la hipnosis.",
       },
       {
@@ -440,11 +440,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "¿Qué diferencia hay entre resistencia de asociación y resistencia radial?",
         opciones: [
           "La de asociación es voluntaria, la radial es involuntaria.",
-          "La de asociación opera en la línea horizontal de una cadena; la radial aumenta al acercarse al núcleo patógeno.",
           "La de asociación es del paciente, la radial es del analista.",
+          "La de asociación opera en la línea horizontal de una cadena; la radial aumenta al acercarse al núcleo patógeno.",
           "Son sinónimos.",
         ],
-        correcta: 1,
+        correcta: 2,
         exp: "Freud organiza el material patógeno en capas concéntricas. Las resistencias de asociación operan horizontalmente (paso de una representación a la siguiente en una cadena). Las radiales operan verticalmente (al avanzar de una capa hacia el núcleo) y aumentan en proximidad al núcleo.",
       },
       {
@@ -473,11 +473,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "¿Qué es el síntoma neo-producido?",
         opciones: [
           "Un síntoma que aparece en el cuerpo, no en la mente.",
-          "Un síntoma nuevo que se forma dentro del análisis, dirigido al analista, en el marco de la transferencia.",
           "Un síntoma que solo aparece de noche.",
           "Un síntoma del analista, no del paciente.",
+          "Un síntoma nuevo que se forma dentro del análisis, dirigido al analista, en el marco de la transferencia.",
         ],
-        correcta: 1,
+        correcta: 3,
         exp: "El análisis no solo descubre síntomas viejos: la transferencia puede producir un síntoma nuevo orientado al analista. Esto muestra que la transferencia genera material clínico activo, no solo recuerdos.",
       },
       {
@@ -578,12 +578,12 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "¿Qué significa 'fuente independiente de desprendimiento de displacer'?",
         opciones: [
-          "Que el displacer viene siempre del exterior.",
           "Que el displacer del síntoma se origina dentro del aparato psíquico (al retornar la representación reprimida), no depende de un estímulo externo.",
+          "Que el displacer viene siempre del exterior.",
           "Que cada síntoma tiene una fuente diferente.",
           "Que el displacer es independiente del placer.",
         ],
-        correcta: 1,
+        correcta: 0,
         exp: "Crucial: el aparato psíquico tiene una fuente autónoma de displacer. Al regresar lo reprimido desde el inconsciente, genera displacer por sí mismo — sin necesidad de un estímulo externo. Anticipa la teoría de la pulsión.",
       },
       {
@@ -672,11 +672,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "¿Cuáles son los cuatro mecanismos del trabajo del sueño?",
         opciones: [
           "Negación, proyección, introyección, sublimación.",
-          "Desplazamiento, condensación, puesta en escena (figurabilidad) y elaboración secundaria.",
           "Represión, regresión, conversión y proyección.",
+          "Desplazamiento, condensación, puesta en escena (figurabilidad) y elaboración secundaria.",
           "Asociación, transferencia, interpretación y construcción.",
         ],
-        correcta: 1,
+        correcta: 2,
         exp: "Los cuatro mecanismos clásicos: desplazamiento (corre el acento), condensación (sintetiza varias representaciones), puesta en escena (vuelve imagen lo abstracto), elaboración secundaria (ordena narrativamente).",
       },
       {
@@ -716,11 +716,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "El 'ombligo del sueño' es:",
         opciones: [
           "El centro del sueño que mejor se interpreta.",
-          "El punto donde la interpretación encuentra su límite, una zona no-interpretable.",
           "El recuerdo más nítido del sueño.",
           "La parte del sueño que se olvida primero.",
+          "El punto donde la interpretación encuentra su límite, una zona no-interpretable.",
         ],
-        correcta: 1,
+        correcta: 3,
         exp: "El ombligo marca el límite del desciframiento. No es un defecto técnico: es estructural. Hay un punto que no se interpreta, donde el saber sobre el inconsciente toca su frontera.",
       },
       {
@@ -797,12 +797,12 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "En el modelo del aparato psíquico de IdS cap. VII, ¿qué dirección sigue la energía normalmente en vigilia?",
         opciones: [
-          "Regrediente: del polo motor al perceptivo.",
           "Progrediente: del polo perceptivo (P) al motor (M), pasando por las huellas mnémicas y el preconsciente.",
+          "Regrediente: del polo motor al perceptivo.",
           "Circular: vuelve al mismo lugar.",
           "Lateral: no tiene dirección.",
         ],
-        correcta: 1,
+        correcta: 0,
         exp: "En vigilia: estímulo → P → Hm → Prcc/Cc → M (acción). Movimiento progrediente. En el sueño se invierte → regrediente.",
       },
       {
@@ -820,11 +820,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "¿Qué es la regresión en el sueño?",
         opciones: [
           "Una pérdida de inteligencia.",
-          "El movimiento por el cual la energía retrocede del polo motor hacia el perceptivo, transformando el pensamiento en imagen alucinatoria.",
           "Un retorno a la infancia.",
           "Una falla del aparato.",
+          "El movimiento por el cual la energía retrocede del polo motor hacia el perceptivo, transformando el pensamiento en imagen alucinatoria.",
         ],
-        correcta: 1,
+        correcta: 3,
         exp: "En el dormir, bloqueada la descarga motora, el flujo se invierte y retrocede hacia el polo perceptivo. Eso explica que el pensamiento del sueño se vuelva imagen, alucinación. Regresión tópica, temporal y formal.",
       },
       {
@@ -915,11 +915,11 @@ const TEMAS_RAW: TemaContenido[] = [
         q: "¿Qué diferencia esencial hay entre satisfacción de la necesidad y realización de deseo?",
         opciones: [
           "Ninguna, son sinónimos.",
-          "La satisfacción de la necesidad requiere el objeto real; la realización de deseo apunta a la huella mnémica y puede ser alucinatoria.",
           "La necesidad es psíquica, el deseo es biológico.",
+          "La satisfacción de la necesidad requiere el objeto real; la realización de deseo apunta a la huella mnémica y puede ser alucinatoria.",
           "El deseo solo aparece en adultos.",
         ],
-        correcta: 1,
+        correcta: 2,
         exp: "Necesidad: real, exige el objeto, se calma con acción específica externa. Deseo: psíquico, apunta a la huella mnémica del objeto satisfactor, busca identidad perceptiva (alucinatoria). El deseo es ficción, no necesidad.",
       },
       {
