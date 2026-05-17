@@ -16,9 +16,9 @@ const lora = Lora({
 })
 
 export const metadata: Metadata = {
-  title: "Repaso · Sistema de estudio",
+  title: "Estudio · Psicoanálisis Mozzi",
   description:
-    "App de repaso espaciado con multiple-choice automático para estudiar tus propias cartas.",
+    "Teoría + quiz + simulacro de parcial. Cátedra Pino (ex Mozzi) UBA · Prácticos 1 a 9.",
 }
 
 export default function RootLayout({
