@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Estudio · Psicoanálisis Mozzi
 
-## Getting Started
+App de estudio para el primer parcial de **Psicoanálisis Freud · Cátedra Pino (ex Mozzi) · UBA** — Prácticos 1 a 9.
 
-First, run the development server:
+Tres modos:
+
+- **Teoría** — bloques didácticos por tema con referentes clínicos, tip de parcial y bibliografía.
+- **Quiz** — preguntas multiple-choice con explicación al responder. Progreso guardado en `localStorage`.
+- **Simulacro de parcial** — preguntas mezcladas al azar de todos los temas, score final con desglose por tema y revisión de errores.
+
+## Stack
+
+- Next.js 16 (App Router, Turbopack) · React 19 · TypeScript
+- Tailwind CSS 4 + shadcn/ui (neutral) + glassmorphism dark mode
+- Inter (sans) + Lora (serif) vía `next/font`
+- Persistencia en `localStorage` (sin backend)
+
+## Desarrollo local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build de producción
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm build
+pnpm start
+```
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Pensado para desplegarse en Vercel — `git push` a `main` dispara redeploy automático.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estructura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/                       Layout, page, globals.css
+├── components/estudio/        Componentes de la app (Header, Sidebar, Quiz, SimulacroMode, etc.)
+├── components/ui/             Primitivos shadcn (button, card, input)
+└── lib/
+    ├── data/temas.ts          8 temas con teoría + quiz (~60 preguntas)
+    ├── types.ts, constants.ts, helpers.ts
+    └── hooks/                 useEstudio, useTheme, useToast
+```
