@@ -120,7 +120,8 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
                     type="button"
                     onClick={() => setCantidad(n)}
                     className={cn(
-                      "btn-press rounded-md px-2.5 py-1 font-mono text-[11px] tabular-nums transition-colors",
+                      // Mobile: tap target ~36px (3*8px padding + texto). Desktop: compacto.
+                      "btn-press min-h-[36px] rounded-md px-3 py-1.5 font-mono text-xs tabular-nums transition-colors sm:min-h-0 sm:px-2.5 sm:py-1 sm:text-[11px]",
                       activo
                         ? "bg-amber-500/20 text-amber-700 ring-1 ring-amber-500/40 dark:text-amber-300"
                         : "text-zinc-500 hover:bg-white/5 hover:text-zinc-700 dark:hover:text-zinc-200",
@@ -148,7 +149,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <button
                 type="button"
                 onClick={() => setCantidad(8)}
-                className="btn-press shrink-0 rounded bg-white/5 px-2 py-0.5 font-mono text-[11px] tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 dark:text-amber-400"
+                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-amber-400"
               >
                 6-10
               </button>
@@ -158,7 +159,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <button
                 type="button"
                 onClick={() => setCantidad(12)}
-                className="btn-press shrink-0 rounded bg-white/5 px-2 py-0.5 font-mono text-[11px] tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 dark:text-amber-400"
+                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-amber-400"
               >
                 12-15
               </button>
@@ -168,7 +169,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <button
                 type="button"
                 onClick={() => setCantidad(20)}
-                className="btn-press shrink-0 rounded bg-white/5 px-2 py-0.5 font-mono text-[11px] tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 dark:text-amber-400"
+                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-amber-400"
               >
                 20-30
               </button>

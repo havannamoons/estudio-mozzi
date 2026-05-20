@@ -6,6 +6,7 @@ import { BlobsBackground } from "./BlobsBackground"
 import { Header } from "./Header"
 import { ModoSelector } from "./ModoSelector"
 import { Sidebar } from "./Sidebar"
+import { MobileTemaSelector } from "./MobileTemaSelector"
 import { ContenidoTema } from "./ContenidoTema"
 import { SimulacroMode } from "./SimulacroMode"
 import { ToastViewport } from "./Toast"
@@ -57,7 +58,12 @@ function EstudioAppInner() {
 
         {api.modo === "estudio" ? (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[280px_1fr]">
-            <Sidebar api={api} />
+            {/* En mobile: dropdown nativo arriba (compacto, accesible).
+                En desktop (lg+): sidebar completo a la izquierda. */}
+            <MobileTemaSelector api={api} />
+            <div className="hidden lg:block">
+              <Sidebar api={api} />
+            </div>
             <section className="min-w-0">
               <ContenidoTema api={api} />
             </section>

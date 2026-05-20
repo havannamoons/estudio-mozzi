@@ -185,40 +185,62 @@ html.dark .kbd {
 /* ============================================================
    OPCIONES MULTIPLE CHOICE
    ============================================================ */
-.opcion-btn {
+.opcion {
   background: rgba(0, 0, 0, 0.025);
   border: 1px solid rgba(0, 0, 0, 0.08);
   transition: all 0.18s ease;
   color: rgb(63 63 70);
+  cursor: pointer;
 }
-html.dark .opcion-btn {
+html.dark .opcion {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.08);
   color: rgb(212 212 216);
 }
-.opcion-btn:not(:disabled):hover {
+.opcion:not(:disabled):hover {
   background: rgba(16, 185, 129, 0.07);
   border-color: rgba(16, 185, 129, 0.3);
 }
-.opcion-btn.opcion-correcta-respondida {
+.opcion.correcta {
   background: rgba(16, 185, 129, 0.18) !important;
   border-color: rgba(16, 185, 129, 0.6) !important;
   color: rgb(6 78 59) !important;
+  animation:
+    correctPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    correctGlow 0.8s ease-out;
 }
-html.dark .opcion-btn.opcion-correcta-respondida {
+html.dark .opcion.correcta {
   color: rgb(167 243 208) !important;
 }
-.opcion-btn.opcion-incorrecta {
+.opcion.incorrecta {
   background: rgba(239, 68, 68, 0.18) !important;
   border-color: rgba(239, 68, 68, 0.6) !important;
   color: rgb(127 29 29) !important;
+  animation: incorrectShake 0.4s ease-in-out;
 }
-html.dark .opcion-btn.opcion-incorrecta {
+html.dark .opcion.incorrecta {
   color: rgb(254 202 202) !important;
 }
-.opcion-btn.opcion-correcta-revelada {
+.opcion.revelada {
   background: rgba(16, 185, 129, 0.08) !important;
   border-color: rgba(16, 185, 129, 0.4) !important;
+  animation: reveladaFade 0.5s ease-out 0.15s both;
+}
+
+/* Iconos ✓/✗ dentro de las opciones: aparecen con escala + leve rotación */
+.opcion-tick {
+  animation: tickPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  transform-origin: center;
+}
+
+/* Respeto a usuarios que pidieron menos animación en el OS */
+@media (prefers-reduced-motion: reduce) {
+  .opcion.correcta,
+  .opcion.incorrecta,
+  .opcion.revelada,
+  .opcion-tick {
+    animation: none !important;
+  }
 }
 .opcion-letra {
   display: inline-flex;
@@ -319,4 +341,27 @@ html.dark .fase-dot {
 }
 .animate-blob-3 {
   animation: blob3 26s ease-in-out infinite;
+}
+
+/* ============================================================
+   MICROINTERACCIONES DE QUIZ (feedback al responder)
+   ============================================================ */
+
+/* Pop con overshoot — la opción correcta "rebota" al elegirla.
+   La clave es el cubic-bezier(0.34, 1.56, 0.64, 1) que pasa de 1
+   ANTES de volver, simulando un resorte. */
+@keyframes correctPop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.03); }
+  60%  { transform: scale(0.99); }
+  100% { transform: scale(1); }
+}
+
+/* Glow ripple — un halo verde que crece y se disipa.
+   Animamos box-shadow: de un anillo de 0px denso a uno de 12px transparente.
+   Esto produce la sensación de "irradiar" desde la opción correcta. */
+@keyframes correctGlow {
+  0%   { box-shadow: 0 0 0 0   rgba(16, 185, 129, 0.45); }
+  50%  { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.15); }
+  100% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);   }
 }
