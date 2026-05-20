@@ -91,13 +91,50 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               max={Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles)}
               value={cantidad}
               onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
+              list="cant-marks"
               className="flex-1 accent-amber-500"
+              aria-valuemin={SIMULACRO_PREGUNTAS_MIN}
+              aria-valuemax={Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles)}
+              aria-valuenow={cantidadReal}
             />
+            <datalist id="cant-marks">
+              <option value="6" label="6" />
+              <option value="12" label="12" />
+              <option value="20" label="20" />
+              <option value="30" label="30" />
+            </datalist>
             <span className="min-w-[3rem] text-right font-serif text-2xl font-semibold tabular-nums text-amber-600 dark:text-amber-400">
               {cantidadReal}
             </span>
           </div>
-          <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-500">
+
+          {/* Anclas visibles + clickeables — Fitts (target visible) + Reconocimiento > recuerdo */}
+          <div className="mt-2 flex items-center justify-between">
+            {[6, 12, 20, 30]
+              .filter((n) => n <= Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles))
+              .map((n) => {
+                const activo = cantidad === n
+                return (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setCantidad(n)}
+                    className={cn(
+                      "btn-press rounded-md px-2.5 py-1 font-mono text-[11px] tabular-nums transition-colors",
+                      activo
+                        ? "bg-amber-500/20 text-amber-700 ring-1 ring-amber-500/40 dark:text-amber-300"
+                        : "text-zinc-500 hover:bg-white/5 hover:text-zinc-700 dark:hover:text-zinc-200",
+                    )}
+                    aria-label={`Elegir ${n} preguntas`}
+                    aria-pressed={activo}
+                  >
+                    {n}
+                  </button>
+                )
+              })}
+          </div>
+
+          <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-500">
             Hay {totalDisponibles} preguntas disponibles en total.
           </p>
         </div>
@@ -107,9 +144,36 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
             Recomendación
           </p>
           <ul className="space-y-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-            <li>· <strong>6-10 preguntas</strong>: repaso rápido (5-8 min)</li>
-            <li>· <strong>12-15 preguntas</strong>: parcial corto (10-15 min)</li>
-            <li>· <strong>20-30 preguntas</strong>: parcial completo (20-30 min)</li>
+            <li className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCantidad(8)}
+                className="btn-press shrink-0 rounded bg-white/5 px-2 py-0.5 font-mono text-[11px] tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 dark:text-amber-400"
+              >
+                6-10
+              </button>
+              <span>repaso rápido (5-8 min)</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCantidad(12)}
+                className="btn-press shrink-0 rounded bg-white/5 px-2 py-0.5 font-mono text-[11px] tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 dark:text-amber-400"
+              >
+                12-15
+              </button>
+              <span>parcial corto (10-15 min)</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCantidad(20)}
+                className="btn-press shrink-0 rounded bg-white/5 px-2 py-0.5 font-mono text-[11px] tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 dark:text-amber-400"
+              >
+                20-30
+              </button>
+              <span>parcial completo (20-30 min)</span>
+            </li>
           </ul>
         </div>
       </div>
