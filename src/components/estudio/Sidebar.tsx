@@ -25,6 +25,15 @@ export function Sidebar({ api }: Props) {
           const dotCls = completo
             ? "bg-emerald-500"
             : "bg-zinc-300 dark:bg-zinc-700"
+          const pct =
+            prog.hechas > 0 ? Math.round((prog.correctas / prog.hechas) * 100) : 0
+          // Chip de % alineado con la paleta (emerald / amber / zinc — sin rojo).
+          const pctCls =
+            pct >= 80
+              ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+              : pct >= 50
+                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300"
+                : "bg-zinc-500/15 text-zinc-600 dark:text-zinc-400"
           return (
             <button
               key={t.id}
@@ -47,9 +56,14 @@ export function Sidebar({ api }: Props) {
                 <span className={cn("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", dotCls)} />
               </div>
               {prog.hechas > 0 && (
-                <div className="mt-1.5 text-[10px] tabular-nums text-zinc-500 dark:text-zinc-500">
-                  Quiz: {prog.correctas}/{prog.hechas}{" "}
-                  <span className="text-zinc-400 dark:text-zinc-600">de {prog.total}</span>
+                <div className="mt-1.5 flex items-center gap-1.5 text-[10px] tabular-nums">
+                  <span className="text-zinc-500 dark:text-zinc-500">
+                    {prog.correctas}/{prog.hechas}{" "}
+                    <span className="text-zinc-400 dark:text-zinc-600">de {prog.total}</span>
+                  </span>
+                  <span className={cn("rounded px-1 py-0.5 font-medium", pctCls)}>
+                    {pct}%
+                  </span>
                 </div>
               )}
             </button>
