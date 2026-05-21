@@ -2,7 +2,7 @@ export type Tema = "dark" | "light"
 
 export type Tab = "teoria" | "quiz"
 
-export type Modo = "estudio" | "simulacro"
+export type Modo = "estudio" | "match" | "cloze" | "simulacro"
 
 export type FaseSimulacro = "setup" | "play" | "resultados"
 

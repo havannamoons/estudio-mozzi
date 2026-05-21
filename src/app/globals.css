@@ -369,3 +369,29 @@ html.dark .fase-dot {
   50%  { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.15); }
   100% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);   }
 }
+
+/* Shake del incorrecto — pequeño vaivén lateral (~4px) que guía la atención
+   sin ser agresivo. NO usar amplitudes mayores: se siente hostil. */
+@keyframes incorrectShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(2px); }
+}
+
+/* Fade-in suave para la opción correcta "revelada" (cuando elegiste mal y
+   te mostramos cuál era la buena). Entra con un breve delay para no competir
+   con la animación de la opción que elegiste. */
+@keyframes reveladaFade {
+  0%   { opacity: 0; transform: translateY(-2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Tick que "llega" en vez de aparecer — escala desde 0 con leve rotación
+   y un pequeño overshoot. Spring curve igual a correctPop para coherencia. */
+@keyframes tickPop {
+  0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}

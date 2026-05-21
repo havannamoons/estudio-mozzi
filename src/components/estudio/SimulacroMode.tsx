@@ -280,14 +280,16 @@ function SimulacroPlay({
             if (esElegida) {
               if (pregunta.correcta === i) {
                 cls += " correcta"
-                icon = <Check className="ml-auto h-4 w-4 shrink-0" />
+                icon = <Check className="opcion-tick ml-auto h-4 w-4 shrink-0" />
               } else {
                 cls += " incorrecta"
-                icon = <X className="ml-auto h-4 w-4 shrink-0" />
+                icon = <X className="opcion-tick ml-auto h-4 w-4 shrink-0" />
               }
             } else if (esCorrectaRevelada) {
               cls += " revelada"
-              icon = <Check className="ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+              icon = (
+                <Check className="opcion-tick ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+              )
             }
             return (
               <button
