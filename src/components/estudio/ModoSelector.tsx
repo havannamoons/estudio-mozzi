@@ -15,8 +15,6 @@ interface Opcion {
   Icon: typeof BookOpen
 }
 
-// "Estudiar" es el héroe: la actividad principal.
-// Las otras 3 son alternativas/actividades complementarias.
 const PRIMARIO: Opcion = {
   id: "estudio",
   label: "Estudiar",
@@ -31,37 +29,38 @@ const ACTIVIDADES: Opcion[] = [
 
 export function ModoSelector({ modo, onChange }: Props) {
   return (
-    <div className="glass mb-4 flex w-full items-center gap-1 overflow-x-auto rounded-xl p-1 sm:w-auto sm:inline-flex">
-      <Boton op={PRIMARIO} activo={modo === PRIMARIO.id} hero onChange={onChange} />
+    <div className="glass mb-4 flex w-full items-center gap-3 overflow-x-auto rounded-xl p-1.5 sm:w-auto sm:inline-flex">
+      {/* HERO — visiblemente más grande, con bg persistente */}
+      <Hero op={PRIMARIO} activo={modo === PRIMARIO.id} onChange={onChange} />
 
-      {/* Separador visual — Gestalt: lo que está agrupado se lee como tal.
-          "Estudiar" queda solo a la izquierda; las 3 actividades agrupadas a la derecha. */}
+      {/* Separador real (no un hairline) */}
       <span
-        className="mx-1 h-5 w-px shrink-0 bg-zinc-300/40 dark:bg-white/10"
+        className="hidden h-7 w-px shrink-0 bg-zinc-300/50 sm:block dark:bg-white/15"
         aria-hidden
       />
 
-      {ACTIVIDADES.map((op) => (
-        <Boton
-          key={op.id}
-          op={op}
-          activo={modo === op.id}
-          onChange={onChange}
-        />
-      ))}
+      {/* ACTIVIDADES — chiquitos, sin peso visual cuando inactivos */}
+      <div className="flex flex-1 items-center gap-1 sm:flex-initial">
+        {ACTIVIDADES.map((op) => (
+          <Pildora
+            key={op.id}
+            op={op}
+            activo={modo === op.id}
+            onChange={onChange}
+          />
+        ))}
+      </div>
     </div>
   )
 }
 
-function Boton({
+function Hero({
   op,
   activo,
-  hero = false,
   onChange,
 }: {
   op: Opcion
   activo: boolean
-  hero?: boolean
   onChange: (m: Modo) => void
 }) {
   const Icon = op.Icon
@@ -70,19 +69,41 @@ function Boton({
       onClick={() => onChange(op.id)}
       aria-pressed={activo}
       className={cn(
-        "btn-press inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs whitespace-nowrap transition-colors sm:flex-initial sm:px-4",
-        // Peso como herramienta de jerarquía: el héroe lleva semibold;
-        // los demás, medium. Misma fuente, mismo tamaño, distinta importancia.
-        hero ? "font-semibold" : "font-medium",
+        "btn-press inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold whitespace-nowrap transition-all",
+        // BG persistente: el hero SIEMPRE tiene un tinte verde,
+        // aunque no esté seleccionado. Eso lo separa de las píldoras.
         activo
-          ? // Estado activo unificado: SOLO emerald, no 4 colores distintos.
-            // Un solo mental model para "estoy acá".
-            "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-          : // Inactivos parejos en gris — sin competir entre sí.
-            "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100",
+          ? "bg-emerald-500/20 text-emerald-700 shadow-sm ring-1 ring-emerald-500/30 dark:text-emerald-300"
+          : "bg-emerald-500/8 text-emerald-700/90 hover:bg-emerald-500/14 dark:text-emerald-300/80",
       )}
     >
-      <Icon className="h-3.5 w-3.5" /> {op.label}
+      <Icon className="h-4 w-4 shrink-0" /> {op.label}
+    </button>
+  )
+}
+
+function Pildora({
+  op,
+  activo,
+  onChange,
+}: {
+  op: Opcion
+  activo: boolean
+  onChange: (m: Modo) => void
+}) {
+  const Icon = op.Icon
+  return (
+    <button
+      onClick={() => onChange(op.id)}
+      aria-pressed={activo}
+      className={cn(
+        "btn-press inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium whitespace-nowrap transition-colors sm:flex-initial",
+        activo
+          ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+          : "text-zinc-500 hover:bg-white/5 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200",
+      )}
+    >
+      <Icon className="h-3 w-3 shrink-0" /> {op.label}
     </button>
   )
 }
