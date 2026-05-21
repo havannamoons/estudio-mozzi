@@ -107,10 +107,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "¿Qué es la temporalidad retroactiva (Nachträglichkeit) en el caso Emma?",
         opciones: [
-          "Que Emma recordó tarde la escena traumática.",
-          "Que la primera escena (8 años, abuso) no era traumática por sí misma; recién en la pubertad, una segunda escena le otorga sentido sexual retroactivo y solo entonces opera la represión.",
-          "Que el trauma actúa con retraso uniforme.",
-          "Que la pubertad cura el trauma.",
+          "Que Emma logró recordar de adulta una escena traumática infantil que había olvidado, y ese recuerdo es lo que produce el síntoma.",
+          "Que la primera escena (8 años, abuso) no era traumática por sí misma; recién en la pubertad una segunda escena le otorga sentido sexual retroactivo, y solo entonces opera la represión.",
+          "Que el trauma actúa con un retraso temporal uniforme y predecible, igual para todos los sujetos según el desarrollo cronológico.",
+          "Que la maduración puberal cura el trauma infantil al darle al sujeto recursos psíquicos para integrarlo conscientemente.",
         ],
         correcta: 1,
         exp: "Lo decisivo no es cronológico. La escena infantil quedó inscripta sin sentido sexual. Una escena posterior la resignifica retroactivamente, le confiere sentido — y solo entonces puede ser reprimida. El sentido se construye desde un después. Esa es la lógica del Nachträglichkeit.",
@@ -704,10 +704,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "La sobredeterminación remite a:",
         opciones: [
-          "Que un mismo elemento del sueño está determinado por varios pensamientos latentes (condensación).",
-          "Que el sueño determina la vigilia.",
-          "Que hay demasiados sueños en una noche.",
-          "Que el determinismo psíquico es excesivo.",
+          "Que un mismo elemento manifiesto del sueño está determinado por varios pensamientos latentes que confluyen en él vía condensación.",
+          "Que el sueño tiene poder causal sobre la vida vigil del soñante, determinando sus acciones del día siguiente.",
+          "Que durante el dormir hay demasiados sueños por noche y todos compiten por dejar huella mnémica.",
+          "Que el determinismo psíquico freudiano postula causas múltiples e independientes para cada conducta del sujeto.",
         ],
         correcta: 0,
         exp: "Condensación → sobredeterminación. Un solo elemento manifiesto reúne y representa a varias cadenas latentes. Por eso la interpretación nunca es uno-a-uno.",
@@ -797,10 +797,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "En el modelo del aparato psíquico de IdS cap. VII, ¿qué dirección sigue la energía normalmente en vigilia?",
         opciones: [
-          "Progrediente: del polo perceptivo (P) al motor (M), pasando por las huellas mnémicas y el preconsciente.",
-          "Regrediente: del polo motor al perceptivo.",
-          "Circular: vuelve al mismo lugar.",
-          "Lateral: no tiene dirección.",
+          "Progrediente: del polo perceptivo (P) al motor (M), pasando por huellas mnémicas y el sistema preconsciente; el estímulo se traduce en acción.",
+          "Regrediente: del polo motor al polo perceptivo, transformando la acción en imagen alucinatoria como ocurre durante el sueño.",
+          "Circular y cerrada: la energía retorna al sistema que la originó sin atravesar otras instancias del aparato psíquico.",
+          "Lateral, paralela a los sistemas: la excitación se distribuye horizontalmente sin polaridad definida entre percepción y acción.",
         ],
         correcta: 0,
         exp: "En vigilia: estímulo → P → Hm → Prcc/Cc → M (acción). Movimiento progrediente. En el sueño se invierte → regrediente.",
@@ -841,10 +841,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "La temporalidad del inconsciente es:",
         opciones: [
-          "Cronológica: antes / ahora / después.",
-          "No cronológica: una escena posterior puede resignificar una anterior (efecto retroactivo).",
-          "Circular: todo vuelve igual.",
-          "Inexistente: el inconsciente no tiene tiempo de ningún tipo.",
+          "Estrictamente cronológica: las inscripciones se ordenan por su fecha y el sentido del trauma se fija en el momento de su ocurrencia.",
+          "No cronológica: una escena posterior puede resignificar retroactivamente a una anterior y darle un sentido que no tenía (Nachträglichkeit).",
+          "Circular: todo material reprimido vuelve siempre exactamente igual a sí mismo, sin transformación entre la inscripción original y el retorno.",
+          "Inexistente: el inconsciente no tiene relación con el tiempo de ningún modo, ni siquiera lógico, y por eso es inalcanzable para el análisis.",
         ],
         correcta: 1,
         exp: "El inconsciente no se organiza en línea recta. El efecto retroactivo (Nachträglichkeit) muestra que el sentido de una escena puede construirse a partir de otra posterior. El caso Emma es el ejemplo.",

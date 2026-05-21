@@ -191,6 +191,10 @@ html.dark .kbd {
   transition: all 0.18s ease;
   color: rgb(63 63 70);
   cursor: pointer;
+  /* Altura mínima uniforme — todas las opciones se ven del mismo tamaño
+     incluso si el texto de cada una varía en longitud. */
+  min-height: 76px;
+  align-items: flex-start;
 }
 html.dark .opcion {
   background: rgba(255, 255, 255, 0.03);
