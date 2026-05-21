@@ -63,10 +63,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "¿Qué tienen en común las distintas neuropsicosis de defensa?",
         opciones: [
-          "Todas son histéricas.",
-          "El mecanismo de la defensa contra una representación incompatible — lo que varía es el destino del afecto (conversión, desplazamiento, proyección).",
-          "Todas son hereditarias.",
-          "Todas se curan con hipnosis.",
+          "Que todas se manifiestan exclusivamente con síntomas histéricos de conversión, aunque cambien las representaciones reprimidas en cada caso clínico.",
+          "El mecanismo de la defensa contra una representación incompatible — lo que varía es el destino del afecto (conversión en histeria, desplazamiento en obsesiva, proyección en paranoia).",
+          "Una predisposición hereditario-degenerativa al estilo del modelo janetiano, que explica por qué todas comparten un mismo cuadro de fondo.",
+          "Que todas requieren hipnosis profunda para resolverse, y la diferencia entre ellas radica en el grado de hipnotizabilidad de cada paciente.",
         ],
         correcta: 1,
         exp: "El mecanismo de la defensa es común; las patologías difieren por cómo se distribuye el afecto desligado de la representación. Histeria → conversión; obsesiva → desplazamiento; paranoia → proyección.",
@@ -129,10 +129,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "Articulación parcial: el caso Emma muestra que para la primera fórmula de la neurosis…",
         opciones: [
-          "Basta con un único trauma en la infancia para producir el síntoma.",
+          "Basta con la primera escena traumática infantil para producir el síntoma; la pubertad solo recuerda lo que ya estaba activo desde el momento del trauma.",
           "La fórmula 'defensa → represión → retorno de lo reprimido' requiere dos escenas: una infantil sin sentido sexual y una segunda que retroactivamente le da ese sentido — solo entonces opera la defensa y se forma el síntoma.",
-          "La defensa opera cronológicamente en el momento exacto del trauma.",
-          "El síntoma se forma independientemente de cualquier escena.",
+          "La defensa opera cronológicamente en el momento exacto del trauma infantil, y el síntoma puede tardar años en manifestarse pero la causalidad es estrictamente lineal.",
+          "El síntoma se forma de modo independiente de las escenas: lo decisivo es la cantidad de excitación recibida, no la articulación temporal entre dos momentos distintos.",
         ],
         correcta: 1,
         exp: "Este es un cruce típico de parcial: Emma muestra que la fórmula no se realiza linealmente. La escena 1 (8 años) queda inscripta sin sentido sexual; recién la escena 2 (pubertad) la resignifica y dispara la represión. El síntoma (escena 1 'recordada' como huida) es el retorno. Sin Nachträglichkeit, la fórmula no se cierra.",
@@ -208,10 +208,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "En el olvido de un nombre propio, los nombres sustitutos:",
         opciones: [
-          "Son completamente aleatorios.",
+          "Aparecen al azar entre los nombres que el sujeto manejó recientemente, sin relación específica con el nombre que se está olvidando en ese momento.",
           "No son aleatorios: están conectados al nombre olvidado por desplazamientos asociativos y son formaciones de compromiso del retorno de lo reprimido.",
-          "Son siempre nombres de pacientes.",
-          "Indican enfermedad mental.",
+          "Pertenecen siempre a la esfera profesional del sujeto (compañeros, pacientes, autores leídos), porque el olvido de nombre propio es un fenómeno laboral.",
+          "Son síntomas de un déficit cognitivo que anuncia el comienzo de un proceso patológico orgánico subyacente en el sujeto.",
         ],
         correcta: 1,
         exp: "Los sustitutos pertenecen a la red asociativa del nombre reprimido. El olvido funciona por desplazamiento: el nombre buscado cae arrastrado por una represión vecina, y los sustitutos contienen fragmentos o conexiones con ese material reprimido. No hay arbitrariedad.",
@@ -219,10 +219,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "En el análisis del olvido de 'Signorelli', los temas reprimidos eran:",
         opciones: [
-          "Solo la sexualidad.",
-          "Muerte y sexualidad (a partir de conversaciones previas reprimidas y de la noticia del suicidio de un paciente).",
-          "El arte italiano.",
-          "El idioma alemán.",
+          "Solo la sexualidad, a partir de las conversaciones recientes que Freud había tenido sobre la centralidad del sexo en sus pacientes italianos.",
+          "Muerte y sexualidad — a partir de conversaciones previas reprimidas (Turcos de Bosnia resignados frente a la muerte, importancia de la sexualidad) y de la noticia del suicidio de un paciente.",
+          "El arte italiano y el manierismo del Renacimiento, materia sobre la cual Freud sentía inseguridad académica y por eso reprimía el nombre del autor de los frescos.",
+          "Su propio nombre y biografía: Signor (Señor) le sonaba al alemán Herr, y eso activaba una represión sobre su identidad profesional como médico.",
         ],
         correcta: 1,
         exp: 'En el análisis Freud rastrea conversaciones anteriores: los Turcos de Bosnia-Herzegovina (resignación frente a la muerte), la importancia de la sexualidad para esos pacientes, y la noticia (reprimida) del suicidio de un paciente. La represión de esos temas hace caer "Signor" y produce los sustitutos Botticelli y Boltraffio, que contienen fragmentos de la red reprimida.',
@@ -252,10 +252,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "El desplazamiento, tanto en el sueño como en el chiste, sirve para:",
         opciones: [
-          "Cambiar de tema constantemente.",
-          "Burlar la censura: el acento se corre del elemento importante a uno secundario, permitiendo decir algo prohibido en forma indirecta.",
-          "Producir confusión.",
-          "Repetir lo mismo.",
+          "Hacer que el soñante o el ingenioso cambien de tema constantemente, dejando el contenido latente oculto detrás del ruido asociativo.",
+          "Burlar la censura: el acento psíquico se corre del elemento importante a uno secundario, permitiendo decir algo prohibido en forma indirecta.",
+          "Producir un efecto de confusión en el destinatario, evitando que el receptor del chiste o el lector del sueño llegue a entender nada.",
+          "Repetir literalmente el contenido latente en el manifiesto, manteniendo una equivalencia uno-a-uno entre lo prohibido y lo expresado.",
         ],
         correcta: 1,
         exp: 'En ambas formaciones el desplazamiento permite que lo prohibido pase la censura. Lo importante queda dicho "de costado", a través de algo aparentemente nimio. En el chiste, eso es justamente lo que produce placer: la satisfacción de decir algo agresivo, sexual o transgresor sin que parezca dicho.',
@@ -392,10 +392,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "Si un alumno dice que para Freud la histeria, igual que para Janet, se debe a una debilidad psíquica congénita, ¿qué error está cometiendo?",
         opciones: [
-          "Confunde a Freud con Charcot.",
+          "Está confundiendo a Freud con Charcot, que sostenía la histeria como predisposición hereditario-traumática activable mediante la hipnosis.",
           "Suprime la ruptura conceptual de Freud: el modelo freudiano no es del déficit (debilidad) sino del conflicto (defensa activa contra una representación incompatible).",
-          "Confunde histeria con neurosis obsesiva.",
-          "Ningún error: Freud sigue a Janet en este punto.",
+          "Está confundiendo la histeria con la neurosis obsesiva en el primer Freud, donde el déficit congénito sí explica los rituales característicos.",
+          "No comete error alguno: en los primeros textos de 1893-1895 Freud todavía adhiere al modelo de Janet antes de virar hacia el conflicto.",
         ],
         correcta: 1,
         exp: "Distinguir Freud / Janet es prueba directa de comprensión del descubrimiento freudiano. Janet: déficit, debilidad, disociación pasiva. Freud: conflicto, defensa, escisión activa. Quien adjudica a Freud el modelo del déficit pierde la originalidad del descubrimiento.",
@@ -483,10 +483,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "El núcleo patógeno se alcanza:",
         opciones: [
-          "Directamente, preguntándole al paciente cuál es.",
-          "Indirectamente, recorriendo cadenas asociativas y salvando resistencias hasta llegar a él.",
-          "Mediante hipnosis profunda.",
-          "Por sugestión del analista.",
+          "De forma directa, preguntándole al paciente cuál es el contenido patógeno y registrando su respuesta verbal como núcleo del síntoma.",
+          "Indirectamente, recorriendo cadenas asociativas horizontales y salvando resistencias radiales que aumentan a medida que uno se aproxima al núcleo reprimido.",
+          "Mediante hipnosis profunda, único método capaz de saltar todas las resistencias y exponer el núcleo patógeno en un solo golpe interpretativo.",
+          "Por sugestión activa del analista al paciente, mediante la cual se le impone el contenido reprimido como verdad clínica establecida desde afuera.",
         ],
         correcta: 1,
         exp: "El núcleo está rodeado de capas y atravesado por cadenas. El trabajo terapéutico no va 'derecho' sino que recorre las asociaciones, vence resistencias, y solo así puede aproximarse el núcleo.",
@@ -600,10 +600,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "El síntoma de Emma (no entrar sola a tiendas) es:",
         opciones: [
-          "Una decisión voluntaria de cuidarse.",
-          "Una compulsión, no elegida: el yo se ve obligado por el retorno de lo reprimido.",
-          "Una fobia hereditaria.",
-          "Una sugestión del analista.",
+          "Una decisión voluntaria y razonada de cuidarse, basada en el recuerdo consciente de la escena infantil traumática que vivió.",
+          "Una compulsión no elegida ni razonada: el yo se ve obligado a la huida por el retorno de lo reprimido, sin tener acceso al sentido.",
+          "Una fobia heredada de la rama materna que se activa frente a estímulos específicos del entorno comercial donde se desencadenó la huida.",
+          "Una sugestión inducida por el analista durante el tratamiento que terminó fijándose en Emma como respuesta condicionada al escenario tienda.",
         ],
         correcta: 1,
         exp: "El síntoma es compulsivo: Emma huye sin saber por qué. No es decisión, no es razón consciente. Esa cualidad compulsiva es justamente lo que delata el origen inconsciente.",
@@ -693,10 +693,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "El desplazamiento es el mecanismo de la censura porque:",
         opciones: [
-          "Hace desaparecer los pensamientos latentes.",
-          "Traslada el acento psíquico de una representación importante a otra nimia, burlando la censura.",
-          "Olvida el sueño al despertar.",
-          "Permite que dos elementos se condensen.",
+          "Hace desaparecer por completo los pensamientos latentes del sueño antes de que puedan irrumpir en la conciencia, sin transformarlos en imagen.",
+          "Traslada el acento psíquico de una representación importante a otra nimia y aparentemente trivial, burlando así la censura entre Icc y Cc.",
+          "Provoca el olvido del sueño al despertar, eliminando las huellas mnémicas y dejando el contenido latente inaccesible al análisis posterior.",
+          "Permite que dos elementos distintos se condensen en una sola representación manifiesta — pero ese es el mecanismo de la condensación, no del desplazamiento.",
         ],
         correcta: 1,
         exp: "El desplazamiento corre la intensidad psíquica desde lo central hacia lo periférico. Eso permite que el contenido pase la censura: lo importante queda disimulado en lo aparentemente trivial.",
@@ -808,10 +808,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "¿Qué significa la exclusión entre percepción y memoria?",
         opciones: [
-          "Que no podemos recordar lo que percibimos.",
-          "Que el mismo sistema no puede a la vez percibir y dejar huella mnémica: percepción e inscripción operan en sistemas distintos.",
-          "Que la memoria reemplaza a la percepción.",
-          "Que percibimos solo lo que recordamos.",
+          "Que no podemos recordar conscientemente la mayor parte de lo que percibimos durante el día porque la capacidad de la memoria es estructuralmente limitada.",
+          "Que el mismo sistema no puede a la vez percibir y dejar huella mnémica: percepción e inscripción operan en sistemas distintos del aparato.",
+          "Que la memoria, al cargarse de contenidos antiguos, va reemplazando a la percepción actual — por eso los adultos perciben menos vívidamente que los niños.",
+          "Que solo podemos percibir aquello para lo cual ya existe una huella mnémica previa, y lo absolutamente nuevo resulta invisible al aparato perceptual.",
         ],
         correcta: 1,
         exp: "Postulado clave (Carta 52): el sistema P recibe estímulos pero no registra. El registro se hace en huellas mnémicas, en otro sistema. Esta separación permite pensar las capas de inscripción y la represión como fracaso de transcripción.",
@@ -830,10 +830,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "El 'otro escenario' refiere a:",
         opciones: [
-          "El consultorio del analista.",
-          "Que el sueño se produce en otro lugar psíquico, distinto del escenario diurno de representaciones, con otras leyes y otra temporalidad.",
-          "Un teatro real.",
-          "El espacio onírico del paciente.",
+          "El consultorio del analista, donde la transferencia despliega un escenario nuevo distinto al de la cotidianidad del paciente neurótico.",
+          "Que el sueño se produce en otro lugar psíquico, distinto del escenario diurno de representaciones, con otras leyes y otra temporalidad propia.",
+          "Un teatro real que el soñante visitó en algún momento de su vida y cuyo recuerdo se activa durante el sueño como decorado del contenido.",
+          "El espacio onírico del paciente como territorio aislado de la conciencia, accesible únicamente mediante la interpretación que hace el analista.",
         ],
         correcta: 1,
         exp: "El otro escenario marca el giro del inconsciente descriptivo al inconsciente como sistema: hay otro lugar psíquico, con lógica y reglas propias. Esa es la dignidad teórica del descubrimiento.",
@@ -969,10 +969,10 @@ const TEMAS_RAW: TemaContenido[] = [
       {
         q: "La 'identidad perceptiva' es:",
         opciones: [
-          "El registro civil del soñante.",
-          "La búsqueda del proceso primario: reproducir la percepción de la huella mnémica, alucinar la satisfacción.",
-          "La identidad del sujeto consciente.",
-          "Lo que percibimos en común.",
+          "El conjunto de rasgos del soñante (edad, género, biografía) que el aparato psíquico registra como continuidad subjetiva durante el sueño.",
+          "La búsqueda del proceso primario: reproducir la percepción de la huella mnémica del objeto satisfactor — alucinar la satisfacción ante la ausencia del objeto real.",
+          "La identidad del sujeto consciente entendida como núcleo del yo, en oposición a la división del inconsciente entre los sistemas Icc y Prcc.",
+          "Lo que distintos sujetos perciben en común frente al mismo estímulo: base intersubjetiva de la realidad consensuada por el principio de realidad.",
         ],
         correcta: 1,
         exp: "Identidad perceptiva: el aparato busca que el estado actual coincida con la huella inscripta de la satisfacción. Como no tiene el objeto real, lo alucina. Es lo propio del proceso primario y del principio de placer.",
