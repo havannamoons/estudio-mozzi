@@ -395,3 +395,47 @@ html.dark .fase-dot {
   60%  { transform: scale(1.2) rotate(4deg); opacity: 1; }
   100% { transform: scale(1) rotate(0); opacity: 1; }
 }
+
+/* ============================================================
+   MATCH · cards del juego de emparejado
+   ============================================================ */
+.match-card {
+  background: rgba(0, 0, 0, 0.025);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgb(63 63 70);
+}
+html.dark .match-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgb(212 212 216);
+}
+.match-card--idle:not(:disabled):hover {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+.match-card--sel {
+  background: rgba(16, 185, 129, 0.10);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+.match-card--ok {
+  background: rgba(16, 185, 129, 0.16) !important;
+  border-color: rgba(16, 185, 129, 0.55) !important;
+  color: rgb(6 78 59) !important;
+  animation:
+    correctPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    correctGlow 0.8s ease-out;
+  cursor: default;
+}
+html.dark .match-card--ok {
+  color: rgb(209 250 229) !important;
+}
+.match-card--err {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: rgb(127 29 29) !important;
+  animation: incorrectShake 0.45s ease-in-out;
+}
+html.dark .match-card--err {
+  color: rgb(254 202 202) !important;
+}

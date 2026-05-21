@@ -9,6 +9,8 @@ import { Sidebar } from "./Sidebar"
 import { MobileTemaSelector } from "./MobileTemaSelector"
 import { ContenidoTema } from "./ContenidoTema"
 import { SimulacroMode } from "./SimulacroMode"
+import { MatchMode } from "./MatchMode"
+import { ClozeMode } from "./ClozeMode"
 import { ToastViewport } from "./Toast"
 
 export function EstudioApp() {
@@ -56,7 +58,7 @@ function EstudioAppInner() {
         <Header onReset={api.modo === "estudio" ? handleReset : undefined} />
         <ModoSelector modo={api.modo} onChange={api.cambiarModo} />
 
-        {api.modo === "estudio" ? (
+        {api.modo === "estudio" && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[280px_1fr]">
             {/* En mobile: dropdown nativo arriba (compacto, accesible).
                 En desktop (lg+): sidebar completo a la izquierda. */}
@@ -68,9 +70,10 @@ function EstudioAppInner() {
               <ContenidoTema api={api} />
             </section>
           </div>
-        ) : (
-          <SimulacroMode api={api} />
         )}
+        {api.modo === "match" && <MatchMode />}
+        {api.modo === "cloze" && <ClozeMode />}
+        {api.modo === "simulacro" && <SimulacroMode api={api} />}
       </main>
     </>
   )
