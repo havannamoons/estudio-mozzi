@@ -15,11 +15,18 @@ import { shuffle } from "@/lib/helpers"
 import { cn } from "@/lib/utils"
 
 const CLOZES_POR_PARTIDA = 8
+const LETRAS = ["A", "B", "C", "D"]
 
 interface Resp {
   id: string
-  input: string
+  elegida: string
   ok: boolean
+}
+
+/** Build the 4 options (correct + 3 distractors) shuffled, returning the
+ *  shuffled order so it stays stable across renders of the same pregunta. */
+function buildOpciones(c: Cloze): string[] {
+  return shuffle([c.respuestas[0], ...c.distractores])
 }
 
 export function ClozeMode() {
@@ -30,66 +37,78 @@ export function ClozeMode() {
     return shuffle(CLOZES).slice(0, CLOZES_POR_PARTIDA)
   }, [partida])
 
+  // Opciones por item (estables durante la partida)
+  const opcionesPorItem = useMemo<Record<string, string[]>>(() => {
+    const m: Record<string, string[]> = {}
+    items.forEach((c) => {
+      m[c.id] = buildOpciones(c)
+    })
+    return m
+  }, [items])
+
   const [idx, setIdx] = useState(0)
-  const [input, setInput] = useState("")
   const [respuestas, setRespuestas] = useState<Resp[]>([])
   const [pistaVisible, setPistaVisible] = useState(false)
 
-  // Reset al cambiar de partida
   useEffect(() => {
     setIdx(0)
-    setInput("")
     setRespuestas([])
     setPistaVisible(false)
   }, [partida])
 
   const total = items.length
   const actual = items[idx]
+  const opciones = actual ? opcionesPorItem[actual.id] : []
   const respActual = respuestas.find((r) => r.id === actual?.id)
   const respondida = !!respActual
 
-  const enviar = () => {
+  const responder = (opcion: string) => {
     if (!actual || respondida) return
-    if (!input.trim()) return
-    const ok = clozeAcierta(input, actual)
-    setRespuestas((prev) => [...prev, { id: actual.id, input, ok }])
+    const ok = clozeAcierta(opcion, actual)
+    setRespuestas((prev) => [...prev, { id: actual.id, elegida: opcion, ok }])
   }
 
   const siguiente = () => {
     if (idx < total - 1) {
       setIdx(idx + 1)
-      setInput("")
       setPistaVisible(false)
     }
   }
   const anterior = () => {
     if (idx > 0) {
       setIdx(idx - 1)
-      setInput("")
       setPistaVisible(false)
     }
   }
 
-  // Keyboard: Enter envía o avanza
+  // Keyboard: 1-4 elige opción, Enter avanza después de responder
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName
-      if (tag === "TEXTAREA") return
-      if (e.key === "Enter") {
+      if (tag === "INPUT" || tag === "TEXTAREA") return
+      if (!respondida) {
+        const n = parseInt(e.key, 10)
+        if (n >= 1 && n <= opciones.length) {
+          e.preventDefault()
+          responder(opciones[n - 1])
+        }
+      } else if (e.key === "Enter" || e.key === " " || e.key === "ArrowRight") {
         e.preventDefault()
-        if (!respondida) enviar()
-        else if (idx < total - 1) siguiente()
+        if (idx < total - 1) siguiente()
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault()
+        anterior()
       }
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input, respondida, idx, total])
+  }, [respondida, opciones, idx, total])
 
   const aciertos = respuestas.filter((r) => r.ok).length
   const ganaste = respuestas.length === total
 
-  // Frase con el ___ resaltado o reemplazado por el resultado
+  // Frase con el ___ resaltado o reemplazado
   const fraseRender = useMemo(() => {
     if (!actual) return null
     const parts = actual.frase.split("___")
@@ -106,7 +125,7 @@ export function ClozeMode() {
                 : "bg-zinc-500/10 text-zinc-400 dark:text-zinc-500",
           )}
         >
-          {respondida ? respActual?.input : "___"}
+          {respondida ? respActual?.elegida : "___"}
         </span>
         {parts[1]}
       </>
@@ -128,8 +147,7 @@ export function ClozeMode() {
               Cloze · Completá la palabra clave
             </h2>
             <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
-              Escribí el término técnico que falta. Acepta variantes con/sin acento y
-              mayúsculas.
+              Elegí entre las 4 opciones la palabra que completa la frase.
             </p>
           </div>
           <button
@@ -180,7 +198,9 @@ export function ClozeMode() {
                 <span className="ml-2 text-zinc-400 dark:text-zinc-600">{actual.tema}</span>
               )}
             </span>
-            <span>{aciertos}/{respuestas.length || 0} correctas</span>
+            <span>
+              {aciertos}/{respuestas.length || 0} correctas
+            </span>
           </div>
 
           {/* Tarjeta principal */}
@@ -189,60 +209,69 @@ export function ClozeMode() {
               {fraseRender}
             </p>
 
-            <div className="mt-5">
-              <label
-                htmlFor="cloze-input"
-                className="mb-1.5 block text-[10px] font-medium tracking-wider text-zinc-500 uppercase"
-              >
-                Tu respuesta
-              </label>
-              <input
-                id="cloze-input"
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                disabled={respondida}
-                placeholder={respondida ? "" : "Escribí acá y dale Enter…"}
-                autoFocus
-                // 16px font-size para evitar zoom de iOS al focusear el input
-                className={cn(
-                  "w-full rounded-xl border bg-zinc-900/40 px-4 py-3 text-base text-zinc-100 outline-none transition-colors disabled:opacity-60",
-                  respondida && respActual?.ok
-                    ? "border-emerald-500/60"
-                    : respondida
-                      ? "border-orange-500/60"
-                      : "border-white/10 focus:border-emerald-500",
-                )}
-                style={{ fontSize: "16px" }}
-              />
-
-              {!respondida && (
-                <div className="mt-3 flex items-center justify-between gap-2">
+            {/* Opciones MC */}
+            <div className="mt-6 space-y-2.5">
+              {opciones.map((op, i) => {
+                const esElegida = respondida && respActual?.elegida === op
+                // ¿esta opción concreta es la correcta?
+                const esLaCorrecta = clozeAcierta(op, actual)
+                const esCorrectaRevelada = respondida && esLaCorrecta && !esElegida
+                let cls = "opcion"
+                let icon: React.ReactNode = null
+                if (esElegida) {
+                  if (esLaCorrecta) {
+                    cls += " correcta"
+                    icon = <Check className="opcion-tick ml-auto h-4 w-4 shrink-0" />
+                  } else {
+                    cls += " incorrecta"
+                    icon = <X className="opcion-tick ml-auto h-4 w-4 shrink-0" />
+                  }
+                } else if (esCorrectaRevelada) {
+                  cls += " revelada"
+                  icon = (
+                    <Check className="opcion-tick ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+                  )
+                }
+                return (
                   <button
-                    onClick={() => setPistaVisible((v) => !v)}
-                    className="btn-press inline-flex items-center gap-1.5 text-[11px] text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    key={op}
+                    onClick={() => responder(op)}
+                    disabled={respondida}
+                    className={cn(
+                      cls,
+                      "flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium",
+                    )}
                   >
-                    <Lightbulb className="h-3.5 w-3.5" />
-                    {pistaVisible ? "Ocultar pista" : "Ver pista"}
+                    <span className="opcion-letra">{LETRAS[i]}</span>
+                    <span className="flex-1 leading-snug">{op}</span>
+                    {icon}
                   </button>
-                  <button
-                    onClick={enviar}
-                    disabled={!input.trim()}
-                    className="btn-press inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 px-4 py-2 text-sm font-medium text-white shadow-lg disabled:opacity-40 hover:from-sky-600 hover:to-sky-700"
-                  >
-                    Confirmar
-                  </button>
-                </div>
-              )}
-
-              {pistaVisible && !respondida && actual.pista && (
-                <p className="anim-fade mt-3 rounded-lg border-l-4 border-l-amber-500/60 bg-amber-500/5 px-3 py-2 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-                  💡 {actual.pista}
-                </p>
-              )}
+                )
+              })}
             </div>
 
-            {respondida && (
+            {!respondida && actual.pista && (
+              <div className="mt-3 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setPistaVisible((v) => !v)}
+                  className="btn-press inline-flex items-center gap-1.5 text-[11px] text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                >
+                  <Lightbulb className="h-3.5 w-3.5" />
+                  {pistaVisible ? "Ocultar pista" : "Ver pista"}
+                </button>
+                <span className="hidden text-[11px] text-zinc-500 sm:inline dark:text-zinc-500">
+                  <span className="kbd">1</span>–<span className="kbd">{opciones.length}</span>{" "}
+                  · elegir
+                </span>
+              </div>
+            )}
+            {pistaVisible && !respondida && actual.pista && (
+              <p className="anim-fade mt-3 rounded-lg border-l-4 border-l-amber-500/60 bg-amber-500/5 px-3 py-2 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+                💡 {actual.pista}
+              </p>
+            )}
+
+            {respondida && actual.pista && (
               <div
                 className={cn(
                   "anim-fade mt-5 rounded-xl border-l-4 p-4",
@@ -253,32 +282,17 @@ export function ClozeMode() {
               >
                 <p
                   className={cn(
-                    "mb-1.5 flex items-center gap-1.5 text-[10px] font-medium tracking-wider uppercase",
+                    "mb-1.5 text-[10px] font-medium tracking-wider uppercase",
                     respActual?.ok
                       ? "text-emerald-700 dark:text-emerald-400"
                       : "text-orange-600 dark:text-orange-400",
                   )}
                 >
-                  {respActual?.ok ? (
-                    <>
-                      <Check className="opcion-tick h-3.5 w-3.5" /> Correcto
-                    </>
-                  ) : (
-                    <>
-                      <X className="opcion-tick h-3.5 w-3.5" /> La respuesta era
-                    </>
-                  )}
+                  {respActual?.ok ? "Bien" : "Para recordar"}
                 </p>
-                {!respActual?.ok && (
-                  <p className="mb-2 font-mono text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                    {actual.respuestas[0]}
-                  </p>
-                )}
-                {actual.pista && (
-                  <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-200">
-                    {actual.pista}
-                  </p>
-                )}
+                <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-200">
+                  {actual.pista}
+                </p>
               </div>
             )}
           </div>
@@ -393,7 +407,7 @@ function ResultadosCloze({
                   <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">
                     Tu respuesta:{" "}
                     <span className="font-mono text-red-600 dark:text-red-400">
-                      {r.input}
+                      {r.elegida}
                     </span>
                   </p>
                 </div>
