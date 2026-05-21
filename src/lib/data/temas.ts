@@ -1038,3 +1038,19 @@ export const TEMAS: TemaContenido[] = (() => {
     return t
   })
 })()
+
+// Dificultad de cada pregunta por tema (indexada por posición original en `preguntas[]`)
+//   1 = identificación / definición directa
+//   2 = conceptual / diferenciación / referente clínico
+//   3 = articulación cross-tema / aplicación clínica
+// Los arrays tienen el mismo largo que el `preguntas[]` correspondiente.
+export const DIFICULTADES: Record<string, number[]> = {
+  p6:   [1, 1, 1, 3, 1, 3, 2],
+  p1_3: [2, 1, 2, 2, 1, 2, 2, 3, 3],
+  p7b:  [1, 3, 2, 2, 1, 3, 3],
+  p7a:  [2, 1, 3, 2, 1, 3, 2],
+  p8:   [1, 3, 1, 2, 3, 2, 3, 3],
+  p4_5: [2, 1, 2, 2, 3, 1, 3, 3],
+  p9a:  [1, 2, 3, 2, 1, 3, 3],
+  p9b:  [1, 2, 2, 3, 3, 1, 3, 3],
+}
