@@ -19,13 +19,12 @@ export function Sidebar({ api }: Props) {
         {TEMAS.map((t) => {
           const prog = progresoTema(t.id)
           const isActive = t.id === temaActivoId
-          const pct = prog.total > 0 ? Math.round((prog.correctas / prog.total) * 100) : 0
-          const dotCls =
-            prog.hechas === 0
-              ? "bg-zinc-300 dark:bg-zinc-700"
-              : pct >= 80
-                ? "bg-emerald-500"
-                : "bg-red-500"
+          // Verde solo cuando el quiz del tema está completo (todas respondidas).
+          // Mientras tanto, el punto queda gris — sin juicio sobre desempeño.
+          const completo = prog.hechas === prog.total && prog.total > 0
+          const dotCls = completo
+            ? "bg-emerald-500"
+            : "bg-zinc-300 dark:bg-zinc-700"
           return (
             <button
               key={t.id}
