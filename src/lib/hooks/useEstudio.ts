@@ -10,8 +10,12 @@ import type {
   Tab,
 } from "@/lib/types"
 import { STORAGE_PROGRESO } from "@/lib/constants"
-import { shuffle } from "@/lib/helpers"
-import { TEMAS } from "@/lib/data/temas"
+import { ordenarPorDificultadIdx, shuffle } from "@/lib/helpers"
+import { DIFICULTADES, TEMAS } from "@/lib/data/temas"
+
+const ORDEN_STORAGE = "estudio_orden_v1"
+
+type OrdenPorTema = Record<string, number[]>
 
 function cargarProgreso(): ProgresoQuiz {
   if (typeof localStorage === "undefined") return {}
@@ -23,9 +27,29 @@ function cargarProgreso(): ProgresoQuiz {
   }
 }
 
+function cargarOrden(): OrdenPorTema {
+  if (typeof localStorage === "undefined") return {}
+  try {
+    const d = localStorage.getItem(ORDEN_STORAGE)
+    return d ? (JSON.parse(d) as OrdenPorTema) : {}
+  } catch {
+    return {}
+  }
+}
+
+function calcularOrdenTema(temaId: string): number[] {
+  const tema = TEMAS.find((t) => t.id === temaId)
+  if (!tema) return []
+  const difs = DIFICULTADES[temaId] ?? tema.preguntas.map(() => 2)
+  // Asegurar largo correcto: si DIFICULTADES no cubre todas, pad con nivel 2
+  const ajustadas = tema.preguntas.map((_, i) => difs[i] ?? 2)
+  return ordenarPorDificultadIdx(ajustadas)
+}
+
 export function useEstudio() {
   const [hidratado, setHidratado] = useState(false)
   const [progreso, setProgreso] = useState<ProgresoQuiz>({})
+  const [ordenPorTema, setOrdenPorTema] = useState<OrdenPorTema>({})
 
   // === Modo estudio ===
   const [modo, setModo] = useState<Modo>("estudio")
@@ -39,8 +63,10 @@ export function useEstudio() {
   const [respuestasSim, setRespuestasSim] = useState<RespuestaSimulacro[]>([])
   const [preguntaSimIdx, setPreguntaSimIdx] = useState(0)
 
+  // === Hidratación inicial ===
   useEffect(() => {
     setProgreso(cargarProgreso())
+    setOrdenPorTema(cargarOrden())
     setHidratado(true)
   }, [])
 
@@ -49,10 +75,42 @@ export function useEstudio() {
     localStorage.setItem(STORAGE_PROGRESO, JSON.stringify(progreso))
   }, [progreso, hidratado])
 
-  // === Tema activo y progreso por tema ===
+  useEffect(() => {
+    if (!hidratado) return
+    localStorage.setItem(ORDEN_STORAGE, JSON.stringify(ordenPorTema))
+  }, [ordenPorTema, hidratado])
+
+  // === Asegurar orden del tema activo (lazy init por tema) ===
+  useEffect(() => {
+    if (!hidratado) return
+    if (!ordenPorTema[temaActivoId]) {
+      setOrdenPorTema((prev) => ({
+        ...prev,
+        [temaActivoId]: calcularOrdenTema(temaActivoId),
+      }))
+    }
+  }, [hidratado, temaActivoId, ordenPorTema])
+
+  // === Tema activo ===
   const temaActivo = useMemo(
     () => TEMAS.find((t) => t.id === temaActivoId) ?? TEMAS[0],
     [temaActivoId],
+  )
+
+  // Orden de display del tema activo (puede ser undefined hasta que hidrate)
+  const ordenTemaActivo = useMemo<number[]>(() => {
+    const orden = ordenPorTema[temaActivoId]
+    if (orden && orden.length === temaActivo.preguntas.length) return orden
+    // Fallback antes de hidratación: orden natural
+    return temaActivo.preguntas.map((_, i) => i)
+  }, [ordenPorTema, temaActivoId, temaActivo])
+
+  // Traduce posición de display → índice original (para leer pregunta + escribir progreso)
+  const originalIdxDe = useCallback(
+    (displayIdx: number): number => {
+      return ordenTemaActivo[displayIdx] ?? displayIdx
+    },
+    [ordenTemaActivo],
   )
 
   const progresoTema = useCallback(
@@ -73,23 +131,25 @@ export function useEstudio() {
     [progreso],
   )
 
-  // === Responder pregunta (modo estudio) ===
+  // === Responder (Quiz) ===
+  // idx = índice de la opción elegida (0..3). preguntaActualIdx = display position.
   const responder = useCallback(
     (idx: number) => {
       const tema = TEMAS.find((t) => t.id === temaActivoId)
       if (!tema) return
-      const yaExiste = progreso[tema.id]?.[preguntaActualIdx]
+      const origIdx = originalIdxDe(preguntaActualIdx)
+      const yaExiste = progreso[tema.id]?.[origIdx]
       if (yaExiste) return
-      const correcta = idx === tema.preguntas[preguntaActualIdx].correcta
+      const correcta = idx === tema.preguntas[origIdx].correcta
       setProgreso((prev) => ({
         ...prev,
         [tema.id]: {
           ...(prev[tema.id] ?? {}),
-          [preguntaActualIdx]: { elegida: idx, correcta },
+          [origIdx]: { elegida: idx, correcta },
         },
       }))
     },
-    [progreso, temaActivoId, preguntaActualIdx],
+    [progreso, temaActivoId, preguntaActualIdx, originalIdxDe],
   )
 
   const irAPregunta = useCallback((idx: number) => {
@@ -108,17 +168,56 @@ export function useEstudio() {
 
   const resetearProgreso = useCallback(() => {
     setProgreso({})
+    // Al resetear progreso también regenero el orden (nueva mezcla dentro de cada nivel)
+    const nuevo: OrdenPorTema = {}
+    TEMAS.forEach((t) => {
+      nuevo[t.id] = calcularOrdenTema(t.id)
+    })
+    setOrdenPorTema(nuevo)
   }, [])
 
   // === Simulacro ===
+  // Sampling proporcional por dificultad + orden creciente.
   const iniciarSimulacro = useCallback((cantidad: number) => {
-    const todas: PreguntaSimulacro[] = []
+    const buckets: Record<1 | 2 | 3, PreguntaSimulacro[]> = { 1: [], 2: [], 3: [] }
     TEMAS.forEach((t) => {
+      const difs = DIFICULTADES[t.id] ?? []
       t.preguntas.forEach((_, i) => {
-        todas.push({ temaId: t.id, preguntaIdx: i })
+        const raw = difs[i] ?? 2
+        const d: 1 | 2 | 3 = raw === 1 ? 1 : raw === 3 ? 3 : 2
+        buckets[d].push({ temaId: t.id, preguntaIdx: i })
       })
     })
-    const seleccion = shuffle(todas).slice(0, Math.min(cantidad, todas.length))
+
+    const total = buckets[1].length + buckets[2].length + buckets[3].length
+    const n = Math.min(cantidad, total)
+    // Distribución proporcional, redondeando "hacia el medio" para que sumen n
+    let n1 = Math.round((n * buckets[1].length) / total)
+    let n3 = Math.round((n * buckets[3].length) / total)
+    let n2 = n - n1 - n3
+    // Saneo: si por redondeo se va negativo o supera disponibles, ajusto
+    n1 = Math.min(Math.max(0, n1), buckets[1].length)
+    n3 = Math.min(Math.max(0, n3), buckets[3].length)
+    n2 = Math.min(Math.max(0, n - n1 - n3), buckets[2].length)
+    // Si quedó hueco por capping, redistribuyo a niveles con disponibles
+    const faltan = n - (n1 + n2 + n3)
+    if (faltan > 0) {
+      const extra2 = Math.min(faltan, buckets[2].length - n2)
+      n2 += extra2
+      const restoTras2 = faltan - extra2
+      if (restoTras2 > 0) {
+        const extra1 = Math.min(restoTras2, buckets[1].length - n1)
+        n1 += extra1
+        n3 += restoTras2 - extra1
+      }
+    }
+
+    const seleccion: PreguntaSimulacro[] = [
+      ...shuffle(buckets[1]).slice(0, n1),
+      ...shuffle(buckets[2]).slice(0, n2),
+      ...shuffle(buckets[3]).slice(0, n3),
+    ]
+
     setPreguntasSim(seleccion)
     setRespuestasSim([])
     setPreguntaSimIdx(0)
@@ -129,7 +228,11 @@ export function useEstudio() {
     (idx: number) => {
       const actual = preguntasSim[preguntaSimIdx]
       if (!actual) return
-      if (respuestasSim.find((r) => r.temaId === actual.temaId && r.preguntaIdx === actual.preguntaIdx)) {
+      if (
+        respuestasSim.find(
+          (r) => r.temaId === actual.temaId && r.preguntaIdx === actual.preguntaIdx,
+        )
+      ) {
         return
       }
       const tema = TEMAS.find((t) => t.id === actual.temaId)
@@ -193,6 +296,9 @@ export function useEstudio() {
     progresoTema,
     responder,
     resetearProgreso,
+    // orden de display por dificultad
+    ordenTemaActivo,
+    originalIdxDe,
     // simulacro
     faseSimulacro,
     preguntasSim,

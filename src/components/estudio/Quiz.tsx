@@ -3,9 +3,18 @@
 import { useEffect } from "react"
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
+import { DIFICULTADES } from "@/lib/data/temas"
 import { cn } from "@/lib/utils"
 
 const LETRAS = ["A", "B", "C", "D", "E", "F"]
+const NIVELES_LABEL: Record<number, { label: string; tone: string }> = {
+  1: { label: "Fácil", tone: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" },
+  2: { label: "Media", tone: "bg-amber-500/15 text-amber-700 dark:text-amber-300" },
+  3: {
+    label: "Articulación",
+    tone: "bg-violet-500/15 text-violet-700 dark:text-violet-300",
+  },
+}
 
 interface Props {
   api: EstudioApi
@@ -18,14 +27,20 @@ export function Quiz({ api }: Props) {
     irAPregunta,
     progreso,
     responder,
+    ordenTemaActivo,
+    originalIdxDe,
   } = api
 
   const total = temaActivo.preguntas.length
-  const idx = Math.min(Math.max(0, preguntaActualIdx), total - 1)
-  const pregunta = temaActivo.preguntas[idx]
+  const displayIdx = Math.min(Math.max(0, preguntaActualIdx), total - 1)
+  const origIdx = originalIdxDe(displayIdx)
+  const pregunta = temaActivo.preguntas[origIdx]
   const r = progreso[temaActivo.id] ?? {}
-  const respuesta = r[idx]
+  const respuesta = r[origIdx]
   const respondida = !!respuesta
+
+  const difs = DIFICULTADES[temaActivo.id] ?? []
+  const nivelActual = difs[origIdx] ?? 2
 
   const totalRespondidas = Object.keys(r).length
   const totalCorrectas = Object.values(r).filter((x) => x.correcta).length
@@ -44,16 +59,16 @@ export function Quiz({ api }: Props) {
       } else {
         if (e.key === "Enter" || e.key === " " || e.key === "ArrowRight") {
           e.preventDefault()
-          if (idx < total - 1) irAPregunta(idx + 1)
+          if (displayIdx < total - 1) irAPregunta(displayIdx + 1)
         } else if (e.key === "ArrowLeft") {
           e.preventDefault()
-          if (idx > 0) irAPregunta(idx - 1)
+          if (displayIdx > 0) irAPregunta(displayIdx - 1)
         }
       }
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [respondida, pregunta.opciones.length, responder, idx, total, irAPregunta])
+  }, [respondida, pregunta.opciones.length, responder, displayIdx, total, irAPregunta])
 
   if (total === 0) {
     return (
@@ -63,15 +78,17 @@ export function Quiz({ api }: Props) {
     )
   }
 
+  const nivelInfo = NIVELES_LABEL[nivelActual] ?? NIVELES_LABEL[2]
+
   return (
     <div className="anim-fade space-y-4">
-      {/* Dots de progreso */}
+      {/* Dots de progreso (en orden de display) */}
       <div className="flex flex-wrap items-center gap-1.5">
-        {temaActivo.preguntas.map((_, i) => {
-          const res = r[i]
+        {ordenTemaActivo.map((origIdxAtPos, i) => {
+          const res = r[origIdxAtPos]
           let cls = "bg-white/20 dark:bg-white/8"
           if (res) cls = res.correcta ? "bg-emerald-500" : "bg-red-500"
-          if (i === idx) cls += " ring-2 ring-white/30"
+          if (i === displayIdx) cls += " ring-2 ring-white/30"
           return (
             <button
               key={i}
@@ -85,9 +102,19 @@ export function Quiz({ api }: Props) {
           )
         })}
       </div>
-      <div className="flex items-center justify-between text-[11px] tabular-nums text-zinc-500 dark:text-zinc-400">
-        <span>
-          Pregunta {idx + 1} de {total}
+      <div className="flex items-center justify-between gap-2 text-[11px] tabular-nums text-zinc-500 dark:text-zinc-400">
+        <span className="flex items-center gap-2">
+          <span>
+            Pregunta {displayIdx + 1} de {total}
+          </span>
+          <span
+            className={cn(
+              "rounded px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider",
+              nivelInfo.tone,
+            )}
+          >
+            {nivelInfo.label}
+          </span>
         </span>
         <span>
           {totalCorrectas}/{totalRespondidas || 0} correctas
@@ -110,14 +137,16 @@ export function Quiz({ api }: Props) {
             if (esElegida) {
               if (pregunta.correcta === i) {
                 cls += " correcta"
-                icon = <Check className="ml-auto h-4 w-4 shrink-0" />
+                icon = <Check className="opcion-tick ml-auto h-4 w-4 shrink-0" />
               } else {
                 cls += " incorrecta"
-                icon = <X className="ml-auto h-4 w-4 shrink-0" />
+                icon = <X className="opcion-tick ml-auto h-4 w-4 shrink-0" />
               }
             } else if (esCorrectaRevelada) {
               cls += " revelada"
-              icon = <Check className="ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+              icon = (
+                <Check className="opcion-tick ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+              )
             }
             return (
               <button
@@ -166,8 +195,8 @@ export function Quiz({ api }: Props) {
       {/* Nav */}
       <div className="flex items-center justify-between gap-2">
         <button
-          onClick={() => irAPregunta(idx - 1)}
-          disabled={idx === 0}
+          onClick={() => irAPregunta(displayIdx - 1)}
+          disabled={displayIdx === 0}
           className="glass btn-press inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 dark:text-zinc-300"
         >
           <ArrowLeft className="h-4 w-4" /> Anterior
@@ -185,8 +214,8 @@ export function Quiz({ api }: Props) {
           )}
         </div>
         <button
-          onClick={() => irAPregunta(idx + 1)}
-          disabled={idx === total - 1}
+          onClick={() => irAPregunta(displayIdx + 1)}
+          disabled={displayIdx === total - 1}
           className="glass btn-press inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 dark:text-zinc-300"
         >
           Siguiente <ArrowRight className="h-4 w-4" />
