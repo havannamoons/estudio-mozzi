@@ -9,7 +9,7 @@ import type {
   RespuestaSimulacro,
   Tab,
 } from "@/lib/types"
-import { STORAGE_PROGRESO } from "@/lib/constants"
+import { STORAGE_PROGRESO, STORAGE_SIMULACRO } from "@/lib/constants"
 import { ordenarPorDificultadIdx, shuffle } from "@/lib/helpers"
 import { DIFICULTADES, TEMAS } from "@/lib/data/temas"
 
@@ -24,6 +24,27 @@ function cargarProgreso(): ProgresoQuiz {
     return d ? (JSON.parse(d) as ProgresoQuiz) : {}
   } catch {
     return {}
+  }
+}
+
+interface SimulacroSnapshot {
+  fase: FaseSimulacro
+  preguntas: PreguntaSimulacro[]
+  respuestas: RespuestaSimulacro[]
+  idx: number
+}
+
+function cargarSimulacro(): SimulacroSnapshot | null {
+  if (typeof localStorage === "undefined") return null
+  try {
+    const d = localStorage.getItem(STORAGE_SIMULACRO)
+    if (!d) return null
+    const parsed = JSON.parse(d) as SimulacroSnapshot
+    // Solo restauramos sesiones activas; las que ya están en "setup" no aportan.
+    if (parsed.fase === "setup") return null
+    return parsed
+  } catch {
+    return null
   }
 }
 
@@ -67,6 +88,14 @@ export function useEstudio() {
   useEffect(() => {
     setProgreso(cargarProgreso())
     setOrdenPorTema(cargarOrden())
+    // Restaurar simulacro en curso si lo hay (Nielsen #5 — prevención de errores)
+    const sim = cargarSimulacro()
+    if (sim) {
+      setFaseSimulacro(sim.fase)
+      setPreguntasSim(sim.preguntas)
+      setRespuestasSim(sim.respuestas)
+      setPreguntaSimIdx(sim.idx)
+    }
     setHidratado(true)
   }, [])
 
@@ -79,6 +108,30 @@ export function useEstudio() {
     if (!hidratado) return
     localStorage.setItem(ORDEN_STORAGE, JSON.stringify(ordenPorTema))
   }, [ordenPorTema, hidratado])
+
+  // === Persistir simulacro en curso ===
+  // Guardamos solo cuando hay algo significativo (play o resultados).
+  // En setup sin preguntas no tiene sentido (es estado vacío).
+  useEffect(() => {
+    if (!hidratado) return
+    if (faseSimulacro === "setup" && preguntasSim.length === 0) {
+      localStorage.removeItem(STORAGE_SIMULACRO)
+      return
+    }
+    const snapshot: SimulacroSnapshot = {
+      fase: faseSimulacro,
+      preguntas: preguntasSim,
+      respuestas: respuestasSim,
+      idx: preguntaSimIdx,
+    }
+    localStorage.setItem(STORAGE_SIMULACRO, JSON.stringify(snapshot))
+  }, [
+    hidratado,
+    faseSimulacro,
+    preguntasSim,
+    respuestasSim,
+    preguntaSimIdx,
+  ])
 
   // === Asegurar orden del tema activo (lazy init por tema) ===
   useEffect(() => {
@@ -272,12 +325,9 @@ export function useEstudio() {
 
   const cambiarModo = useCallback((nuevo: Modo) => {
     setModo(nuevo)
-    if (nuevo === "simulacro") {
-      setFaseSimulacro("setup")
-      setPreguntasSim([])
-      setRespuestasSim([])
-      setPreguntaSimIdx(0)
-    }
+    // Antes acá reseteábamos el simulacro al entrar. Ahora lo dejamos vivo:
+    // gracias a la persistencia, podés salir y volver sin perder el progreso.
+    // Para resetear, usá "Salir" o "Otro simulacro" dentro de la UI del modo.
   }, [])
 
   return {

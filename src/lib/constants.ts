@@ -1,4 +1,5 @@
 export const STORAGE_PROGRESO = "estudio_mozzi_v2"
+export const STORAGE_SIMULACRO = "estudio_simulacro_v1"
 export const THEME_KEY = "tema_estudio"
 export const SIMULACRO_PREGUNTAS_DEFAULT = 12
 export const SIMULACRO_PREGUNTAS_MIN = 6
