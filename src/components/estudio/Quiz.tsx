@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect,useRef,useState} from "react"
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
 import { DIFICULTADES } from "@/lib/data/temas"
@@ -30,6 +30,10 @@ export function Quiz({ api }: Props) {
     ordenTemaActivo,
     originalIdxDe,
   } = api
+
+  const [animandoDotIdx, setAnimandoDotIdx] = useState<number | null>(null)
+  const prevRespondidaRef = useRef<boolean | undefined>(undefined)
+
 
   const total = temaActivo.preguntas.length
   const displayIdx = Math.min(Math.max(0, preguntaActualIdx), total - 1)
@@ -70,6 +74,18 @@ export function Quiz({ api }: Props) {
     return () => window.removeEventListener("keydown", onKey)
   }, [respondida, pregunta.opciones.length, responder, displayIdx, total, irAPregunta])
 
+  // Cuando pasás de NO respondido a respondido, iluminamos el dot por 1.6s
+  // y después se atenúa solo (calm design — idea de la usuaria).
+  useEffect(() => {
+    const prev = prevRespondidaRef.current
+    prevRespondidaRef.current = respondida
+    if (prev === false && respondida === true) {
+      setAnimandoDotIdx(displayIdx)
+      const t = setTimeout(() => setAnimandoDotIdx(null), 1600)
+      return () => clearTimeout(t)
+    }
+  }, [respondida, displayIdx])
+
   if (total === 0) {
     return (
       <div className="glass-strong rounded-2xl p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
@@ -87,7 +103,17 @@ export function Quiz({ api }: Props) {
         {ordenTemaActivo.map((origIdxAtPos, i) => {
           const res = r[origIdxAtPos]
           let cls = "bg-white/20 dark:bg-white/8"
-          if (res) cls = res.correcta ? "bg-emerald-500" : "bg-red-500"
+          if (res) {
+            if (animandoDotIdx === i) {
+              // Recién respondido: brillante + animación que lo atenúa
+              cls = res.correcta
+                ? "bg-emerald-500 dot-settling"
+                : "bg-red-500 dot-settling"
+            } else {
+              // Ya respondido antes: estado calmo desde el inicio
+              cls = res.correcta ? "bg-emerald-500/55" : "bg-red-500/55"
+            }
+          }
           if (i === displayIdx) cls += " ring-2 ring-white/30"
           return (
             <button
