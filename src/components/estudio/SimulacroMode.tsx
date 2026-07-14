@@ -68,7 +68,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
         <FileCheck className="h-7 w-7 text-amber-500" />
       </div>
       <h2 className="mb-2 font-serif text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-        Simulacro de parcial
+        Simulacro de examen
       </h2>
       <p className="mb-6 max-w-prose text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
         Te tomamos preguntas de todos los temas del final (del parcial + la segunda parte) mezcladas. Sin pista de qué tema viene cada una.
@@ -163,7 +163,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               >
                 12-15
               </button>
-              <span>parcial corto (10-15 min)</span>
+              <span>examen corto (10-15 min)</span>
             </li>
             <li className="flex items-center gap-2">
               <button
@@ -173,7 +173,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               >
                 20-30
               </button>
-              <span>parcial completo (20-30 min)</span>
+              <span>examen completo (20-30 min)</span>
             </li>
           </ul>
         </div>
