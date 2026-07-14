@@ -16,7 +16,7 @@ export function Header({ onReset }: Props) {
           Estudio
         </h1>
         <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-          Psicoanálisis · Cát. Pino (ex Mozzi) · UBA · Prácticos 1 a 9
+          Psicoanálisis Freud · Cát. Pino (ex Mozzi) · UBA · Parcial + Final
         </p>
       </div>
       <div className="flex items-center gap-2">

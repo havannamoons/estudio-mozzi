@@ -16,9 +16,37 @@ const lora = Lora({
 })
 
 export const metadata: Metadata = {
-  title: "Estudio · Psicoanálisis Mozzi",
+  metadataBase: new URL("https://estudio-mozzi-i3ao.vercel.app"),
+  title: "Estudio Mozzi · Psicoanálisis Freud (Parcial + Final)",
   description:
-    "Teoría + quiz + simulacro de parcial. Cátedra Pino (ex Mozzi) UBA · Prácticos 1 a 9.",
+    "Teoría, quiz y simulacro para Psicoanálisis Freud · Cát. Pino (ex Mozzi) UBA. 19 temas y +120 preguntas: del parcial (prácticos 1 a 9) al final. Con dark mode y progreso guardado.",
+  applicationName: "Estudio Mozzi",
+  authors: [{ name: "Estudio Mozzi" }],
+  keywords: [
+    "Psicoanálisis",
+    "Freud",
+    "UBA",
+    "Psicología",
+    "Cátedra Pino",
+    "Mozzi",
+    "parcial",
+    "final",
+    "resumen",
+  ],
+  openGraph: {
+    title: "Estudio Mozzi · Psicoanálisis Freud",
+    description:
+      "Teoría + Quiz + Simulacro. 19 temas y +120 preguntas, del parcial al final. Cát. Pino (ex Mozzi) UBA.",
+    type: "website",
+    locale: "es_AR",
+    siteName: "Estudio Mozzi",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Estudio Mozzi · Psicoanálisis Freud",
+    description:
+      "Teoría + Quiz + Simulacro. 19 temas y +120 preguntas, del parcial al final.",
+  },
 }
 
 // Viewport: width=device-width + zoom permitido hasta 5x (accesibilidad).
