@@ -13,6 +13,7 @@ import { MatchMode } from "./MatchMode"
 import { ClozeMode } from "./ClozeMode"
 import { ToastViewport } from "./Toast"
 import { Welcome } from "./Welcome"
+import { AccessGate } from "./AccessGate"
 
 export function EstudioApp() {
   return (
@@ -37,7 +38,17 @@ function EstudioAppInner() {
     )
   }
 
-  // Primera visita: pantalla de bienvenida antes de la app.
+  // Acceso: sin código válido no se entra a la app.
+  if (!api.desbloqueado) {
+    return (
+      <>
+        <BlobsBackground />
+        <AccessGate onDesbloquear={api.desbloquear} />
+      </>
+    )
+  }
+
+  // Primera visita (ya desbloqueado): pantalla de bienvenida antes de la app.
   if (api.verBienvenida) {
     return (
       <>

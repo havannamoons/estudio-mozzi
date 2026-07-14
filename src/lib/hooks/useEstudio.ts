@@ -9,7 +9,12 @@ import type {
   RespuestaSimulacro,
   Tab,
 } from "@/lib/types"
-import { STORAGE_PROGRESO, STORAGE_SIMULACRO, STORAGE_WELCOME } from "@/lib/constants"
+import {
+  STORAGE_ACCESS,
+  STORAGE_PROGRESO,
+  STORAGE_SIMULACRO,
+  STORAGE_WELCOME,
+} from "@/lib/constants"
 import { ordenarPorDificultadIdx, shuffle } from "@/lib/helpers"
 import { DIFICULTADES, TEMAS } from "@/lib/data/temas"
 
@@ -72,6 +77,9 @@ export function useEstudio() {
   const [progreso, setProgreso] = useState<ProgresoQuiz>({})
   const [ordenPorTema, setOrdenPorTema] = useState<OrdenPorTema>({})
 
+  // === Control de acceso por código ===
+  const [desbloqueado, setDesbloqueado] = useState(false)
+
   // === Pantalla de bienvenida (solo la primera visita) ===
   const [verBienvenida, setVerBienvenida] = useState(false)
 
@@ -99,11 +107,22 @@ export function useEstudio() {
       setRespuestasSim(sim.respuestas)
       setPreguntaSimIdx(sim.idx)
     }
+    // Acceso: desbloqueado si ya ingresó un código válido en este dispositivo.
+    try {
+      if (localStorage.getItem(STORAGE_ACCESS) === "1") setDesbloqueado(true)
+    } catch {}
     // Mostrar bienvenida solo si nunca se cerró en este dispositivo.
     try {
       if (!localStorage.getItem(STORAGE_WELCOME)) setVerBienvenida(true)
     } catch {}
     setHidratado(true)
+  }, [])
+
+  const desbloquear = useCallback(() => {
+    setDesbloqueado(true)
+    try {
+      localStorage.setItem(STORAGE_ACCESS, "1")
+    } catch {}
   }, [])
 
   const cerrarBienvenida = useCallback(() => {
@@ -350,6 +369,9 @@ export function useEstudio() {
 
   return {
     hidratado,
+    // acceso
+    desbloqueado,
+    desbloquear,
     // bienvenida
     verBienvenida,
     cerrarBienvenida,
