@@ -71,7 +71,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
         Simulacro de parcial
       </h2>
       <p className="mb-6 max-w-prose text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-        Te tomamos preguntas de todos los temas (Prácticos 1 a 9) mezcladas. Sin pista de qué tema viene cada una.
+        Te tomamos preguntas de todos los temas del final (del parcial + la segunda parte) mezcladas. Sin pista de qué tema viene cada una.
         Al terminar vas a ver tu puntaje total, desglose por tema y todas las explicaciones.
       </p>
 
