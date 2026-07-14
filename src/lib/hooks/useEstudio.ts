@@ -9,7 +9,7 @@ import type {
   RespuestaSimulacro,
   Tab,
 } from "@/lib/types"
-import { STORAGE_PROGRESO, STORAGE_SIMULACRO } from "@/lib/constants"
+import { STORAGE_PROGRESO, STORAGE_SIMULACRO, STORAGE_WELCOME } from "@/lib/constants"
 import { ordenarPorDificultadIdx, shuffle } from "@/lib/helpers"
 import { DIFICULTADES, TEMAS } from "@/lib/data/temas"
 
@@ -72,6 +72,9 @@ export function useEstudio() {
   const [progreso, setProgreso] = useState<ProgresoQuiz>({})
   const [ordenPorTema, setOrdenPorTema] = useState<OrdenPorTema>({})
 
+  // === Pantalla de bienvenida (solo la primera visita) ===
+  const [verBienvenida, setVerBienvenida] = useState(false)
+
   // === Modo estudio ===
   const [modo, setModo] = useState<Modo>("estudio")
   const [temaActivoId, setTemaActivoId] = useState<string>(TEMAS[0].id)
@@ -96,7 +99,22 @@ export function useEstudio() {
       setRespuestasSim(sim.respuestas)
       setPreguntaSimIdx(sim.idx)
     }
+    // Mostrar bienvenida solo si nunca se cerró en este dispositivo.
+    try {
+      if (!localStorage.getItem(STORAGE_WELCOME)) setVerBienvenida(true)
+    } catch {}
     setHidratado(true)
+  }, [])
+
+  const cerrarBienvenida = useCallback(() => {
+    setVerBienvenida(false)
+    try {
+      localStorage.setItem(STORAGE_WELCOME, "1")
+    } catch {}
+  }, [])
+
+  const abrirBienvenida = useCallback(() => {
+    setVerBienvenida(true)
   }, [])
 
   useEffect(() => {
@@ -332,6 +350,10 @@ export function useEstudio() {
 
   return {
     hidratado,
+    // bienvenida
+    verBienvenida,
+    cerrarBienvenida,
+    abrirBienvenida,
     // estudio
     modo,
     cambiarModo,
