@@ -86,4 +86,54 @@ export const REFERENTES: Par[] = [
     referente: "Los histéricos sufren de reminiscencias",
     pista: "Tesis de Breuer y Freud: los síntomas son expresión simbólica de recuerdos traumáticos reprimidos.",
   },
+
+  // --- Final ---
+  {
+    id: "chupeteo",
+    concepto: "Chupeteo (Ludeln)",
+    referente: "Apuntalamiento y autoerotismo",
+    pista: "El placer de la succión se independiza de la nutrición: la pulsión sexual nace apoyada en lo vital.",
+  },
+  {
+    id: "negativo-perversion",
+    concepto: "La neurosis es el negativo de la perversión",
+    referente: "Tres ensayos de teoría sexual (1905)",
+    pista: "Lo que el perverso actúa, el neurótico lo reprime y retorna como síntoma.",
+  },
+  {
+    id: "his-majesty-baby",
+    concepto: "His Majesty the Baby",
+    referente: "Narcisismo primario",
+    pista: "La sobreestimación del hijo retoma el narcisismo perdido de los padres.",
+  },
+  {
+    id: "fort-da",
+    concepto: "Fort-da (el carretel)",
+    referente: "Compulsión de repetición",
+    pista: "El niño elabora activamente (arroja y recupera) la ausencia de la madre que padeció pasivamente.",
+  },
+  {
+    id: "sombra-objeto-yo",
+    concepto: "La sombra del objeto cayó sobre el yo",
+    referente: "Identificación melancólica",
+    pista: "La libido se retrae al yo y lo identifica con el objeto perdido; los autorreproches van al objeto.",
+  },
+  {
+    id: "yo-no-amo",
+    concepto: "El yo no es amo en su propia casa",
+    referente: "Segunda tópica (ello / yo / superyó)",
+    pista: "El yo no coincide con la conciencia ni domina el aparato: es servidor del ello, el superyó y la realidad.",
+  },
+  {
+    id: "envidia-pene",
+    concepto: "Envidia del pene",
+    referente: "El Edipo femenino (inaugurado por la castración)",
+    pista: "La niña se aparta de la madre y se vuelve al padre esperando un hijo como equivalente del pene.",
+  },
+  {
+    id: "homo-homini-lupus",
+    concepto: "Homo homini lupus",
+    referente: "Pulsión de muerte / agresión en la cultura",
+    pista: "La cultura (obra de Eros) debe domar la agresión constitutiva del hombre hacia el hombre.",
+  },
 ]
