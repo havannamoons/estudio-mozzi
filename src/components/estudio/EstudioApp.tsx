@@ -12,6 +12,7 @@ import { SimulacroMode } from "./SimulacroMode"
 import { MatchMode } from "./MatchMode"
 import { ClozeMode } from "./ClozeMode"
 import { ToastViewport } from "./Toast"
+import { Welcome } from "./Welcome"
 
 export function EstudioApp() {
   return (
@@ -33,6 +34,16 @@ function EstudioAppInner() {
           Cargando…
         </div>
       </main>
+    )
+  }
+
+  // Primera visita: pantalla de bienvenida antes de la app.
+  if (api.verBienvenida) {
+    return (
+      <>
+        <BlobsBackground />
+        <Welcome onEmpezar={api.cerrarBienvenida} />
+      </>
     )
   }
 
