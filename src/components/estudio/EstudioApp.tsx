@@ -2,6 +2,7 @@
 
 import { ToastProvider, useToast } from "@/lib/hooks/useToast"
 import { useEstudio } from "@/lib/hooks/useEstudio"
+import { useAuth } from "@/lib/hooks/useAuth"
 import { BlobsBackground } from "./BlobsBackground"
 import { Header } from "./Header"
 import { ModoSelector } from "./ModoSelector"
@@ -13,7 +14,8 @@ import { MatchMode } from "./MatchMode"
 import { ClozeMode } from "./ClozeMode"
 import { ToastViewport } from "./Toast"
 import { Welcome } from "./Welcome"
-import { AccessGate } from "./AccessGate"
+import { LoginGate } from "./LoginGate"
+import { PendienteAprobacion } from "./PendienteAprobacion"
 
 export function EstudioApp() {
   return (
@@ -24,31 +26,52 @@ export function EstudioApp() {
   )
 }
 
+function Cargando() {
+  return (
+    <main className="mx-auto max-w-7xl px-4 py-6">
+      <div className="glass-strong rounded-3xl p-10 text-center text-sm text-zinc-500 dark:text-zinc-400">
+        Cargando…
+      </div>
+    </main>
+  )
+}
+
 function EstudioAppInner() {
+  const auth = useAuth()
   const api = useEstudio()
   const { push: toast } = useToast()
 
-  if (!api.hidratado) {
-    return (
-      <main className="mx-auto max-w-7xl px-4 py-6">
-        <div className="glass-strong rounded-3xl p-10 text-center text-sm text-zinc-500 dark:text-zinc-400">
-          Cargando…
-        </div>
-      </main>
-    )
+  // 1. Resolviendo sesión de Supabase o hidratando localStorage.
+  if (auth.cargando || !api.hidratado) {
+    return <Cargando />
   }
 
-  // Acceso: sin código válido no se entra a la app.
-  if (!api.desbloqueado) {
+  // 2. Sin sesión → login con Google.
+  if (!auth.session) {
     return (
       <>
         <BlobsBackground />
-        <AccessGate onDesbloquear={api.desbloquear} />
+        <LoginGate auth={auth} />
       </>
     )
   }
 
-  // Primera visita (ya desbloqueado): pantalla de bienvenida antes de la app.
+  // 3. Logueada pero todavía chequeando si está habilitada.
+  if (auth.habilitado === null) {
+    return <Cargando />
+  }
+
+  // 4. Logueada pero acceso no habilitado (aún no confirmada la compra).
+  if (!auth.habilitado) {
+    return (
+      <>
+        <BlobsBackground />
+        <PendienteAprobacion auth={auth} />
+      </>
+    )
+  }
+
+  // 5. Habilitada + primera visita → bienvenida.
   if (api.verBienvenida) {
     return (
       <>
