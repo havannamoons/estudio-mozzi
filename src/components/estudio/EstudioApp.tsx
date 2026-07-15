@@ -1,6 +1,7 @@
 "use client"
 
 import { ToastProvider, useToast } from "@/lib/hooks/useToast"
+import { ACCESO_ABIERTO } from "@/lib/constants"
 import { useEstudio } from "@/lib/hooks/useEstudio"
 import { useAuth } from "@/lib/hooks/useAuth"
 import { BlobsBackground } from "./BlobsBackground"
@@ -41,37 +42,43 @@ function EstudioAppInner() {
   const api = useEstudio()
   const { push: toast } = useToast()
 
-  // 1. Resolviendo sesión de Supabase o hidratando localStorage.
-  if (auth.cargando || !api.hidratado) {
+  // === Gate de acceso (login con Google + aprobación) ===
+  // Se saltea por completo cuando ACCESO_ABIERTO = true (app gratis para todos).
+  if (!ACCESO_ABIERTO) {
+    // 1. Resolviendo sesión de Supabase.
+    if (auth.cargando) {
+      return <Cargando />
+    }
+    // 2. Sin sesión → login con Google.
+    if (!auth.session) {
+      return (
+        <>
+          <BlobsBackground />
+          <LoginGate auth={auth} />
+        </>
+      )
+    }
+    // 3. Logueada pero todavía chequeando si está habilitada.
+    if (auth.habilitado === null) {
+      return <Cargando />
+    }
+    // 4. Logueada pero acceso no habilitado (aún no confirmada la compra).
+    if (!auth.habilitado) {
+      return (
+        <>
+          <BlobsBackground />
+          <PendienteAprobacion auth={auth} />
+        </>
+      )
+    }
+  }
+
+  // Hidratando localStorage (progreso, etc.).
+  if (!api.hidratado) {
     return <Cargando />
   }
 
-  // 2. Sin sesión → login con Google.
-  if (!auth.session) {
-    return (
-      <>
-        <BlobsBackground />
-        <LoginGate auth={auth} />
-      </>
-    )
-  }
-
-  // 3. Logueada pero todavía chequeando si está habilitada.
-  if (auth.habilitado === null) {
-    return <Cargando />
-  }
-
-  // 4. Logueada pero acceso no habilitado (aún no confirmada la compra).
-  if (!auth.habilitado) {
-    return (
-      <>
-        <BlobsBackground />
-        <PendienteAprobacion auth={auth} />
-      </>
-    )
-  }
-
-  // 5. Habilitada + primera visita → bienvenida.
+  // Primera visita → bienvenida.
   if (api.verBienvenida) {
     return (
       <>
