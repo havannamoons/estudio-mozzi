@@ -7,7 +7,7 @@ export function PendienteAprobacion({ auth }: { auth: AuthApi }) {
   return (
     <main className="mx-auto flex min-h-[100svh] max-w-md flex-col justify-center px-4 py-8">
       <div className="glass-strong animate-scale-in rounded-3xl p-6 text-center sm:p-8">
-        <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+        <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/12 text-emerald-600 dark:text-emerald-400">
           <Clock className="h-7 w-7" />
         </div>
 
