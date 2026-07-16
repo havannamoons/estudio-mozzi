@@ -278,10 +278,10 @@ html.dark .fase-dot {
   background: rgba(255, 255, 255, 0.15);
 }
 .fase-dot.active {
-  background: rgb(249 115 22);
+  background: rgb(239 68 68);
 }
 .fase-dot.done {
-  background: rgba(249, 115, 22, 0.4);
+  background: rgba(239, 68, 68, 0.4);
 }
 
 /* ============================================================

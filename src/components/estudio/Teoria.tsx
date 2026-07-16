@@ -36,17 +36,17 @@ export function Teoria({ tema, onIrAlQuiz }: Props) {
       {tema.tipParcial && (
         <div className="tip-parcial mt-4 rounded-2xl p-4">
           <div className="mb-1.5 flex items-center gap-1.5">
-            <Target className="h-3.5 w-3.5" style={{ color: "rgb(251,191,36)" }} />
+            <Target className="h-3.5 w-3.5" style={{ color: "rgb(52,211,153)" }} />
             <p
               className="text-[10px] font-medium tracking-wider uppercase"
-              style={{ color: "rgb(251,191,36)" }}
+              style={{ color: "rgb(52,211,153)" }}
             >
               Tip de parcial · Cát. Pino (ex Mozzi)
             </p>
           </div>
           <p
             className="text-xs leading-relaxed"
-            style={{ color: "rgb(254,215,170)" }}
+            style={{ color: "rgb(167,243,208)" }}
             dangerouslySetInnerHTML={{ __html: tema.tipParcial }}
           />
         </div>
