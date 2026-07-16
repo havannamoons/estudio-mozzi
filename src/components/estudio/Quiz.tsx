@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 const LETRAS = ["A", "B", "C", "D", "E", "F"]
 const NIVELES_LABEL: Record<number, { label: string; tone: string }> = {
   1: { label: "Fácil", tone: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" },
-  2: { label: "Media", tone: "bg-amber-500/15 text-amber-700 dark:text-amber-300" },
+  2: { label: "Media", tone: "bg-teal-500/15 text-teal-700 dark:text-teal-300" },
   3: {
     label: "Articulación",
     tone: "bg-violet-500/15 text-violet-700 dark:text-violet-300",

@@ -1,7 +1,7 @@
 "use client"
 
 import { ToastProvider, useToast } from "@/lib/hooks/useToast"
-import { ACCESO_ABIERTO } from "@/lib/constants"
+import { ACCESO_ABIERTO, APP_PAUSADA } from "@/lib/constants"
 import { useEstudio } from "@/lib/hooks/useEstudio"
 import { useAuth } from "@/lib/hooks/useAuth"
 import { BlobsBackground } from "./BlobsBackground"
@@ -15,6 +15,7 @@ import { MatchMode } from "./MatchMode"
 import { ClozeMode } from "./ClozeMode"
 import { ToastViewport } from "./Toast"
 import { Welcome } from "./Welcome"
+import { AppPausada } from "./AppPausada"
 import { LoginGate } from "./LoginGate"
 import { PendienteAprobacion } from "./PendienteAprobacion"
 
@@ -41,6 +42,18 @@ function EstudioAppInner() {
   const auth = useAuth()
   const api = useEstudio()
   const { push: toast } = useToast()
+
+  // === Pausa total (bloqueo del link online) ===
+  // Cuando APP_PAUSADA = true, la copia PUBLICADA (internet) muestra "No disponible por ahora".
+  // En desarrollo local (tu compu) NUNCA se pausa, así podés seguir trabajando.
+  if (APP_PAUSADA && process.env.NODE_ENV === "production") {
+    return (
+      <>
+        <BlobsBackground />
+        <AppPausada />
+      </>
+    )
+  }
 
   // === Gate de acceso (login con Google + aprobación) ===
   // Se saltea por completo cuando ACCESO_ABIERTO = true (app gratis para todos).

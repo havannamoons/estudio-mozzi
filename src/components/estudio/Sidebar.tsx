@@ -27,12 +27,12 @@ export function Sidebar({ api }: Props) {
             : "bg-zinc-300 dark:bg-zinc-700"
           const pct =
             prog.hechas > 0 ? Math.round((prog.correctas / prog.hechas) * 100) : 0
-          // Chip de % alineado con la paleta (emerald / amber / zinc — sin rojo).
+          // Chip de % alineado con la paleta (emerald / teal / zinc — sin rojo).
           const pctCls =
             pct >= 80
               ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
               : pct >= 50
-                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300"
+                ? "bg-teal-500/15 text-teal-700 dark:text-teal-300"
                 : "bg-zinc-500/15 text-zinc-600 dark:text-zinc-400"
           return (
             <button
