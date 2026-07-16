@@ -12,7 +12,7 @@ const NIVELES_LABEL: Record<number, { label: string; tone: string }> = {
   2: { label: "Media", tone: "bg-teal-500/15 text-teal-700 dark:text-teal-300" },
   3: {
     label: "Articulación",
-    tone: "bg-violet-500/15 text-violet-700 dark:text-violet-300",
+    tone: "bg-green-500/15 text-green-700 dark:text-green-300",
   },
 }
 
@@ -198,7 +198,7 @@ export function Quiz({ api }: Props) {
               "anim-fade mt-5 rounded-xl border-l-4 p-4",
               respuesta?.correcta
                 ? "border-l-emerald-500/60 bg-emerald-500/5"
-                : "border-l-orange-500/60 bg-orange-500/5",
+                : "border-l-red-500/60 bg-red-500/5",
             )}
           >
             <p
@@ -206,7 +206,7 @@ export function Quiz({ api }: Props) {
                 "mb-1.5 text-[10px] font-medium tracking-wider uppercase",
                 respuesta?.correcta
                   ? "text-emerald-700 dark:text-emerald-400"
-                  : "text-orange-600 dark:text-orange-400",
+                  : "text-red-600 dark:text-red-400",
               )}
             >
               {respuesta?.correcta ? "Bien" : "Para recordar"}

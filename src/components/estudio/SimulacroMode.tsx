@@ -315,7 +315,7 @@ function SimulacroPlay({
               "anim-fade mt-5 rounded-xl border-l-4 p-4",
               respuesta?.correcta
                 ? "border-l-emerald-500/60 bg-emerald-500/5"
-                : "border-l-orange-500/60 bg-orange-500/5",
+                : "border-l-red-500/60 bg-red-500/5",
             )}
           >
             <p
@@ -323,7 +323,7 @@ function SimulacroPlay({
                 "mb-1.5 text-[10px] font-medium tracking-wider uppercase",
                 respuesta?.correcta
                   ? "text-emerald-700 dark:text-emerald-400"
-                  : "text-orange-600 dark:text-orange-400",
+                  : "text-red-600 dark:text-red-400",
               )}
             >
               {respuesta?.correcta ? "Bien · " : "Para recordar · "}
@@ -396,13 +396,13 @@ function SimulacroResultados({
             "mb-5 inline-flex rounded-2xl p-3",
             aprobado
               ? "bg-gradient-to-br from-emerald-500/20 to-emerald-600/10"
-              : "bg-gradient-to-br from-orange-500/20 to-orange-600/10",
+              : "bg-gradient-to-br from-red-500/20 to-red-600/10",
           )}
         >
           <Trophy
             className={cn(
               "h-8 w-8",
-              aprobado ? "text-emerald-500" : "text-orange-500",
+              aprobado ? "text-emerald-500" : "text-red-500",
             )}
           />
         </div>
@@ -413,7 +413,7 @@ function SimulacroResultados({
           <span
             className={cn(
               "font-serif text-6xl font-bold tabular-nums",
-              aprobado ? "text-emerald-500" : "text-orange-500",
+              aprobado ? "text-emerald-500" : "text-red-500",
             )}
           >
             {pct}%
@@ -495,9 +495,9 @@ function SimulacroResultados({
               return (
                 <div
                   key={i}
-                  className="glass rounded-xl border-l-4 border-l-orange-500/60 p-4"
+                  className="glass rounded-xl border-l-4 border-l-red-500/60 p-4"
                 >
-                  <div className="mb-1 text-[10px] font-medium tracking-wider text-orange-600 uppercase dark:text-orange-400">
+                  <div className="mb-1 text-[10px] font-medium tracking-wider text-red-600 uppercase dark:text-red-400">
                     {tema.practico} · {tema.titulo}
                   </div>
                   <p className="mb-3 font-serif text-sm leading-snug text-zinc-800 dark:text-zinc-100">

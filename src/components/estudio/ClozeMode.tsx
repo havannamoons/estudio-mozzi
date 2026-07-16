@@ -121,7 +121,7 @@ export function ClozeMode() {
             respondida && respActual?.ok
               ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300"
               : respondida
-                ? "bg-orange-500/20 text-orange-700 line-through decoration-orange-500/60 dark:text-orange-300"
+                ? "bg-red-500/20 text-red-700 line-through decoration-red-500/60 dark:text-red-300"
                 : "bg-zinc-500/10 text-zinc-400 dark:text-zinc-500",
           )}
         >
@@ -140,7 +140,7 @@ export function ClozeMode() {
       <div className="glass-strong rounded-2xl p-5 sm:p-7">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <div className="mb-1.5 text-[10px] font-medium tracking-wider text-sky-600 uppercase dark:text-sky-400">
+            <div className="mb-1.5 text-[10px] font-medium tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
               Actividad
             </div>
             <h2 className="font-serif text-xl leading-tight font-semibold text-zinc-900 sm:text-2xl dark:text-zinc-50">
@@ -178,7 +178,7 @@ export function ClozeMode() {
             {items.map((c, i) => {
               const r = respuestas.find((x) => x.id === c.id)
               let cls = "bg-white/20 dark:bg-white/8"
-              if (r) cls = r.ok ? "bg-emerald-500" : "bg-orange-500"
+              if (r) cls = r.ok ? "bg-emerald-500" : "bg-red-500"
               if (i === idx) cls += " ring-2 ring-white/30"
               return (
                 <div
@@ -277,7 +277,7 @@ export function ClozeMode() {
                   "anim-fade mt-5 rounded-xl border-l-4 p-4",
                   respActual?.ok
                     ? "border-l-emerald-500/60 bg-emerald-500/5"
-                    : "border-l-orange-500/60 bg-orange-500/5",
+                    : "border-l-red-500/60 bg-red-500/5",
                 )}
               >
                 <p
@@ -285,7 +285,7 @@ export function ClozeMode() {
                     "mb-1.5 text-[10px] font-medium tracking-wider uppercase",
                     respActual?.ok
                       ? "text-emerald-700 dark:text-emerald-400"
-                      : "text-orange-600 dark:text-orange-400",
+                      : "text-red-600 dark:text-red-400",
                   )}
                 >
                   {respActual?.ok ? "Bien" : "Para recordar"}
@@ -309,7 +309,7 @@ export function ClozeMode() {
             <button
               onClick={siguiente}
               disabled={!respondida || idx === total - 1}
-              className="btn-press inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 hover:from-sky-600 hover:to-sky-700"
+              className="btn-press inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 hover:from-emerald-600 hover:to-emerald-700"
             >
               {idx === total - 1 ? "Ver resultados" : "Siguiente"}
               <ArrowRight className="h-4 w-4" />
@@ -345,11 +345,11 @@ function ResultadosCloze({
             "mb-5 inline-flex rounded-2xl p-3",
             buena
               ? "bg-gradient-to-br from-emerald-500/20 to-emerald-600/10"
-              : "bg-gradient-to-br from-sky-500/20 to-sky-600/10",
+              : "bg-gradient-to-br from-emerald-500/20 to-emerald-600/10",
           )}
         >
           <Trophy
-            className={cn("h-8 w-8", buena ? "text-emerald-500" : "text-sky-500")}
+            className={cn("h-8 w-8", buena ? "text-emerald-500" : "text-emerald-500")}
           />
         </div>
         <h2 className="mb-1 font-serif text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
@@ -359,7 +359,7 @@ function ResultadosCloze({
           <span
             className={cn(
               "font-serif text-6xl font-bold tabular-nums",
-              buena ? "text-emerald-500" : "text-sky-500",
+              buena ? "text-emerald-500" : "text-emerald-500",
             )}
           >
             {pct}%
@@ -370,7 +370,7 @@ function ResultadosCloze({
         </p>
         <button
           onClick={onReintentar}
-          className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg hover:from-sky-600 hover:to-sky-700"
+          className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg hover:from-emerald-600 hover:to-emerald-700"
         >
           <RotateCcw className="h-4 w-4" /> Otra partida
         </button>
@@ -390,10 +390,10 @@ function ResultadosCloze({
               return (
                 <div
                   key={r.id}
-                  className="glass rounded-xl border-l-4 border-l-orange-500/60 p-4"
+                  className="glass rounded-xl border-l-4 border-l-red-500/60 p-4"
                 >
                   {cloze.tema && (
-                    <div className="mb-1 text-[10px] font-medium tracking-wider text-orange-600 uppercase dark:text-orange-400">
+                    <div className="mb-1 text-[10px] font-medium tracking-wider text-red-600 uppercase dark:text-red-400">
                       {cloze.tema}
                     </div>
                   )}
