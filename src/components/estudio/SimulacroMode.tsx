@@ -64,8 +64,8 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
 
   return (
     <div className="anim-fade glass-strong rounded-3xl p-6 sm:p-10">
-      <div className="mb-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 p-3">
-        <FileCheck className="h-7 w-7 text-amber-500" />
+      <div className="mb-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 p-3">
+        <FileCheck className="h-7 w-7 text-emerald-500" />
       </div>
       <h2 className="mb-2 font-serif text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
         Simulacro de examen
@@ -92,7 +92,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               value={cantidad}
               onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
               list="cant-marks"
-              className="flex-1 accent-amber-500"
+              className="flex-1 accent-emerald-500"
               aria-valuemin={SIMULACRO_PREGUNTAS_MIN}
               aria-valuemax={Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles)}
               aria-valuenow={cantidadReal}
@@ -103,7 +103,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <option value="20" label="20" />
               <option value="30" label="30" />
             </datalist>
-            <span className="min-w-[3rem] text-right font-serif text-2xl font-semibold tabular-nums text-amber-600 dark:text-amber-400">
+            <span className="min-w-[3rem] text-right font-serif text-2xl font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
               {cantidadReal}
             </span>
           </div>
@@ -123,7 +123,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
                       // Mobile: tap target ~36px (3*8px padding + texto). Desktop: compacto.
                       "btn-press min-h-[36px] rounded-md px-3 py-1.5 font-mono text-xs tabular-nums transition-colors sm:min-h-0 sm:px-2.5 sm:py-1 sm:text-[11px]",
                       activo
-                        ? "bg-amber-500/20 text-amber-700 ring-1 ring-amber-500/40 dark:text-amber-300"
+                        ? "bg-emerald-500/20 text-emerald-700 ring-1 ring-emerald-500/40 dark:text-emerald-300"
                         : "text-zinc-500 hover:bg-white/5 hover:text-zinc-700 dark:hover:text-zinc-200",
                     )}
                     aria-label={`Elegir ${n} preguntas`}
@@ -149,7 +149,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <button
                 type="button"
                 onClick={() => setCantidad(8)}
-                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-amber-400"
+                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-emerald-600 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-emerald-400"
               >
                 6-10
               </button>
@@ -159,7 +159,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <button
                 type="button"
                 onClick={() => setCantidad(12)}
-                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-amber-400"
+                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-emerald-600 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-emerald-400"
               >
                 12-15
               </button>
@@ -169,7 +169,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
               <button
                 type="button"
                 onClick={() => setCantidad(20)}
-                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-amber-600 ring-1 ring-amber-500/30 hover:bg-amber-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-amber-400"
+                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-emerald-600 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-emerald-400"
               >
                 20-30
               </button>
@@ -181,7 +181,7 @@ function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
 
       <button
         onClick={() => onIniciar(cantidadReal)}
-        className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-amber-900/30 hover:from-amber-600 hover:to-amber-700"
+        className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-emerald-900/30 hover:from-emerald-600 hover:to-emerald-700"
       >
         <Play className="h-4 w-4" /> Empezar simulacro
       </button>
@@ -224,14 +224,14 @@ function SimulacroPlay({
   return (
     <div className="anim-fade space-y-4">
       {/* Banner simulacro */}
-      <div className="glass flex items-center justify-between rounded-2xl border-l-4 border-l-amber-500/60 px-4 py-2.5">
-        <div className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300">
+      <div className="glass flex items-center justify-between rounded-2xl border-l-4 border-l-emerald-500/60 px-4 py-2.5">
+        <div className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-300">
           <FileCheck className="h-4 w-4" />
           <span className="font-medium">Simulacro · pregunta {idx + 1} de {preguntasSim.length}</span>
         </div>
         <button
           onClick={onSalir}
-          className="text-xs text-amber-700 hover:underline dark:text-amber-400"
+          className="text-xs text-emerald-700 hover:underline dark:text-emerald-400"
         >
           Salir
         </button>
@@ -350,7 +350,7 @@ function SimulacroPlay({
         <button
           onClick={onSiguiente}
           disabled={!respondida}
-          className="btn-press inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 hover:from-amber-600 hover:to-amber-700"
+          className="btn-press inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 hover:from-emerald-600 hover:to-emerald-700"
         >
           {idx === preguntasSim.length - 1 ? "Ver resultados" : "Siguiente"}
           <ChevronRight className="h-4 w-4" />
@@ -425,7 +425,7 @@ function SimulacroResultados({
 
         <button
           onClick={onReintentar}
-          className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg hover:from-amber-600 hover:to-amber-700"
+          className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg hover:from-emerald-600 hover:to-emerald-700"
         >
           <RotateCcw className="h-4 w-4" /> Otro simulacro
         </button>
@@ -456,7 +456,7 @@ function SimulacroResultados({
                       p >= 80
                         ? "text-emerald-500"
                         : p >= 50
-                          ? "text-amber-500"
+                          ? "text-teal-500"
                           : "text-red-500",
                     )}
                   >
@@ -470,7 +470,7 @@ function SimulacroResultados({
                       p >= 80
                         ? "bg-emerald-500"
                         : p >= 50
-                          ? "bg-amber-500"
+                          ? "bg-teal-500"
                           : "bg-red-500",
                     )}
                     style={{ width: `${p}%` }}

@@ -11,6 +11,15 @@ export const THEME_KEY = "tema_estudio"
  */
 export const ACCESO_ABIERTO = true
 
+/**
+ * Interruptor de pausa (bloqueo del link online).
+ *   true  = el link publicado muestra "No disponible por ahora" (nadie entra).
+ *   false = la app funciona normal (sujeta a ACCESO_ABIERTO).
+ * Ojo: la pausa SOLO aplica en producción (el link). En tu compu (dev) siempre
+ * podés abrir la app para seguir trabajando. Para reabrir el link, poné false y deployá.
+ */
+export const APP_PAUSADA = true
+
 export const SIMULACRO_PREGUNTAS_DEFAULT = 12
 export const SIMULACRO_PREGUNTAS_MIN = 6
 export const SIMULACRO_PREGUNTAS_MAX = 30

@@ -266,7 +266,7 @@ export function ClozeMode() {
               </div>
             )}
             {pistaVisible && !respondida && actual.pista && (
-              <p className="anim-fade mt-3 rounded-lg border-l-4 border-l-amber-500/60 bg-amber-500/5 px-3 py-2 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+              <p className="anim-fade mt-3 rounded-lg border-l-4 border-l-emerald-500/60 bg-emerald-500/5 px-3 py-2 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
                 💡 {actual.pista}
               </p>
             )}
