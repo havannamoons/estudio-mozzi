@@ -99,6 +99,8 @@ Sin naranjas, amarillos, violetas ni azules.
 - La **clave secreta** de Supabase que se había filtrado ya está **anulada** (17/7). ✔️
 - El código solo usa la **clave pública** (inofensiva, protegida por RLS).
 - Solo **havannamoons@gmail.com** puede activar gente (lo garantizan las políticas RLS de la base, no solo la pantalla).
+- **Marca de agua** "havannamoons" tenue sobre el contenido (aparece en las capturas).
+- ⚠️ **Las capturas NO se pueden bloquear en una web** (ni con clic derecho ni nada: el botón de captura del celu/compu funciona igual, y peor, pueden sacarle una foto con otro celular). La protección real es: (1) el **login** — nadie entra sin pagar y ser aprobada; (2) podés **quitarle el acceso** a quien re-venda, desde el panel.
 
 ---
 
