@@ -20,6 +20,13 @@ export const ACCESO_ABIERTO = false
  */
 export const APP_PAUSADA = false
 
+/**
+ * Email de la dueña/admin. Solo esta cuenta puede entrar a `/panel` y activar
+ * compradoras. La seguridad real la da la política RLS en Supabase (este valor
+ * es solo para mostrar/ocultar la UI del panel).
+ */
+export const ADMIN_EMAIL = "havannamoons@gmail.com"
+
 export const SIMULACRO_PREGUNTAS_DEFAULT = 12
 export const SIMULACRO_PREGUNTAS_MIN = 6
 export const SIMULACRO_PREGUNTAS_MAX = 30
