@@ -27,6 +27,13 @@ export const APP_PAUSADA = false
  */
 export const ADMIN_EMAIL = "havannamoons@gmail.com"
 
+/**
+ * Número de WhatsApp de la vendedora para el botón "Comprar" de la landing.
+ * Formato internacional SIN "+", espacios ni guiones. Ej: 5491112345678.
+ * Si queda vacío, el botón "Comprar" invita a completar el número.
+ */
+export const WHATSAPP_NUMERO = "5491127044906"
+
 export const SIMULACRO_PREGUNTAS_DEFAULT = 12
 export const SIMULACRO_PREGUNTAS_MIN = 6
 export const SIMULACRO_PREGUNTAS_MAX = 30

@@ -1,5 +1,5 @@
-import { EstudioApp } from "@/components/estudio/EstudioApp"
+import { Landing } from "@/components/estudio/Landing"
 
 export default function Home() {
-  return <EstudioApp />
+  return <Landing />
 }
