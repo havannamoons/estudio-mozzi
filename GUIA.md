@@ -9,7 +9,8 @@ Guía práctica para vos (Ro). Todo lo importante en un solo lugar.
 
 | Qué | Link |
 |---|---|
-| **La app** (lo que usan tus compradoras) | https://estudio-mozzi-i3ao.vercel.app |
+| **Link para vender** (la landing/presentación) | https://estudio-mozzi-i3ao.vercel.app |
+| **La app** (para estudiar) | https://estudio-mozzi-i3ao.vercel.app/app |
 | **Tu panel** (para activar compradoras) | https://estudio-mozzi-i3ao.vercel.app/panel |
 | Panel de Supabase (base de datos) | https://supabase.com/dashboard/project/esbrpjlwavnwdykygcxk |
 | Google Cloud (login) | https://console.cloud.google.com |
