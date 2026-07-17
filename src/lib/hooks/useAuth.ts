@@ -65,9 +65,10 @@ export function useAuth() {
   }, [chequearHabilitado])
 
   const loginConGoogle = useCallback(async () => {
+    // Vuelve a la MISMA página desde donde se logueó (app o /panel).
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: window.location.origin + window.location.pathname },
     })
   }, [])
 
