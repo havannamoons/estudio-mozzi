@@ -9,7 +9,7 @@ export const THEME_KEY = "tema_estudio"
  *   false = vuelve el login con Google + gate de "habilitado" (para vender).
  * Todo el sistema de login queda construido; solo se activa cambiando esto a false.
  */
-export const ACCESO_ABIERTO = true
+export const ACCESO_ABIERTO = false
 
 /**
  * Interruptor de pausa (bloqueo del link online).
@@ -18,7 +18,7 @@ export const ACCESO_ABIERTO = true
  * Ojo: la pausa SOLO aplica en producción (el link). En tu compu (dev) siempre
  * podés abrir la app para seguir trabajando. Para reabrir el link, poné false y deployá.
  */
-export const APP_PAUSADA = true
+export const APP_PAUSADA = false
 
 export const SIMULACRO_PREGUNTAS_DEFAULT = 12
 export const SIMULACRO_PREGUNTAS_MIN = 6
