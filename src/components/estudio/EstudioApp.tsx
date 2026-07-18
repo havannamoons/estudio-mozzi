@@ -16,7 +16,6 @@ import { ClozeMode } from "./ClozeMode"
 import { ToastViewport } from "./Toast"
 import { Welcome } from "./Welcome"
 import { AppPausada } from "./AppPausada"
-import { Watermark } from "./Watermark"
 import { LoginGate } from "./LoginGate"
 import { PendienteAprobacion } from "./PendienteAprobacion"
 
@@ -141,7 +140,6 @@ function EstudioAppInner() {
         {api.modo === "cloze" && <ClozeMode />}
         {api.modo === "simulacro" && <SimulacroMode api={api} />}
       </main>
-      <Watermark />
     </>
   )
 }

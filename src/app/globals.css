@@ -99,6 +99,21 @@
   .font-serif {
     font-family: var(--font-serif);
   }
+  /* Tailwind 4 dejó los botones con cursor default; acá vuelve la manito
+     en todo lo clickeable (salvo deshabilitados). */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  select:not(:disabled),
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
 
 /* ============================================================
