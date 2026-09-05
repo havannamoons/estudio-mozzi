@@ -1,19 +1,6 @@
-/**
- * Cloze (fill-in-the-blank). Cada item es una frase con `___` donde falta
- * una palabra/término técnico clave. El matcheo acepta variantes (case +
- * acentos insensibles), por lo cual `respuestas` puede listar sinónimos.
- */
-export interface Cloze {
-  id: string
-  frase: string
-  /** Variantes válidas (case + acentos insensibles). El primer item es la
-   *  que se muestra como botón "correcto" en modo opciones. */
-  respuestas: string[]
-  /** 3 distractores plausibles para modo multiple-choice. */
-  distractores: string[]
-  pista?: string
-  tema?: string
-}
+import type { Cloze } from "@/lib/types"
+
+export type { Cloze }
 
 export const CLOZES: Cloze[] = [
   {
@@ -245,21 +232,3 @@ export const CLOZES: Cloze[] = [
     tema: "El malestar en la cultura (1930)",
   },
 ]
-
-/**
- * Normaliza strings para matcheo del cloze: minúsculas + sin acentos + sin
- * espacios extra. Hace que "Represión" matchee con "represion", "REPRESION", etc.
- */
-export function normalizarCloze(s: string): string {
-  return s
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .trim()
-}
-
-export function clozeAcierta(respuestaUsuario: string, cloze: Cloze): boolean {
-  const norm = normalizarCloze(respuestaUsuario)
-  if (!norm) return false
-  return cloze.respuestas.some((r) => normalizarCloze(r) === norm)
-}

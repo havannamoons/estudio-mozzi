@@ -1,3 +1,5 @@
+import type { Cloze } from "@/lib/types"
+
 export function hoy(): string {
   return new Date().toISOString().slice(0, 10)
 }
@@ -46,4 +48,20 @@ export function ordenarPorDificultadIdx(dificultades: number[]): number[] {
     ...shuffle(buckets[2]),
     ...shuffle(buckets[3]),
   ]
+}
+
+/** Normaliza para comparar respuestas: sin acentos, minúsculas, sin espacios sobrantes. */
+export function normalizarCloze(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim()
+}
+
+/** ¿La respuesta escrita coincide con alguna variante válida del cloze? */
+export function clozeAcierta(respuestaUsuario: string, cloze: Cloze): boolean {
+  const norm = normalizarCloze(respuestaUsuario)
+  if (!norm) return false
+  return cloze.respuestas.some((r) => normalizarCloze(r) === norm)
 }

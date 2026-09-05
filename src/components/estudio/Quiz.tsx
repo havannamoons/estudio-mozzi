@@ -3,8 +3,10 @@
 import { useEffect,useRef,useState} from "react"
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
-import { DIFICULTADES } from "@/lib/data/temas"
+import type { Seguridad } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { QuizTerminado } from "./QuizTerminado"
+import { SelectorSeguridad } from "./Calibracion"
 
 const LETRAS = ["A", "B", "C", "D", "E", "F"]
 const NIVELES_LABEL: Record<number, { label: string; tone: string }> = {
@@ -32,7 +34,16 @@ export function Quiz({ api }: Props) {
   } = api
 
   const [animandoDotIdx, setAnimandoDotIdx] = useState<number | null>(null)
+  /* Cierre del quiz. Aparece solo apenas contestás la última pregunta.
+     `revisando` es la salida: con "Ver mis respuestas" volvés al quiz a leer
+     las explicaciones sin que el cierre vuelva a taparte la vista. */
+  const [revisando, setRevisando] = useState(false)
   const prevRespondidaRef = useRef<boolean | undefined>(undefined)
+
+  /* Opción tocada que todavía no se registró, porque falta declarar cuánta
+     seguridad tenías. Vive acá y no en el progreso a propósito: mientras está
+     pendiente podés cambiar de opción, y nada quedó guardado. */
+  const [eleccionPendiente, setEleccionPendiente] = useState<number | null>(null)
 
 
   const total = temaActivo.preguntas.length
@@ -43,7 +54,7 @@ export function Quiz({ api }: Props) {
   const respuesta = r[origIdx]
   const respondida = !!respuesta
 
-  const difs = DIFICULTADES[temaActivo.id] ?? []
+  const difs = api.contenido.dificultades[temaActivo.id] ?? []
   const nivelActual = difs[origIdx] ?? 2
 
   const totalRespondidas = Object.keys(r).length
@@ -56,9 +67,21 @@ export function Quiz({ api }: Props) {
       if (tag === "INPUT" || tag === "TEXTAREA") return
       if (!respondida) {
         const n = parseInt(e.key, 10)
+        /* Con una elección pendiente, 1-2-3 ya no eligen opción: eligen
+           seguridad, que es lo único que la pantalla está pidiendo. */
+        if (eleccionPendiente !== null) {
+          if (n >= 1 && n <= 3) {
+            e.preventDefault()
+            const seg: Seguridad =
+              n === 1 ? "seguro" : n === 2 ? "masomenos" : "adivino"
+            responder(eleccionPendiente, seg)
+            setEleccionPendiente(null)
+          }
+          return
+        }
         if (n >= 1 && n <= pregunta.opciones.length) {
           e.preventDefault()
-          responder(n - 1)
+          setEleccionPendiente(n - 1)
         }
       } else {
         if (e.key === "Enter" || e.key === " " || e.key === "ArrowRight") {
@@ -72,7 +95,33 @@ export function Quiz({ api }: Props) {
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [respondida, pregunta.opciones.length, responder, displayIdx, total, irAPregunta])
+  }, [
+    respondida,
+    pregunta.opciones.length,
+    responder,
+    displayIdx,
+    total,
+    irAPregunta,
+    eleccionPendiente,
+  ])
+
+  // Al cambiar de tema volvemos a permitir que el cierre aparezca.
+  useEffect(() => {
+    setRevisando(false)
+  }, [temaActivo.id])
+
+  // Cambiar de pregunta descarta la elección a medio hacer.
+  useEffect(() => {
+    setEleccionPendiente(null)
+  }, [displayIdx, temaActivo.id])
+
+  // Terminado el tema, queda anotado en la sesión.
+  const { registrarTema } = api
+  useEffect(() => {
+    if (total > 0 && totalRespondidas >= total) {
+      registrarTema({ temaId: temaActivo.id, correctas: totalCorrectas, total })
+    }
+  }, [temaActivo.id, totalRespondidas, totalCorrectas, total, registrarTema])
 
   // Cuando pasás de NO respondido a respondido, iluminamos el dot por 1.6s
   // y después se atenúa solo (calm design — idea de la usuaria).
@@ -94,7 +143,38 @@ export function Quiz({ api }: Props) {
     )
   }
 
+  // Contestaste todas: en vez de dejarte parada en la última pregunta,
+  // aparece el cierre con el puntaje y a dónde seguir.
+  if (totalRespondidas >= total && !revisando) {
+    return (
+      <QuizTerminado
+        api={api}
+        correctas={totalCorrectas}
+        total={total}
+        onRevisar={() => setRevisando(true)}
+      />
+    )
+  }
+
   const nivelInfo = NIVELES_LABEL[nivelActual] ?? NIVELES_LABEL[2]
+
+  /* El quiz corre de largo: en la última pregunta del tema, "Siguiente" no se
+     apaga — te pasa al quiz del tema que sigue. Antes había que ir a elegirlo
+     a mano y se perdía el hilo. */
+  const temas = api.contenido.temas
+  const posTema = temas.findIndex((t) => t.id === temaActivo.id)
+  const temaSiguiente =
+    posTema >= 0 && posTema < temas.length - 1 ? temas[posTema + 1] : null
+  const enUltima = displayIdx === total - 1
+
+  const irSiguiente = () => {
+    if (!enUltima) {
+      irAPregunta(displayIdx + 1)
+    } else if (temaSiguiente) {
+      api.seleccionarTema(temaSiguiente.id)
+      api.cambiarTab("quiz")
+    }
+  }
 
   return (
     <div className="anim-fade space-y-4">
@@ -102,25 +182,27 @@ export function Quiz({ api }: Props) {
       <div className="flex flex-wrap items-center gap-1.5">
         {ordenTemaActivo.map((origIdxAtPos, i) => {
           const res = r[origIdxAtPos]
-          let cls = "bg-white/20 dark:bg-white/8"
+          let cls = "bg-[var(--noche)]/12"
           if (res) {
             if (animandoDotIdx === i) {
               // Recién respondido: brillante + animación que lo atenúa
               cls = res.correcta
-                ? "bg-emerald-500 dot-settling"
-                : "bg-red-500 dot-settling"
+                ? "bg-[var(--acierto)] dot-settling"
+                : "bg-[var(--error)] dot-settling"
             } else {
               // Ya respondido antes: estado calmo desde el inicio
-              cls = res.correcta ? "bg-emerald-500/55" : "bg-red-500/55"
+              cls = res.correcta
+                ? "bg-[var(--acierto)]/60"
+                : "bg-[var(--error)]/60"
             }
           }
-          if (i === displayIdx) cls += " ring-2 ring-white/30"
+          if (i === displayIdx) cls += " ring-2 ring-[var(--lila)]/45"
           return (
             <button
               key={i}
               onClick={() => irAPregunta(i)}
               className={cn(
-                "h-1.5 flex-1 min-w-[8px] rounded-full transition-all hover:opacity-80",
+                "h-2 flex-1 min-w-[10px] rounded-full transition-all hover:opacity-80",
                 cls,
               )}
               aria-label={`Ir a pregunta ${i + 1}`}
@@ -132,6 +214,11 @@ export function Quiz({ api }: Props) {
         <span className="flex items-center gap-2">
           <span>
             Pregunta {displayIdx + 1} de {total}
+          </span>
+          {/* Sin esto, "2 de 9" no dice de qué serie: parece que la app se
+              quedó trabada en vez de estar en el tema 3 de 19. */}
+          <span className="hidden text-[var(--noche)]/35 sm:inline">
+            tema {posTema + 1} de {temas.length}
           </span>
           <span
             className={cn(
@@ -171,13 +258,16 @@ export function Quiz({ api }: Props) {
             } else if (esCorrectaRevelada) {
               cls += " revelada"
               icon = (
-                <Check className="opcion-tick ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+                <Check className="opcion-tick ml-auto h-4 w-4 shrink-0" />
               )
+            } else if (!respondida && eleccionPendiente === i) {
+              // Marcada, todavía sin corregir: ni verde ni roja.
+              cls += " elegida"
             }
             return (
               <button
                 key={i}
-                onClick={() => responder(i)}
+                onClick={() => setEleccionPendiente(i)}
                 disabled={respondida}
                 className={cn(
                   cls,
@@ -191,6 +281,16 @@ export function Quiz({ api }: Props) {
             )
           })}
         </div>
+
+        {/* El paso de calibración. Va acá, entre elegir y saber. */}
+        {!respondida && eleccionPendiente !== null && (
+          <SelectorSeguridad
+            onElegir={(seg) => {
+              responder(eleccionPendiente, seg)
+              setEleccionPendiente(null)
+            }}
+          />
+        )}
 
         {respondida && (
           <div
@@ -223,7 +323,7 @@ export function Quiz({ api }: Props) {
         <button
           onClick={() => irAPregunta(displayIdx - 1)}
           disabled={displayIdx === 0}
-          className="glass btn-press inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 dark:text-zinc-300"
+          className="btn-lunar btn-suave !px-5 !py-3 text-sm disabled:cursor-not-allowed disabled:opacity-30"
         >
           <ArrowLeft className="h-4 w-4" /> Anterior
         </button>
@@ -231,6 +331,11 @@ export function Quiz({ api }: Props) {
           {respondida ? (
             <>
               <span className="kbd">Enter</span> · siguiente
+            </>
+          ) : eleccionPendiente !== null ? (
+            <>
+              <span className="kbd">1</span>–<span className="kbd">3</span> ·
+              seguridad
             </>
           ) : (
             <>
@@ -240,11 +345,12 @@ export function Quiz({ api }: Props) {
           )}
         </div>
         <button
-          onClick={() => irAPregunta(displayIdx + 1)}
-          disabled={displayIdx === total - 1}
-          className="glass btn-press inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 dark:text-zinc-300"
+          onClick={irSiguiente}
+          disabled={enUltima && !temaSiguiente}
+          className="btn-lunar btn-lila !px-5 !py-3 text-sm disabled:cursor-not-allowed disabled:opacity-30"
         >
-          Siguiente <ArrowRight className="h-4 w-4" />
+          {enUltima ? "Tema siguiente" : "Siguiente"}
+          <ArrowRight className="h-4 w-4" />
         </button>
       </div>
     </div>

@@ -14,7 +14,7 @@ export function ToastViewport() {
             "animate-toast pointer-events-auto rounded-xl px-4 py-2.5 text-sm font-medium shadow-2xl backdrop-blur-xl",
             t.tipo === "error"
               ? "bg-gradient-to-r from-red-600 to-red-700 text-white"
-              : "border border-white/10 bg-gradient-to-r from-zinc-800 to-zinc-900 text-white",
+              : "bg-[var(--noche)] text-[var(--crema)]",
           )}
         >
           {t.texto}

@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Lora } from "next/font/google"
+import { Fraunces, Inter, Lora, Nunito } from "next/font/google"
 import "./globals.css"
+// El sistema visual de Estudio Lunar. Va acá y no en la home porque ahora lo
+// usan también las pantallas de la app (login, acceso pendiente, etc.).
+import "./landing.css"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,6 +16,24 @@ const lora = Lora({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
+})
+
+// Tipografías de la marca Estudio Lunar (landing y catálogo).
+// Fraunces para títulos: serif con carácter, "opsz" la hace más expresiva
+// en tamaños grandes. Nunito para texto: redondeada y cálida.
+// Sin `weight`: Fraunces es variable, así tenemos todo el rango de peso.
+// Los ejes SOFT (redondez) y WONK (cursiva rara) son los que le dan el
+// carácter — se ajustan por CSS en landing.css.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["SOFT", "WONK"],
+})
+
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 })
 
 export const metadata: Metadata = {
@@ -61,28 +82,14 @@ export const viewport: Viewport = {
   ],
 }
 
-// Script anti-flicker para el tema:
-// Corre ANTES de hidratación de React, lee localStorage,
-// y setea la clase `dark` en <html> de entrada.
-// Evita el flash light→dark al cargar.
-const themeInitScript = `
-(function() {
-  try {
-    var t = localStorage.getItem('tema_estudio');
-    var d = t ? t === 'dark' : true;
-    document.documentElement.classList.toggle('dark', d);
-  } catch (e) {}
-})();
-`
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${lora.variable} h-full dark`}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
+    <html
+      lang="es"
+      className={`${inter.variable} ${lora.variable} ${fraunces.variable} ${nunito.variable} h-full`}
+    >
       <body className="min-h-full">{children}</body>
     </html>
   )

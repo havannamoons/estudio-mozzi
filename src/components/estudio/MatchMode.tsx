@@ -2,20 +2,24 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { Check, RotateCcw, Sparkles, X } from "lucide-react"
-import { REFERENTES, type Par } from "@/lib/data/referentes"
+import type { Par } from "@/lib/types"
+import { useContenido } from "@/lib/materias/contexto"
 import { shuffle } from "@/lib/helpers"
 import { cn } from "@/lib/utils"
+import type { EstudioApi } from "@/lib/hooks/useEstudio"
+import { MatchTerminado } from "./MatchTerminado"
 
 const PARES_POR_PARTIDA = 6
 
-export function MatchMode() {
+export function MatchMode({ api }: { api: EstudioApi }) {
+  const { referentes } = useContenido()
   const [partida, setPartida] = useState(0)
 
   // Re-samplea pares al cambiar de partida
   const pares = useMemo<Par[]>(() => {
     void partida
-    return shuffle(REFERENTES).slice(0, PARES_POR_PARTIDA)
-  }, [partida])
+    return shuffle(referentes).slice(0, PARES_POR_PARTIDA)
+  }, [partida, referentes])
 
   // Orden visual de cada columna (independiente; ambos shuffleados)
   const ordenIzq = useMemo(() => shuffle(pares.map((p) => p.id)), [pares])
@@ -64,6 +68,18 @@ export function MatchMode() {
   const ganaste = matched.size === pares.length
   const parPorId = (id: string) => pares.find((p) => p.id === id)
 
+  // Terminaste: el cierre ocupa la pantalla, como en el quiz.
+  if (ganaste) {
+    return (
+      <MatchTerminado
+        api={api}
+        pares={pares.length}
+        intentos={intentos}
+        onOtraRonda={() => setPartida((p) => p + 1)}
+      />
+    )
+  }
+
   return (
     <div className="anim-fade space-y-4">
       {/* Header */}
@@ -104,24 +120,6 @@ export function MatchMode() {
           </div>
         </div>
       </div>
-
-      {/* Estado ganaste */}
-      {ganaste && (
-        <div className="anim-fade glass-strong rounded-2xl border-l-4 border-l-emerald-500/60 p-4 sm:p-5">
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-5 w-5 text-emerald-500" />
-            <div>
-              <p className="font-serif text-base font-semibold text-emerald-700 dark:text-emerald-300">
-                ¡Todos matcheados!
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {intentos} intentos · {pares.length} aciertos. Tocá ↻ para otra ronda con
-                nuevos pares.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Tablero */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">

@@ -7,12 +7,14 @@ import {
   Check,
   Lightbulb,
   RotateCcw,
-  Trophy,
   X,
 } from "lucide-react"
-import { CLOZES, clozeAcierta, type Cloze } from "@/lib/data/cloze"
-import { shuffle } from "@/lib/helpers"
+import type { Cloze } from "@/lib/types"
+import type { EstudioApi } from "@/lib/hooks/useEstudio"
+import { useContenido } from "@/lib/materias/contexto"
+import { clozeAcierta, shuffle } from "@/lib/helpers"
 import { cn } from "@/lib/utils"
+import { ClozeTerminado } from "./ClozeTerminado"
 
 const CLOZES_POR_PARTIDA = 8
 const LETRAS = ["A", "B", "C", "D"]
@@ -29,13 +31,14 @@ function buildOpciones(c: Cloze): string[] {
   return shuffle([c.respuestas[0], ...c.distractores])
 }
 
-export function ClozeMode() {
+export function ClozeMode({ api }: { api: EstudioApi }) {
+  const { clozes } = useContenido()
   const [partida, setPartida] = useState(0)
 
   const items = useMemo<Cloze[]>(() => {
     void partida
-    return shuffle(CLOZES).slice(0, CLOZES_POR_PARTIDA)
-  }, [partida])
+    return shuffle(clozes).slice(0, CLOZES_POR_PARTIDA)
+  }, [partida, clozes])
 
   // Opciones por item (estables durante la partida)
   const opcionesPorItem = useMemo<Record<string, string[]>>(() => {
@@ -119,10 +122,10 @@ export function ClozeMode() {
           className={cn(
             "mx-1 inline-block min-w-[5ch] rounded-md px-2 py-0.5 font-mono text-sm font-semibold align-baseline",
             respondida && respActual?.ok
-              ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300"
+              ? "bg-[var(--acierto)]/20 text-[var(--noche)]"
               : respondida
-                ? "bg-red-500/20 text-red-700 line-through decoration-red-500/60 dark:text-red-300"
-                : "bg-zinc-500/10 text-zinc-400 dark:text-zinc-500",
+                ? "bg-[var(--error)]/20 text-[var(--noche)] line-through decoration-[var(--error)]"
+                : "bg-[var(--noche)]/8 text-[var(--noche)]/45",
           )}
         >
           {respondida ? respActual?.elegida : "___"}
@@ -133,6 +136,20 @@ export function ClozeMode() {
   }, [actual, respondida, respActual])
 
   if (!actual) return null
+
+  // Terminaste la ronda: el cierre ocupa la pantalla, igual que en Match y Quiz.
+  if (ganaste) {
+    return (
+      <ClozeTerminado
+        api={api}
+        aciertos={aciertos}
+        total={total}
+        items={items}
+        respuestas={respuestas}
+        onOtraPartida={() => setPartida((p) => p + 1)}
+      />
+    )
+  }
 
   return (
     <div className="anim-fade space-y-4">
@@ -161,30 +178,20 @@ export function ClozeMode() {
         </div>
       </div>
 
-      {ganaste && (
-        <ResultadosCloze
-          aciertos={aciertos}
-          total={total}
-          items={items}
-          respuestas={respuestas}
-          onReintentar={() => setPartida((p) => p + 1)}
-        />
-      )}
-
       {!ganaste && (
         <>
           {/* Dots de progreso */}
           <div className="flex flex-wrap items-center gap-1.5">
             {items.map((c, i) => {
               const r = respuestas.find((x) => x.id === c.id)
-              let cls = "bg-white/20 dark:bg-white/8"
-              if (r) cls = r.ok ? "bg-emerald-500" : "bg-red-500"
-              if (i === idx) cls += " ring-2 ring-white/30"
+              let cls = "bg-[var(--noche)]/12"
+              if (r) cls = r.ok ? "bg-[var(--acierto)]" : "bg-[var(--error)]"
+              if (i === idx) cls += " ring-2 ring-[var(--lila)]/45"
               return (
                 <div
                   key={i}
                   className={cn(
-                    "h-1.5 flex-1 min-w-[8px] rounded-full transition-all",
+                    "h-2 flex-1 min-w-[10px] rounded-full transition-all",
                     cls,
                   )}
                 />
@@ -316,105 +323,6 @@ export function ClozeMode() {
             </button>
           </div>
         </>
-      )}
-    </div>
-  )
-}
-
-function ResultadosCloze({
-  aciertos,
-  total,
-  items,
-  respuestas,
-  onReintentar,
-}: {
-  aciertos: number
-  total: number
-  items: Cloze[]
-  respuestas: Resp[]
-  onReintentar: () => void
-}) {
-  const pct = total > 0 ? Math.round((aciertos / total) * 100) : 0
-  const buena = pct >= 60
-  const errores = respuestas.filter((r) => !r.ok)
-  return (
-    <div className="anim-fade space-y-4">
-      <div className="glass-strong rounded-3xl p-6 text-center sm:p-10">
-        <div
-          className={cn(
-            "mb-5 inline-flex rounded-2xl p-3",
-            buena
-              ? "bg-gradient-to-br from-emerald-500/20 to-emerald-600/10"
-              : "bg-gradient-to-br from-emerald-500/20 to-emerald-600/10",
-          )}
-        >
-          <Trophy
-            className={cn("h-8 w-8", buena ? "text-emerald-500" : "text-emerald-500")}
-          />
-        </div>
-        <h2 className="mb-1 font-serif text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-          {buena ? "¡Bien jugado!" : "A reforzar el vocabulario"}
-        </h2>
-        <div className="my-4">
-          <span
-            className={cn(
-              "font-serif text-6xl font-bold tabular-nums",
-              buena ? "text-emerald-500" : "text-emerald-500",
-            )}
-          >
-            {pct}%
-          </span>
-        </div>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          {aciertos} correctas de {total} cloze
-        </p>
-        <button
-          onClick={onReintentar}
-          className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg hover:from-emerald-600 hover:to-emerald-700"
-        >
-          <RotateCcw className="h-4 w-4" /> Otra partida
-        </button>
-      </div>
-
-      {errores.length > 0 && (
-        <div className="glass-strong rounded-2xl p-5 sm:p-6">
-          <h3 className="mb-4 font-serif text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-            A revisar ({errores.length})
-          </h3>
-          <div className="space-y-3">
-            {errores.map((r) => {
-              const cloze = items.find((c) => c.id === r.id)
-              if (!cloze) return null
-              const correcta = cloze.respuestas[0]
-              const parts = cloze.frase.split("___")
-              return (
-                <div
-                  key={r.id}
-                  className="glass rounded-xl border-l-4 border-l-red-500/60 p-4"
-                >
-                  {cloze.tema && (
-                    <div className="mb-1 text-[10px] font-medium tracking-wider text-red-600 uppercase dark:text-red-400">
-                      {cloze.tema}
-                    </div>
-                  )}
-                  <p className="font-serif text-sm leading-snug text-zinc-800 dark:text-zinc-100">
-                    {parts[0]}
-                    <span className="mx-1 rounded-md bg-emerald-500/20 px-1.5 py-0.5 font-mono font-semibold text-emerald-700 dark:text-emerald-300">
-                      {correcta}
-                    </span>
-                    {parts[1]}
-                  </p>
-                  <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">
-                    Tu respuesta:{" "}
-                    <span className="font-mono text-red-600 dark:text-red-400">
-                      {r.elegida}
-                    </span>
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
       )}
     </div>
   )

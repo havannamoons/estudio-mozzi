@@ -1,7 +1,6 @@
 "use client"
 
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
-import { TEMAS } from "@/lib/data/temas"
 import { cn } from "@/lib/utils"
 
 interface Props {
@@ -10,6 +9,7 @@ interface Props {
 
 export function Sidebar({ api }: Props) {
   const { temaActivoId, seleccionarTema, progresoTema } = api
+  const TEMAS = api.contenido.temas
   return (
     <aside className="glass h-fit rounded-2xl p-3 lg:sticky lg:top-4">
       <p className="mb-2 px-2 text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
@@ -70,7 +70,7 @@ export function Sidebar({ api }: Props) {
           )
         })}
       </nav>
-      <div className="mt-3 border-t border-white/10 pt-3 px-2">
+      <div className="mt-3 border-t border-[var(--noche)]/10 pt-3 px-2">
         <p className="text-[10px] leading-relaxed text-zinc-500 dark:text-zinc-500">
           Cada tema tiene <span className="text-zinc-700 dark:text-zinc-300">Teoría</span> y{" "}
           <span className="text-zinc-700 dark:text-zinc-300">Quiz</span>. Tu progreso se guarda automáticamente.

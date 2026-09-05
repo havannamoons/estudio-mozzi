@@ -1,17 +1,30 @@
 "use client"
 
-import { useState } from "react"
-import { Check, ChevronLeft, ChevronRight, FileCheck, Play, RotateCcw, Trophy, X } from "lucide-react"
+import { useEffect, useState } from "react"
+import { ArrowLeft, ArrowRight, Check, X } from "lucide-react"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
-import { TEMAS } from "@/lib/data/temas"
+import type { EstiloSimulacro, Seguridad } from "@/lib/types"
+import { useContenido } from "@/lib/materias/contexto"
 import {
   SIMULACRO_PREGUNTAS_DEFAULT,
   SIMULACRO_PREGUNTAS_MAX,
   SIMULACRO_PREGUNTAS_MIN,
+  SIMULACRO_SEGUNDOS_ALERTA,
+  SIMULACRO_SEGUNDOS_POR_PREGUNTA,
 } from "@/lib/constants"
 import { cn } from "@/lib/utils"
+import { Sentada } from "@/components/landing/Personajes"
+import { SimulacroTerminado } from "./SimulacroTerminado"
+import { SelectorSeguridad } from "./Calibracion"
 
 const LETRAS = ["A", "B", "C", "D", "E", "F"]
+
+/** mm:ss, que es como se lee un reloj de examen. */
+function reloj(segundos: number) {
+  const m = Math.floor(segundos / 60)
+  const s = segundos % 60
+  return `${m}:${String(s).padStart(2, "0")}`
+}
 
 interface Props {
   api: EstudioApi
@@ -22,11 +35,9 @@ export function SimulacroMode({ api }: Props) {
     faseSimulacro,
     preguntasSim,
     respuestasSim,
-    preguntaSimIdx,
+    estiloSim,
+    porTiempoSim,
     iniciarSimulacro,
-    responderSimulacro,
-    siguienteSimulacro,
-    anteriorSimulacro,
     reiniciarSimulacro,
   } = api
 
@@ -35,270 +46,393 @@ export function SimulacroMode({ api }: Props) {
   }
   if (faseSimulacro === "resultados") {
     return (
-      <SimulacroResultados
+      <SimulacroTerminado
+        api={api}
         preguntas={preguntasSim}
         respuestas={respuestasSim}
-        onReintentar={reiniciarSimulacro}
+        estilo={estiloSim}
+        porTiempo={porTiempoSim}
+        onOtro={reiniciarSimulacro}
       />
     )
   }
-  return (
-    <SimulacroPlay
-      api={api}
-      onResponder={responderSimulacro}
-      onSiguiente={siguienteSimulacro}
-      onAnterior={anteriorSimulacro}
-      onSalir={reiniciarSimulacro}
-      idx={preguntaSimIdx}
-    />
-  )
+  return <SimulacroPlay api={api} />
 }
 
 // ============================================================
 // SETUP
 // ============================================================
-function SimulacroSetup({ onIniciar }: { onIniciar: (n: number) => void }) {
+function SimulacroSetup({
+  onIniciar,
+}: {
+  onIniciar: (n: number, estilo: EstiloSimulacro) => void
+}) {
+  const { temas: TEMAS } = useContenido()
   const [cantidad, setCantidad] = useState(SIMULACRO_PREGUNTAS_DEFAULT)
+  const [estilo, setEstilo] = useState<EstiloSimulacro>("practica")
+
   const totalDisponibles = TEMAS.reduce((acc, t) => acc + t.preguntas.length, 0)
+  const tope = Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles)
   const cantidadReal = Math.min(cantidad, totalDisponibles)
+  const minutos = Math.round(
+    (cantidadReal * SIMULACRO_SEGUNDOS_POR_PREGUNTA) / 60,
+  )
 
   return (
-    <div className="anim-fade glass-strong rounded-3xl p-6 sm:p-10">
-      <div className="mb-5 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 p-3">
-        <FileCheck className="h-7 w-7 text-emerald-500" />
+    <div className="anim-fade mx-auto max-w-xl">
+      <div className="mb-8 text-center">
+        <div className="mx-auto mb-6 w-fit">
+          <Sentada size={170} color="var(--lila-claro)" />
+        </div>
+        <p className="mb-2 text-[12px] font-extrabold tracking-[0.16em] text-[var(--lila)] uppercase">
+          Simulacro
+        </p>
+        <p className="serif mb-4 text-[clamp(1.9rem,5.5vw,2.6rem)] leading-tight">
+          Preguntas de todo, mezcladas
+        </p>
+        <p className="mx-auto max-w-md text-[17px] leading-relaxed font-medium text-[var(--noche)]/65">
+          Sin saber de qué tema viene cada una, que es la parte difícil del
+          final: en el quiz ya sabés de qué te van a preguntar.
+        </p>
       </div>
-      <h2 className="mb-2 font-serif text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-        Simulacro de examen
-      </h2>
-      <p className="mb-6 max-w-prose text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-        Te tomamos preguntas de todos los temas del final (del parcial + la segunda parte) mezcladas. Sin pista de qué tema viene cada una.
-        Al terminar vas a ver tu puntaje total, desglose por tema y todas las explicaciones.
+
+      {/* Cómo correrlo. La diferencia es real, así que se elige antes de
+          empezar y no queda escondida en un ajuste. */}
+      <p className="mb-3 text-[13px] font-bold tracking-wide text-[var(--noche)]/40">
+        ¿Cómo lo querés hacer?
+      </p>
+      <div className="mb-8 grid gap-3 sm:grid-cols-2">
+        <OpcionEstilo
+          activa={estilo === "practica"}
+          onClick={() => setEstilo("practica")}
+          titulo="Práctica"
+          detalle="Te corrige al toque y te explica cada una. Para aprender."
+        />
+        <OpcionEstilo
+          activa={estilo === "examen"}
+          onClick={() => setEstilo("examen")}
+          titulo="Examen"
+          detalle="Con reloj y sin corrección hasta entregar. Para ensayar el final."
+        />
+      </div>
+
+      <p className="mb-3 text-[13px] font-bold tracking-wide text-[var(--noche)]/40">
+        ¿Cuántas preguntas?
+      </p>
+      <div className="mb-2 flex items-center gap-4">
+        <input
+          id="cant"
+          type="range"
+          min={SIMULACRO_PREGUNTAS_MIN}
+          max={tope}
+          value={cantidad}
+          onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
+          className="flex-1 accent-[var(--lila)]"
+          aria-label="Cantidad de preguntas"
+          aria-valuemin={SIMULACRO_PREGUNTAS_MIN}
+          aria-valuemax={tope}
+          aria-valuenow={cantidadReal}
+        />
+        <span
+          className="serif shrink-0 text-[2.6rem] leading-none tabular-nums"
+          style={{ color: "var(--lila)" }}
+        >
+          {cantidadReal}
+        </span>
+      </div>
+
+      <div className="mb-3 flex items-center gap-2">
+        {[6, 12, 20, 30]
+          .filter((n) => n <= tope)
+          .map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => setCantidad(n)}
+              aria-pressed={cantidad === n}
+              className={cn(
+                "min-h-[38px] flex-1 rounded-full text-[14px] font-bold tabular-nums transition-colors",
+                cantidad === n
+                  ? "bg-[color-mix(in_srgb,var(--lila)_14%,transparent)] text-[var(--lila)]"
+                  : "text-[var(--noche)]/45 hover:bg-[color-mix(in_srgb,var(--noche)_5%,transparent)] hover:text-[var(--noche)]",
+              )}
+            >
+              {n}
+            </button>
+          ))}
+      </div>
+
+      <p className="mb-9 text-[14px] font-medium text-[var(--noche)]/45">
+        {estilo === "examen" ? (
+          <>
+            Vas a tener <strong className="font-extrabold">{minutos} minutos</strong> para
+            las {cantidadReal}. Hay {totalDisponibles} preguntas en total.
+          </>
+        ) : (
+          <>Sin reloj. Hay {totalDisponibles} preguntas en total.</>
+        )}
       </p>
 
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="cant"
-            className="mb-2 block text-[11px] font-medium tracking-wider text-zinc-600 uppercase dark:text-zinc-400"
-          >
-            Cantidad de preguntas
-          </label>
-          <div className="flex items-center gap-3">
-            <input
-              id="cant"
-              type="range"
-              min={SIMULACRO_PREGUNTAS_MIN}
-              max={Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles)}
-              value={cantidad}
-              onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
-              list="cant-marks"
-              className="flex-1 accent-emerald-500"
-              aria-valuemin={SIMULACRO_PREGUNTAS_MIN}
-              aria-valuemax={Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles)}
-              aria-valuenow={cantidadReal}
-            />
-            <datalist id="cant-marks">
-              <option value="6" label="6" />
-              <option value="12" label="12" />
-              <option value="20" label="20" />
-              <option value="30" label="30" />
-            </datalist>
-            <span className="min-w-[3rem] text-right font-serif text-2xl font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
-              {cantidadReal}
-            </span>
-          </div>
-
-          {/* Anclas visibles + clickeables — Fitts (target visible) + Reconocimiento > recuerdo */}
-          <div className="mt-2 flex items-center justify-between">
-            {[6, 12, 20, 30]
-              .filter((n) => n <= Math.min(SIMULACRO_PREGUNTAS_MAX, totalDisponibles))
-              .map((n) => {
-                const activo = cantidad === n
-                return (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setCantidad(n)}
-                    className={cn(
-                      // Mobile: tap target ~36px (3*8px padding + texto). Desktop: compacto.
-                      "btn-press min-h-[36px] rounded-md px-3 py-1.5 font-mono text-xs tabular-nums transition-colors sm:min-h-0 sm:px-2.5 sm:py-1 sm:text-[11px]",
-                      activo
-                        ? "bg-emerald-500/20 text-emerald-700 ring-1 ring-emerald-500/40 dark:text-emerald-300"
-                        : "text-zinc-500 hover:bg-white/5 hover:text-zinc-700 dark:hover:text-zinc-200",
-                    )}
-                    aria-label={`Elegir ${n} preguntas`}
-                    aria-pressed={activo}
-                  >
-                    {n}
-                  </button>
-                )
-              })}
-          </div>
-
-          <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-500">
-            Hay {totalDisponibles} preguntas disponibles en total.
-          </p>
-        </div>
-
-        <div className="glass rounded-xl p-4">
-          <p className="mb-2 text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
-            Recomendación
-          </p>
-          <ul className="space-y-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-            <li className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setCantidad(8)}
-                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-emerald-600 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-emerald-400"
-              >
-                6-10
-              </button>
-              <span>repaso rápido (5-8 min)</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setCantidad(12)}
-                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-emerald-600 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-emerald-400"
-              >
-                12-15
-              </button>
-              <span>examen corto (10-15 min)</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setCantidad(20)}
-                className="btn-press min-h-[32px] shrink-0 rounded bg-white/5 px-2.5 py-1 font-mono text-xs tabular-nums text-emerald-600 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 sm:min-h-0 sm:px-2 sm:py-0.5 sm:text-[11px] dark:text-emerald-400"
-              >
-                20-30
-              </button>
-              <span>examen completo (20-30 min)</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
       <button
-        onClick={() => onIniciar(cantidadReal)}
-        className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-emerald-900/30 hover:from-emerald-600 hover:to-emerald-700"
+        onClick={() => onIniciar(cantidadReal, estilo)}
+        className="btn-lunar btn-lila w-full sm:w-auto"
       >
-        <Play className="h-4 w-4" /> Empezar simulacro
+        {estilo === "examen" ? "Arrancar el examen" : "Empezar simulacro"}
       </button>
     </div>
+  )
+}
+
+/** Una de las dos formas de correr el simulacro. Línea, no tarjeta. */
+function OpcionEstilo({
+  activa,
+  onClick,
+  titulo,
+  detalle,
+}: {
+  activa: boolean
+  onClick: () => void
+  titulo: string
+  detalle: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={activa}
+      className={cn(
+        "rounded-3xl p-5 text-left transition-all",
+        activa
+          ? "bg-[color-mix(in_srgb,var(--lila)_12%,transparent)] ring-2 ring-[var(--lila)]"
+          : "bg-[color-mix(in_srgb,var(--noche)_4%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--noche)_10%,transparent)] hover:bg-[color-mix(in_srgb,var(--noche)_7%,transparent)]",
+      )}
+    >
+      <span
+        className={cn(
+          "mb-1.5 block text-[17px] font-extrabold",
+          activa ? "text-[var(--lila)]" : "text-[var(--noche)]",
+        )}
+      >
+        {titulo}
+      </span>
+      <span className="block text-[14px] leading-snug font-medium text-[var(--noche)]/55">
+        {detalle}
+      </span>
+    </button>
   )
 }
 
 // ============================================================
 // PLAY
 // ============================================================
-function SimulacroPlay({
-  api,
-  onResponder,
-  onSiguiente,
-  onAnterior,
-  onSalir,
-  idx,
-}: {
-  api: EstudioApi
-  onResponder: (i: number) => void
-  onSiguiente: () => void
-  onAnterior: () => void
-  onSalir: () => void
-  idx: number
-}) {
-  const { preguntasSim, respuestasSim } = api
+function SimulacroPlay({ api }: { api: EstudioApi }) {
+  const { temas: TEMAS } = useContenido()
+  const {
+    preguntasSim,
+    respuestasSim,
+    preguntaSimIdx: idx,
+    estiloSim,
+    segundosRestantes,
+    responderSimulacro,
+    siguienteSimulacro,
+    anteriorSimulacro,
+    irAPreguntaSim,
+    entregarSimulacro,
+    reiniciarSimulacro,
+  } = api
+
+  /* Dos salidas distintas, las dos irreversibles: entregar el examen o
+     abandonar la práctica a medio hacer. Ninguna se ejecuta sin preguntar. */
+  const [confirmando, setConfirmando] = useState<"entregar" | "salir" | null>(
+    null,
+  )
+  /* Opción tocada a la espera de que declares seguridad. Solo existe en
+     práctica: bajo reloj, pedirte un paso extra por pregunta te haría perder
+     segundos reales, y el examen tiene que sentirse como un examen. */
+  const [eleccionPendiente, setEleccionPendiente] = useState<number | null>(null)
+  const esExamen = estiloSim === "examen"
+
   const actual = preguntasSim[idx]
   const tema = TEMAS.find((t) => t.id === actual?.temaId)
   const pregunta = tema?.preguntas[actual?.preguntaIdx ?? 0]
-  if (!actual || !tema || !pregunta) return null
 
   const respuesta = respuestasSim.find(
-    (r) => r.temaId === actual.temaId && r.preguntaIdx === actual.preguntaIdx,
+    (r) => r.temaId === actual?.temaId && r.preguntaIdx === actual?.preguntaIdx,
   )
   const respondida = !!respuesta
+  /* En examen no se corrige nada hasta entregar: "respondida" solo significa
+     que elegiste algo. La corrección se revela recién en el cierre. */
+  const corregida = respondida && !esExamen
 
-  const totalRespondidas = respuestasSim.length
-  const totalCorrectas = respuestasSim.filter((r) => r.correcta).length
+  const sinContestar = preguntasSim.length - respuestasSim.length
+  const enUltima = idx === preguntasSim.length - 1
+
+  // Teclado: números para elegir, flechas para moverse.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === "INPUT" || tag === "TEXTAREA") return
+      const cuantas = pregunta?.opciones.length ?? 0
+      const n = parseInt(e.key, 10)
+      if (eleccionPendiente !== null) {
+        if (n >= 1 && n <= 3) {
+          e.preventDefault()
+          const seg: Seguridad =
+            n === 1 ? "seguro" : n === 2 ? "masomenos" : "adivino"
+          responderSimulacro(eleccionPendiente, seg)
+          setEleccionPendiente(null)
+        }
+        return
+      }
+      if (n >= 1 && n <= cuantas) {
+        e.preventDefault()
+        if (esExamen) responderSimulacro(n - 1)
+        else setEleccionPendiente(n - 1)
+        return
+      }
+      if (e.key === "ArrowRight" || e.key === "Enter") {
+        e.preventDefault()
+        siguienteSimulacro()
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault()
+        anteriorSimulacro()
+      }
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [
+    pregunta,
+    responderSimulacro,
+    siguienteSimulacro,
+    anteriorSimulacro,
+    eleccionPendiente,
+    esExamen,
+  ])
+
+  // Moverse de pregunta descarta la elección a medio hacer.
+  useEffect(() => {
+    setEleccionPendiente(null)
+  }, [idx])
+
+  if (!actual || !tema || !pregunta) return null
+
+  const urgente =
+    segundosRestantes !== null && segundosRestantes <= SIMULACRO_SEGUNDOS_ALERTA
 
   return (
     <div className="anim-fade space-y-4">
-      {/* Banner simulacro */}
-      <div className="glass flex items-center justify-between rounded-2xl border-l-4 border-l-emerald-500/60 px-4 py-2.5">
-        <div className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-300">
-          <FileCheck className="h-4 w-4" />
-          <span className="font-medium">Simulacro · pregunta {idx + 1} de {preguntasSim.length}</span>
-        </div>
-        <button
-          onClick={onSalir}
-          className="text-xs text-emerald-700 hover:underline dark:text-emerald-400"
-        >
-          Salir
-        </button>
+      {/* Barra de estado: dónde estás, cuánto queda, cómo salir */}
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-[14px] font-bold text-[var(--noche)]/50 tabular-nums">
+          {esExamen ? "Examen" : "Simulacro"} · {idx + 1} de{" "}
+          {preguntasSim.length}
+        </span>
+
+        <span className="flex items-center gap-4">
+          {segundosRestantes !== null && (
+            <span
+              className={cn(
+                "serif text-[1.7rem] leading-none tabular-nums",
+                urgente && "reloj-urgente",
+              )}
+              style={{ color: urgente ? "var(--error)" : "var(--noche)" }}
+              aria-live="off"
+              title="Tiempo restante"
+            >
+              {reloj(segundosRestantes)}
+            </span>
+          )}
+          <button
+            onClick={() => {
+              if (esExamen) setConfirmando("entregar")
+              /* Salir de una práctica ya empezada borra lo hecho, así que
+                 tampoco pasa derecho. Si no contestaste nada todavía, no hay
+                 nada que perder y sale sin molestarte. */
+              else if (respuestasSim.length > 0) setConfirmando("salir")
+              else reiniciarSimulacro()
+            }}
+            className="text-[14px] font-bold text-[var(--lila)] underline decoration-2 underline-offset-4"
+          >
+            {esExamen ? "Entregar" : "Salir"}
+          </button>
+        </span>
       </div>
 
-      {/* Dots */}
+      {/* Puntitos: en examen dicen solo si contestaste, no si acertaste */}
       <div className="flex flex-wrap items-center gap-1.5">
         {preguntasSim.map((p, i) => {
           const r = respuestasSim.find(
             (x) => x.temaId === p.temaId && x.preguntaIdx === p.preguntaIdx,
           )
-          let cls = "bg-white/20 dark:bg-white/8"
-          if (r) cls = r.correcta ? "bg-emerald-500" : "bg-red-500"
-          if (i === idx) cls += " ring-2 ring-white/30"
+          let cls = "bg-[var(--noche)]/12"
+          if (r) {
+            if (esExamen) cls = "bg-[var(--lila)]/55"
+            else cls = r.correcta ? "bg-[var(--acierto)]/60" : "bg-[var(--error)]/60"
+          }
+          if (i === idx) cls += " ring-2 ring-[var(--lila)]/45"
           return (
-            <div
+            <button
               key={i}
+              onClick={() => irAPreguntaSim(i)}
               className={cn(
-                "h-1.5 flex-1 min-w-[8px] rounded-full transition-all",
+                "h-2 min-w-[10px] flex-1 rounded-full transition-all hover:opacity-80",
                 cls,
               )}
+              aria-label={`Ir a la pregunta ${i + 1}`}
             />
           )
         })}
       </div>
-      <div className="flex items-center justify-between text-[11px] tabular-nums text-zinc-500 dark:text-zinc-400">
-        <span>Sin pista del tema · {totalRespondidas} respondidas</span>
-        <span>
-          {totalCorrectas}/{totalRespondidas} correctas
-        </span>
-      </div>
+
+      <p className="text-[12px] font-bold text-[var(--noche)]/35">
+        {esExamen
+          ? sinContestar > 0
+            ? `${sinContestar} sin contestar · podés volver y cambiar lo que quieras`
+            : "Contestaste todas · podés revisar antes de entregar"
+          : `Sin pista del tema · ${respuestasSim.filter((r) => r.correcta).length}/${respuestasSim.length} correctas`}
+      </p>
 
       {/* Pregunta */}
       <div className="glass-strong rounded-2xl p-5 sm:p-7">
-        <p className="mb-5 font-serif text-lg leading-relaxed text-zinc-900 sm:text-xl dark:text-zinc-50">
+        <p className="serif mb-6 text-[19px] leading-snug sm:text-[22px]">
           {pregunta.q}
         </p>
 
         <div className="space-y-2.5">
           {pregunta.opciones.map((op, i) => {
-            const esElegida = respondida && respuesta?.elegida === i
-            const esCorrectaRevelada =
-              respondida && pregunta.correcta === i && !esElegida
+            const esElegida = respuesta?.elegida === i
             let cls = "opcion"
             let icon: React.ReactNode = null
-            if (esElegida) {
-              if (pregunta.correcta === i) {
-                cls += " correcta"
+
+            if (esExamen) {
+              // Solo marca tu elección. Ni verde ni rojo: no sabés nada todavía.
+              if (esElegida) cls += " elegida"
+            } else if (!respondida && eleccionPendiente === i) {
+              cls += " elegida"
+            } else if (corregida) {
+              if (esElegida) {
+                if (pregunta.correcta === i) {
+                  cls += " correcta"
+                  icon = <Check className="opcion-tick ml-auto h-4 w-4 shrink-0" />
+                } else {
+                  cls += " incorrecta"
+                  icon = <X className="opcion-tick ml-auto h-4 w-4 shrink-0" />
+                }
+              } else if (pregunta.correcta === i) {
+                cls += " revelada"
                 icon = <Check className="opcion-tick ml-auto h-4 w-4 shrink-0" />
-              } else {
-                cls += " incorrecta"
-                icon = <X className="opcion-tick ml-auto h-4 w-4 shrink-0" />
               }
-            } else if (esCorrectaRevelada) {
-              cls += " revelada"
-              icon = (
-                <Check className="opcion-tick ml-auto h-4 w-4 shrink-0 text-emerald-500" />
-              )
             }
+
             return (
               <button
                 key={i}
-                onClick={() => onResponder(i)}
-                disabled={respondida}
+                onClick={() =>
+                  esExamen ? responderSimulacro(i) : setEleccionPendiente(i)
+                }
+                disabled={corregida}
                 className={cn(
                   cls,
-                  "flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium",
+                  "flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-[15px] font-medium",
                 )}
               >
                 <span className="opcion-letra">{LETRAS[i]}</span>
@@ -309,219 +443,165 @@ function SimulacroPlay({
           })}
         </div>
 
-        {respondida && (
+        {!esExamen && !respondida && eleccionPendiente !== null && (
+          <SelectorSeguridad
+            onElegir={(seg) => {
+              responderSimulacro(eleccionPendiente, seg)
+              setEleccionPendiente(null)
+            }}
+          />
+        )}
+
+        {corregida && (
           <div
             className={cn(
-              "anim-fade mt-5 rounded-xl border-l-4 p-4",
+              "anim-fade mt-6 border-l-2 pl-4",
               respuesta?.correcta
-                ? "border-l-emerald-500/60 bg-emerald-500/5"
-                : "border-l-red-500/60 bg-red-500/5",
+                ? "border-l-[var(--acierto)]"
+                : "border-l-[var(--error)]",
             )}
           >
             <p
-              className={cn(
-                "mb-1.5 text-[10px] font-medium tracking-wider uppercase",
-                respuesta?.correcta
-                  ? "text-emerald-700 dark:text-emerald-400"
-                  : "text-red-600 dark:text-red-400",
-              )}
+              className="mb-1.5 text-[12px] font-extrabold tracking-wider uppercase"
+              style={{
+                color: respuesta?.correcta ? "var(--acierto)" : "var(--error)",
+              }}
             >
-              {respuesta?.correcta ? "Bien · " : "Para recordar · "}
-              <span className="text-zinc-500 dark:text-zinc-500 normal-case">
+              {respuesta?.correcta ? "Bien" : "Para recordar"}
+              <span className="ml-2 font-bold text-[var(--noche)]/35 normal-case">
                 {tema.practico} · {tema.titulo}
               </span>
             </p>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap text-zinc-700 dark:text-zinc-200">
+            <p className="text-[15px] leading-relaxed font-medium whitespace-pre-wrap text-[var(--noche)]/70">
               {pregunta.exp}
             </p>
           </div>
         )}
       </div>
 
-      {/* Nav */}
+      {/* Navegación */}
       <div className="flex items-center justify-between gap-2">
         <button
-          onClick={onAnterior}
+          onClick={anteriorSimulacro}
           disabled={idx === 0}
-          className="glass btn-press inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-zinc-600 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 dark:text-zinc-300"
+          className="btn-lunar btn-suave !px-5 !py-3 text-sm disabled:cursor-not-allowed disabled:opacity-30"
         >
-          <ChevronLeft className="h-4 w-4" /> Anterior
+          <ArrowLeft className="h-4 w-4" /> Anterior
         </button>
-        <button
-          onClick={onSiguiente}
-          disabled={!respondida}
-          className="btn-press inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 hover:from-emerald-600 hover:to-emerald-700"
-        >
-          {idx === preguntasSim.length - 1 ? "Ver resultados" : "Siguiente"}
-          <ChevronRight className="h-4 w-4" />
-        </button>
+
+        {esExamen && enUltima ? (
+          <button
+            onClick={() => setConfirmando("entregar")}
+            className="btn-lunar btn-lila !px-5 !py-3 text-sm"
+          >
+            Entregar
+          </button>
+        ) : (
+          <button
+            onClick={siguienteSimulacro}
+            disabled={!esExamen && !respondida}
+            className="btn-lunar btn-lila !px-5 !py-3 text-sm disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            {!esExamen && enUltima ? "Ver resultados" : "Siguiente"}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        )}
       </div>
+
+      {confirmando === "entregar" && (
+        <Confirmar
+          titulo="¿Entregamos?"
+          detalle={
+            sinContestar > 0
+              ? `Te quedan ${sinContestar} sin contestar. Cuentan como error, igual que en el final.`
+              : "Contestaste todas. Después de entregar no se puede volver."
+          }
+          confirmar="Entregar y ver cómo me fue"
+          cancelar={sinContestar > 0 ? "Seguir contestando" : "Seguir revisando"}
+          onCancelar={() => setConfirmando(null)}
+          onConfirmar={() => {
+            setConfirmando(null)
+            entregarSimulacro()
+          }}
+        />
+      )}
+
+      {confirmando === "salir" && (
+        <Confirmar
+          titulo="¿Dejamos acá?"
+          detalle={`Llevás ${respuestasSim.length} de ${preguntasSim.length} contestadas. Si salís se borran y el próximo simulacro arranca de cero.`}
+          confirmar="Salir y perder lo hecho"
+          cancelar="Seguir contestando"
+          onCancelar={() => setConfirmando(null)}
+          onConfirmar={() => {
+            setConfirmando(null)
+            reiniciarSimulacro()
+          }}
+        />
+      )}
     </div>
   )
 }
 
-// ============================================================
-// RESULTADOS
-// ============================================================
-function SimulacroResultados({
-  preguntas,
-  respuestas,
-  onReintentar,
+/**
+ * Aviso para lo que no se puede deshacer. Va como panel propio y no como
+ * `confirm()` del navegador: ese cartel gris del sistema rompe la ilusión de
+ * estar dentro de una app.
+ */
+function Confirmar({
+  titulo,
+  detalle,
+  confirmar,
+  cancelar,
+  onCancelar,
+  onConfirmar,
 }: {
-  preguntas: { temaId: string; preguntaIdx: number }[]
-  respuestas: { temaId: string; preguntaIdx: number; elegida: number; correcta: boolean }[]
-  onReintentar: () => void
+  titulo: string
+  detalle: string
+  confirmar: string
+  cancelar: string
+  onCancelar: () => void
+  onConfirmar: () => void
 }) {
-  const total = preguntas.length
-  const correctas = respuestas.filter((r) => r.correcta).length
-  const pct = total > 0 ? Math.round((correctas / total) * 100) : 0
-
-  // Desglose por tema
-  const desglose = TEMAS.map((t) => {
-    const delTema = respuestas.filter((r) => r.temaId === t.id)
-    if (delTema.length === 0) return null
-    const ok = delTema.filter((r) => r.correcta).length
-    return { tema: t, total: delTema.length, ok }
-  }).filter((x): x is { tema: typeof TEMAS[0]; total: number; ok: number } => x !== null)
-
-  const aprobado = pct >= 60
-  const errores = respuestas.filter((r) => !r.correcta)
+  // Escape cancela: es lo que espera cualquiera que abrió algo por error.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onCancelar()
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [onCancelar])
 
   return (
-    <div className="anim-fade space-y-4">
-      {/* Score */}
-      <div className="glass-strong rounded-3xl p-6 text-center sm:p-10">
-        <div
-          className={cn(
-            "mb-5 inline-flex rounded-2xl p-3",
-            aprobado
-              ? "bg-gradient-to-br from-emerald-500/20 to-emerald-600/10"
-              : "bg-gradient-to-br from-red-500/20 to-red-600/10",
-          )}
-        >
-          <Trophy
-            className={cn(
-              "h-8 w-8",
-              aprobado ? "text-emerald-500" : "text-red-500",
-            )}
-          />
-        </div>
-        <h2 className="mb-1 font-serif text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-          {aprobado ? "¡Buen trabajo!" : "Hay que reforzar"}
-        </h2>
-        <div className="my-4">
-          <span
-            className={cn(
-              "font-serif text-6xl font-bold tabular-nums",
-              aprobado ? "text-emerald-500" : "text-red-500",
-            )}
-          >
-            {pct}%
-          </span>
-        </div>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          {correctas} correctas de {total} preguntas
+    <div
+      className="anim-fade fixed inset-0 z-50 flex items-center justify-center p-5"
+      style={{ background: "color-mix(in srgb, var(--noche) 55%, transparent)" }}
+      onClick={onCancelar}
+      role="dialog"
+      aria-modal="true"
+      aria-label={titulo}
+    >
+      <div
+        className="w-full max-w-sm rounded-3xl p-7 text-center"
+        style={{ background: "var(--crema)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p className="serif mb-3 text-[1.7rem] leading-tight">{titulo}</p>
+        <p className="mb-7 text-[16px] leading-relaxed font-medium text-[var(--noche)]/65">
+          {detalle}
         </p>
-
-        <button
-          onClick={onReintentar}
-          className="btn-press mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg hover:from-emerald-600 hover:to-emerald-700"
-        >
-          <RotateCcw className="h-4 w-4" /> Otro simulacro
-        </button>
-      </div>
-
-      {/* Desglose por tema */}
-      <div className="glass-strong rounded-2xl p-5 sm:p-6">
-        <h3 className="mb-4 font-serif text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-          Por tema
-        </h3>
-        <div className="space-y-2">
-          {desglose.map(({ tema, total, ok }) => {
-            const p = total > 0 ? Math.round((ok / total) * 100) : 0
-            return (
-              <div key={tema.id} className="glass rounded-xl p-3">
-                <div className="mb-1.5 flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
-                      {tema.practico}
-                    </div>
-                    <div className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                      {tema.titulo}
-                    </div>
-                  </div>
-                  <span
-                    className={cn(
-                      "shrink-0 font-mono text-sm font-semibold tabular-nums",
-                      p >= 80
-                        ? "text-emerald-500"
-                        : p >= 50
-                          ? "text-teal-500"
-                          : "text-red-500",
-                    )}
-                  >
-                    {ok}/{total}
-                  </span>
-                </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className={cn(
-                      "h-full rounded-full transition-all",
-                      p >= 80
-                        ? "bg-emerald-500"
-                        : p >= 50
-                          ? "bg-teal-500"
-                          : "bg-red-500",
-                    )}
-                    style={{ width: `${p}%` }}
-                  />
-                </div>
-              </div>
-            )
-          })}
+        <div className="flex flex-col gap-3">
+          <button onClick={onConfirmar} className="btn-lunar btn-lila w-full">
+            {confirmar}
+          </button>
+          <button
+            onClick={onCancelar}
+            className="btn-lunar btn-fantasma w-full !px-0"
+          >
+            {cancelar}
+          </button>
         </div>
       </div>
-
-      {/* Errores */}
-      {errores.length > 0 && (
-        <div className="glass-strong rounded-2xl p-5 sm:p-6">
-          <h3 className="mb-4 font-serif text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-            Preguntas a revisar ({errores.length})
-          </h3>
-          <div className="space-y-3">
-            {errores.map((err, i) => {
-              const tema = TEMAS.find((t) => t.id === err.temaId)!
-              const pregunta = tema.preguntas[err.preguntaIdx]
-              return (
-                <div
-                  key={i}
-                  className="glass rounded-xl border-l-4 border-l-red-500/60 p-4"
-                >
-                  <div className="mb-1 text-[10px] font-medium tracking-wider text-red-600 uppercase dark:text-red-400">
-                    {tema.practico} · {tema.titulo}
-                  </div>
-                  <p className="mb-3 font-serif text-sm leading-snug text-zinc-800 dark:text-zinc-100">
-                    {pregunta.q}
-                  </p>
-                  <div className="mb-2 grid gap-1.5 text-xs">
-                    <div className="text-red-600 dark:text-red-400">
-                      <span className="font-medium">Tu respuesta:</span>{" "}
-                      {LETRAS[err.elegida]}. {pregunta.opciones[err.elegida]}
-                    </div>
-                    <div className="text-emerald-700 dark:text-emerald-400">
-                      <span className="font-medium">Correcta:</span>{" "}
-                      {LETRAS[pregunta.correcta]}. {pregunta.opciones[pregunta.correcta]}
-                    </div>
-                  </div>
-                  <p className="mt-2 text-xs leading-relaxed whitespace-pre-wrap text-zinc-600 dark:text-zinc-300">
-                    {pregunta.exp}
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

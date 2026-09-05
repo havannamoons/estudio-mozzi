@@ -6,12 +6,9 @@
  * el matcheo correcto), un `concepto` (la columna izquierda) y un `referente`
  * (la columna derecha). El `pista` es opcional — se muestra al matchear.
  */
-export interface Par {
-  id: string
-  concepto: string
-  referente: string
-  pista?: string
-}
+import type { Par } from "@/lib/types"
+
+export type { Par }
 
 export const REFERENTES: Par[] = [
   {

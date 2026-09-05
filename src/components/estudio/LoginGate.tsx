@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { GraduationCap } from "lucide-react"
 import type { AuthApi } from "@/lib/hooks/useAuth"
+import { LunaProta } from "@/components/landing/Personajes"
+import { PantallaLunar } from "./PantallaLunar"
 
 function GoogleG({ className }: { className?: string }) {
   return (
@@ -41,33 +42,32 @@ export function LoginGate({ auth }: { auth: AuthApi }) {
   }
 
   return (
-    <main className="mx-auto flex min-h-[100svh] max-w-md flex-col justify-center px-4 py-8">
-      <div className="glass-strong animate-scale-in rounded-3xl p-6 text-center sm:p-8">
-        <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/12 text-emerald-600 dark:text-emerald-400">
-          <GraduationCap className="h-7 w-7" />
-        </div>
-
-        <h1 className="font-serif text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Estudio Mozzi
-        </h1>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Ingresá con tu cuenta de Google para acceder a la app.
-        </p>
-
-        <button
-          onClick={entrar}
-          disabled={yendo}
-          className="btn-press mt-6 inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-6 py-3.5 text-base font-semibold text-zinc-700 shadow-lg shadow-black/5 ring-1 ring-black/10 transition-all hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <GoogleG className="h-5 w-5" />
-          {yendo ? "Abriendo Google…" : "Continuar con Google"}
-        </button>
-
-        <p className="mt-5 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500">
-          Usamos tu cuenta solo para identificarte. Tu acceso se habilita una vez
-          confirmada tu compra.
-        </p>
+    <PantallaLunar>
+      {/* La lunita saluda en vez del birrete genérico */}
+      <div className="flota mx-auto mb-7 w-fit">
+        <LunaProta size={190} />
       </div>
-    </main>
+
+      <h1 className="serif mb-3 text-[clamp(2rem,7vw,2.8rem)] leading-tight">
+        Hola de nuevo
+      </h1>
+      <p className="mx-auto mb-8 max-w-xs text-[17px] leading-relaxed font-medium text-[var(--noche)]/65">
+        Entrá con tu cuenta de Google y seguí donde lo dejaste.
+      </p>
+
+      <button
+        onClick={entrar}
+        disabled={yendo}
+        className="btn-lunar btn-google w-full !py-4 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <GoogleG className="h-5 w-5" />
+        {yendo ? "Abriendo Google…" : "Continuar con Google"}
+      </button>
+
+      <p className="mx-auto mt-6 max-w-xs text-[13px] leading-relaxed font-semibold text-[var(--noche)]/40">
+        Usamos tu cuenta solo para identificarte. Tu acceso se habilita una vez
+        confirmada tu compra.
+      </p>
+    </PantallaLunar>
   )
 }

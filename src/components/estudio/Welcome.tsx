@@ -1,124 +1,95 @@
 "use client"
 
-import {
-  ArrowRight,
-  BookOpen,
-  FileCheck,
-  GraduationCap,
-  ListChecks,
-  Puzzle,
-  Type,
-} from "lucide-react"
+import { useMateria } from "@/lib/materias/contexto"
+import { Estirandose, LunaProta, Sentada } from "@/components/landing/Personajes"
 
 interface Props {
   onEmpezar: () => void
 }
 
-const MODOS = [
-  {
-    Icon: BookOpen,
-    titulo: "Estudiar por tema",
-    desc: "Teoría clara, con tips de parcial y bibliografía de cada práctico.",
-  },
-  {
-    Icon: ListChecks,
-    titulo: "Quiz",
-    desc: "Preguntas con explicación y dificultad progresiva. Tu progreso se guarda.",
-  },
-  {
-    Icon: Puzzle,
-    titulo: "Match",
-    desc: "Emparejá cada concepto con su caso o referente clínico.",
-  },
-  {
-    Icon: Type,
-    titulo: "Cloze",
-    desc: "Completá las frases clave con el término que falta.",
-  },
-  {
-    Icon: FileCheck,
-    titulo: "Simulacro",
-    desc: "Examen mezclado de todos los temas, con puntaje y desglose final.",
-  },
-]
+/**
+ * Primera visita. Antes era una tarjeta de vidrio con etiqueta, stats y cinco
+ * filas de íconos — mucha información antes de dejar entrar a nadie.
+ *
+ * Ahora es una bienvenida corta con los muñequitos de la marca: dice de qué
+ * materia se trata, cómo se estudia y listo. El detalle de los modos ya está
+ * en el selector, no hace falta explicarlo dos veces.
+ */
 
-const STATS = [
-  { n: "19", label: "temas" },
-  { n: "128", label: "preguntas" },
-  { n: "5", label: "formas de estudiar" },
+const COMO = [
+  {
+    titulo: "Leés poquito",
+    desc: "El tema en bloques cortos, con los referentes clínicos al lado.",
+  },
+  {
+    titulo: "Contestás",
+    desc: "Quiz, unir conceptos y completar frases. Con explicación siempre.",
+  },
+  {
+    titulo: "Te tomás un simulacro",
+    desc: "Todo mezclado, sin pistas. Como la mesa de verdad.",
+  },
 ]
 
 export function Welcome({ onEmpezar }: Props) {
+  const { materia, contenido } = useMateria()
+  const totalPreguntas = contenido.temas.reduce(
+    (acc, t) => acc + t.preguntas.length,
+    0,
+  )
+
   return (
-    <main className="mx-auto flex min-h-[100svh] max-w-3xl flex-col justify-center px-4 py-8 sm:py-12">
-      <div className="glass-strong animate-scale-in rounded-3xl p-6 sm:p-10">
-        {/* Etiqueta */}
-        <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-emerald-500/12 px-3 py-1.5 text-[11px] font-semibold tracking-wider text-emerald-700 uppercase dark:text-emerald-300">
-          <GraduationCap className="h-3.5 w-3.5" />
-          Psicoanálisis · Freud · UBA
+    <main className="sin-bichito relative mx-auto flex min-h-[100svh] max-w-2xl flex-col justify-center px-6 py-12">
+      {/* Muñequitos en los márgenes, como en la landing */}
+      <div className="asoma asoma-izq bottom-10">
+        <Estirandose size={230} color="var(--cielo)" />
+      </div>
+      <div className="asoma asoma-der top-16">
+        <Sentada size={210} color="var(--menta)" />
+      </div>
+
+      <div className="relative text-center">
+        <div className="flota mx-auto mb-7 w-fit">
+          <LunaProta size={200} />
         </div>
 
-        {/* Título + bajada */}
-        <h1 className="font-serif text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
-          Estudio Mozzi
-        </h1>
-        <p className="mt-3 max-w-prose text-sm leading-relaxed text-zinc-600 sm:text-base dark:text-zinc-300">
-          Todo lo que necesitás para rendir <strong>Psicoanálisis (Freud)</strong> de la
-          Cát. Pino (ex Mozzi): teoría resumida, práctica y simulacro de examen — del
-          parcial al final, en un solo lugar.
+        <p className="mb-4 text-[12px] font-extrabold tracking-[0.16em] text-[var(--lila)] uppercase">
+          {materia.carrera}
+          {materia.catedra ? ` · ${materia.catedra}` : ""}
         </p>
 
-        {/* Stats */}
-        <div className="mt-6 grid grid-cols-3 gap-3">
-          {STATS.map((s) => (
-            <div
-              key={s.label}
-              className="glass rounded-2xl px-3 py-4 text-center"
-            >
-              <div className="font-serif text-3xl font-semibold text-emerald-600 tabular-nums dark:text-emerald-400">
-                {s.n}
-              </div>
-              <div className="mt-0.5 text-[11px] leading-tight text-zinc-500 dark:text-zinc-400">
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
+        <h1 className="serif mb-4 text-[clamp(2.2rem,7vw,3.4rem)] leading-tight">
+          {materia.nombreLargo}
+        </h1>
 
-        {/* Modos */}
-        <div className="mt-6 space-y-2">
-          {MODOS.map(({ Icon, titulo, desc }) => (
-            <div
-              key={titulo}
-              className="glass-subtle flex items-start gap-3 rounded-2xl p-3"
-            >
-              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-600 dark:text-emerald-400">
-                <Icon className="h-4 w-4" />
+        <p className="mx-auto mb-10 max-w-md text-[17px] leading-relaxed font-medium text-[var(--noche)]/65">
+          {contenido.temas.length} temas y {totalPreguntas} preguntas para
+          preparar el final contestando, no releyendo.
+        </p>
+
+        {/* Cómo se estudia: tres líneas, sin tarjetas ni íconos */}
+        <div className="mx-auto mb-10 max-w-md text-left">
+          {COMO.map((c, i) => (
+            <div key={c.titulo} className="fila flex items-baseline gap-4 py-4">
+              <span className="w-4 shrink-0 text-sm font-extrabold text-[var(--lila)]">
+                {i + 1}
               </span>
-              <div className="min-w-0">
-                <div className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
-                  {titulo}
-                </div>
-                <div className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-                  {desc}
-                </div>
-              </div>
+              <span>
+                <span className="serif block text-xl">{c.titulo}</span>
+                <span className="mt-0.5 block text-[15px] leading-relaxed font-medium text-[var(--noche)]/60">
+                  {c.desc}
+                </span>
+              </span>
             </div>
           ))}
         </div>
 
-        {/* CTA */}
-        <button
-          onClick={onEmpezar}
-          className="btn-press mt-7 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-emerald-900/20 transition-all hover:from-emerald-400 hover:to-emerald-500 sm:w-auto"
-        >
+        <button onClick={onEmpezar} className="btn-lunar btn-lila !px-8 !py-4">
           Empezar a estudiar
-          <ArrowRight className="h-5 w-5" />
         </button>
 
-        {/* Pie */}
-        <p className="mt-5 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500">
-          Tu progreso se guarda solo en este dispositivo — no necesitás cuenta.
+        <p className="mt-6 text-[13px] font-semibold text-[var(--noche)]/40">
+          Tu progreso se guarda en este dispositivo.
         </p>
       </div>
     </main>
