@@ -13,7 +13,9 @@ export const THEME_KEY = "tema_estudio_lunar"
  *   false = vuelve el login con Google + gate de "habilitado" (para vender).
  * Todo el sistema de login queda construido; solo se activa cambiando esto a false.
  */
-export const ACCESO_ABIERTO = false
+/* Abierta a propósito desde el 2026-09-29 para poder mostrar la app en una
+   reunión sin depender del login. Para volver a vender, poner false y deployar. */
+export const ACCESO_ABIERTO = true
 
 /**
  * Saltea el login SOLO cuando la app corre en tu compu (`npm run dev`).
