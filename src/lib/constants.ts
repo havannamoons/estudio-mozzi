@@ -8,13 +8,17 @@ export const STORAGE_ACCESS = "estudio_acceso_v1"
    en claro —que es como se ve la landing— y eligen si quieren la noche. */
 export const THEME_KEY = "tema_estudio_lunar"
 /**
- * Interruptor de acceso.
- *   true  = app ABIERTA para todos (sin login) — para compartir gratis.
- *   false = vuelve el login con Google + gate de "habilitado" (para vender).
- * Todo el sistema de login queda construido; solo se activa cambiando esto a false.
+ * Interruptor de la PUERTA DE ENTRADA.
+ *
+ *   true  = cualquiera entra sin cuenta, y ve la MUESTRA (ver `lib/plan.ts`).
+ *   false = vuelve el muro de login: no se ve nada sin cuenta.
+ *
+ * OJO, cambió de significado el 2026-09-29. Antes `true` quería decir
+ * "todo gratis para todos". Ahora ya no: con los tres niveles de acceso,
+ * `true` solo saca el muro de entrada, y lo que cada persona ve lo decide
+ * su nivel. Para vender conviene dejarlo en `true`, porque nadie paga por
+ * algo que no pudo probar.
  */
-/* Abierta a propósito desde el 2026-09-29 para poder mostrar la app en una
-   reunión sin depender del login. Para volver a vender, poner false y deployar. */
 export const ACCESO_ABIERTO = true
 
 /**

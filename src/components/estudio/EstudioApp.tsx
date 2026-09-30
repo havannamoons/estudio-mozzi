@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { ToastProvider, useToast } from "@/lib/hooks/useToast"
 import { ACCESO_ABIERTO, APP_PAUSADA, SALTEAR_LOGIN_EN_DEV } from "@/lib/constants"
 import { useEstudio } from "@/lib/hooks/useEstudio"
@@ -9,6 +10,8 @@ import { Header } from "./Header"
 import { ModoSelector } from "./ModoSelector"
 import { Sidebar } from "./Sidebar"
 import { MobileTemaSelector } from "./MobileTemaSelector"
+import { Paywall } from "./Paywall"
+import { LIMITES, modoAbierto, nivelDe, temaAbierto } from "@/lib/plan"
 import { ContenidoTema } from "./ContenidoTema"
 import { SimulacroMode } from "./SimulacroMode"
 import { MatchMode } from "./MatchMode"
@@ -24,6 +27,8 @@ import { Luna, Saludando } from "@/components/landing/Personajes"
 import { cn } from "@/lib/utils"
 import { MateriaProvider } from "@/lib/materias/contexto"
 import { getContenido, getMateria } from "@/lib/materias"
+import { RachaProvider } from "@/lib/hooks/useRacha"
+import { FestejoRacha } from "./Racha"
 
 /**
  * La app de estudio, para UNA materia. El slug viene de la URL
@@ -46,14 +51,19 @@ export function EstudioApp({ slug }: { slug: string }) {
   }
 
   return (
-    <MateriaProvider valor={{ materia, contenido }}>
-      <ToastProvider>
-        <CapaLunar>
-          <EstudioAppInner />
-          <ToastViewport />
-        </CapaLunar>
-      </ToastProvider>
-    </MateriaProvider>
+    /* La racha va POR ENCIMA de la materia: es de la persona, no de
+       Psicoanálisis. Si mañana estudia Estadística, la racha sigue viva. */
+    <RachaProvider>
+      <MateriaProvider valor={{ materia, contenido }}>
+        <ToastProvider>
+          <CapaLunar>
+            <EstudioAppInner />
+            <ToastViewport />
+            <FestejoRacha />
+          </CapaLunar>
+        </ToastProvider>
+      </MateriaProvider>
+    </RachaProvider>
   )
 }
 
@@ -103,6 +113,10 @@ function EstudioAppInner() {
   const auth = useAuth()
   const api = useEstudio()
   const { push: toast } = useToast()
+  /* Qué quiso abrir y no pudo. null = no hay nada bloqueado en pantalla. */
+  const [bloqueo, setBloqueo] = useState<
+    { tipo: "tema"; nombre: string } | { tipo: "modo"; nombre: string } | null
+  >(null)
 
   // === Pausa total (bloqueo del link online) ===
   // Cuando APP_PAUSADA = true, la copia PUBLICADA (internet) muestra "No disponible por ahora".
@@ -181,28 +195,99 @@ function EstudioAppInner() {
     toast("Progreso reiniciado")
   }
 
+  /* ── Los tres niveles de acceso ───────────────────────────────────────
+     Sin sesión se ve la muestra; con cuenta se abre un poco más; pagando
+     se abre todo. El candado se dibuja siempre, para que nadie se choque
+     con un cobro de sorpresa en la mitad de una sesión de estudio. */
+  const nivel = nivelDe(Boolean(auth.session), auth.habilitado)
+  const orden = api.contenido.temas.map((t) => t.id)
+  const temasBloqueados = new Set(
+    orden.filter((id) => !temaAbierto(nivel, id, orden)),
+  )
+  const NOMBRE_MODO: Record<string, string> = {
+    estudio: "La teoría",
+    match: "Relacionar",
+    cloze: "Completar frases",
+    simulacro: "El simulacro",
+    oral: "El oral",
+  }
+  const modosBloqueados = new Set(
+    Object.keys(NOMBRE_MODO).filter(
+      (m) => !modoAbierto(nivel, m as typeof api.modo),
+    ),
+  )
+
+  /* Envolvemos las dos acciones que pueden chocar con un límite. El resto
+     de la api pasa igual, así ningún componente se entera de esto. */
+  const apiConCandado = {
+    ...api,
+    seleccionarTema: (id: string) => {
+      if (temasBloqueados.has(id)) {
+        const t = api.contenido.temas.find((x) => x.id === id)
+        setBloqueo({ tipo: "tema", nombre: t?.titulo ?? "Ese tema" })
+        return
+      }
+      api.seleccionarTema(id)
+    },
+    cambiarModo: (m: typeof api.modo) => {
+      if (modosBloqueados.has(m)) {
+        setBloqueo({ tipo: "modo", nombre: NOMBRE_MODO[m] ?? "Esa actividad" })
+        return
+      }
+      api.cambiarModo(m)
+    },
+  }
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
         <Header onReset={api.modo === "estudio" ? handleReset : undefined} />
-        <ModoSelector modo={api.modo} onChange={api.cambiarModo} />
+        <ModoSelector
+          modo={api.modo}
+          onChange={apiConCandado.cambiarModo}
+          bloqueados={modosBloqueados}
+        />
+
+        {bloqueo && (
+          <Paywall
+            nivel={nivel}
+            motivo={bloqueo}
+            totalTemas={api.contenido.temas.length}
+            auth={auth}
+            onCerrar={() => setBloqueo(null)}
+          />
+        )}
 
         {api.modo === "estudio" && (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[280px_1fr]">
             {/* En mobile: dropdown nativo arriba (compacto, accesible).
                 En desktop (lg+): sidebar completo a la izquierda. */}
-            <MobileTemaSelector api={api} />
+            <MobileTemaSelector api={apiConCandado} bloqueados={temasBloqueados} />
             <div className="hidden lg:block">
-              <Sidebar api={api} />
+              <Sidebar api={apiConCandado} bloqueados={temasBloqueados} />
             </div>
             <section className="min-w-0">
-              <ContenidoTema api={api} />
+              <ContenidoTema
+                api={api}
+                tope={LIMITES[nivel].preguntasPorTema}
+                onTope={() =>
+                  setBloqueo({ tipo: "modo", nombre: "El resto de las preguntas" })
+                }
+              />
             </section>
           </div>
         )}
         {api.modo === "match" && <MatchMode api={api} />}
         {api.modo === "cloze" && <ClozeMode api={api} />}
       {api.modo === "simulacro" && <SimulacroMode api={api} />}
-      {api.modo === "oral" && <OralMode api={api} />}
+      {api.modo === "oral" && (
+        <OralMode
+          api={api}
+          tope={LIMITES[nivel].oral}
+          onTope={() =>
+            setBloqueo({ tipo: "modo", nombre: "El resto del oral" })
+          }
+        />
+      )}
     </main>
   )
 }

@@ -56,7 +56,7 @@ export default function OpengraphImage() {
               letterSpacing: -2,
             }}
           >
-            Estudio Mozzi
+            Estudio Lunar
           </div>
           <div
             style={{
@@ -66,7 +66,7 @@ export default function OpengraphImage() {
               fontWeight: 500,
             }}
           >
-            Teoría · Quiz · Simulacro
+            Teoría · Quiz · Simulacro · Oral
           </div>
         </div>
 

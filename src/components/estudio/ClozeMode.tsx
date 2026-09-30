@@ -13,6 +13,8 @@ import type { Cloze } from "@/lib/types"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
 import { useContenido } from "@/lib/materias/contexto"
 import { clozeAcierta, shuffle } from "@/lib/helpers"
+import { useRacha } from "@/lib/hooks/useRacha"
+import { XP } from "@/lib/racha"
 import { cn } from "@/lib/utils"
 import { ClozeTerminado } from "./ClozeTerminado"
 
@@ -33,6 +35,7 @@ function buildOpciones(c: Cloze): string[] {
 
 export function ClozeMode({ api }: { api: EstudioApi }) {
   const { clozes } = useContenido()
+  const racha = useRacha()
   const [partida, setPartida] = useState(0)
 
   const items = useMemo<Cloze[]>(() => {
@@ -69,6 +72,7 @@ export function ClozeMode({ api }: { api: EstudioApi }) {
     if (!actual || respondida) return
     const ok = clozeAcierta(opcion, actual)
     setRespuestas((prev) => [...prev, { id: actual.id, elegida: opcion, ok }])
+    racha.sumar(ok ? XP.aciertoCloze : XP.errorQuiz, { materia: api.materia.slug })
   }
 
   const siguiente = () => {

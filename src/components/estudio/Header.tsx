@@ -4,6 +4,7 @@ import Link from "next/link"
 import { RotateCcw } from "lucide-react"
 import { useMateria } from "@/lib/materias/contexto"
 import { Luna } from "@/components/landing/Personajes"
+import { RachaIndicador } from "./Racha"
 
 interface Props {
   onReset?: () => void
@@ -30,6 +31,9 @@ export function Header({ onReset }: Props) {
       </Link>
 
       <div className="flex items-center gap-2">
+        {/* La racha va acá y no en un menú: la mecánica funciona porque el
+            número está a la vista mientras estudiás. */}
+        <RachaIndicador />
 
         {onReset && (
           <button

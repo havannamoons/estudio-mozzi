@@ -1,13 +1,17 @@
 "use client"
 
+import { Lock } from "lucide-react"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
 import { cn } from "@/lib/utils"
 
 interface Props {
   api: EstudioApi
+  /** Ids de temas que esta persona todavía no tiene desbloqueados.
+      Se dibujan con candado, nunca se esconden: la idea es que vea qué hay. */
+  bloqueados?: Set<string>
 }
 
-export function Sidebar({ api }: Props) {
+export function Sidebar({ api, bloqueados }: Props) {
   const { temaActivoId, seleccionarTema, progresoTema } = api
   const TEMAS = api.contenido.temas
   return (
@@ -19,6 +23,7 @@ export function Sidebar({ api }: Props) {
         {TEMAS.map((t) => {
           const prog = progresoTema(t.id)
           const isActive = t.id === temaActivoId
+          const cerrado = bloqueados?.has(t.id) ?? false
           // Verde solo cuando el quiz del tema está completo (todas respondidas).
           // Mientras tanto, el punto queda gris — sin juicio sobre desempeño.
           const completo = prog.hechas === prog.total && prog.total > 0
@@ -38,12 +43,14 @@ export function Sidebar({ api }: Props) {
             <button
               key={t.id}
               onClick={() => seleccionarTema(t.id)}
+              title={cerrado ? "Todavía no lo tenés desbloqueado" : undefined}
               className={cn(
                 "w-full cursor-pointer rounded-lg px-3 py-2.5 text-left text-xs transition-colors",
                 "border-l-2",
                 isActive
                   ? "border-l-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-200"
                   : "border-l-transparent text-zinc-600 hover:bg-white/30 dark:text-zinc-300 dark:hover:bg-white/5",
+                cerrado && "opacity-55",
               )}
             >
               <div className="flex items-start justify-between gap-2">
@@ -53,9 +60,18 @@ export function Sidebar({ api }: Props) {
                   </div>
                   <div className="leading-snug font-medium">{t.titulo}</div>
                 </div>
-                <span className={cn("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", dotCls)} />
+                {cerrado ? (
+                  <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-zinc-400 dark:text-zinc-500" />
+                ) : (
+                  <span className={cn("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", dotCls)} />
+                )}
               </div>
-              {prog.hechas > 0 && (
+              {cerrado && (
+                <div className="mt-1.5 text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                  Tocá para desbloquear
+                </div>
+              )}
+              {!cerrado && prog.hechas > 0 && (
                 <div className="mt-1.5 flex items-center gap-1.5 text-[10px] tabular-nums">
                   <span className="text-zinc-500 dark:text-zinc-500">
                     {prog.correctas}/{prog.hechas}{" "}

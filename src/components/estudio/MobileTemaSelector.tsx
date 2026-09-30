@@ -4,9 +4,12 @@ import type { EstudioApi } from "@/lib/hooks/useEstudio"
 
 interface Props {
   api: EstudioApi
+  /** Temas todavía sin desbloquear. En el desplegable no se pueden dibujar
+      íconos, así que van con un candado de texto delante del nombre. */
+  bloqueados?: Set<string>
 }
 
-export function MobileTemaSelector({ api }: Props) {
+export function MobileTemaSelector({ api, bloqueados }: Props) {
   const { temaActivoId, seleccionarTema, progresoTema } = api
   const TEMAS = api.contenido.temas
   return (
@@ -26,10 +29,15 @@ export function MobileTemaSelector({ api }: Props) {
         style={{ fontSize: "16px" }}
       >
         {TEMAS.map((t) => {
+          const cerrado = bloqueados?.has(t.id) ?? false
           const prog = progresoTema(t.id)
-          const score = prog.hechas > 0 ? ` · ${prog.correctas}/${prog.total}` : ""
+          const score =
+            !cerrado && prog.hechas > 0
+              ? ` · ${prog.correctas}/${prog.total}`
+              : ""
           return (
             <option key={t.id} value={t.id}>
+              {cerrado ? "🔒 " : ""}
               {t.practico} · {t.titulo}
               {score}
             </option>

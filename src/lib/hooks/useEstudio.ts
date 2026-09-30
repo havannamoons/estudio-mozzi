@@ -19,6 +19,8 @@ import {
   STORAGE_WELCOME,
 } from "@/lib/constants"
 import { ordenarPorDificultadIdx, shuffle } from "@/lib/helpers"
+import { useRacha } from "@/lib/hooks/useRacha"
+import { XP } from "@/lib/racha"
 import { claveStorage } from "@/lib/materias"
 import { useMateria } from "@/lib/materias/contexto"
 import type { ContenidoMateria } from "@/lib/materias/tipos"
@@ -92,6 +94,7 @@ function calcularOrdenTema(contenido: ContenidoMateria, temaId: string): number[
 export function useEstudio() {
   // Contenido de la materia activa (la inyecta <MateriaProvider>).
   const { materia, contenido } = useMateria()
+  const racha = useRacha()
   const TEMAS = contenido.temas
   const DIFICULTADES = contenido.dificultades
 
@@ -303,8 +306,20 @@ export function useEstudio() {
           [origIdx]: { elegida: idx, correcta, seguridad },
         },
       }))
+      racha.sumar(
+        (correcta ? XP.aciertoQuiz : XP.errorQuiz) + (seguridad ? XP.calibrar : 0),
+        { materia: materia.slug },
+      )
     },
-    [progreso, temaActivoId, preguntaActualIdx, originalIdxDe, TEMAS],
+    [
+      progreso,
+      temaActivoId,
+      preguntaActualIdx,
+      originalIdxDe,
+      TEMAS,
+      racha,
+      materia.slug,
+    ],
   )
 
   const irAPregunta = useCallback((idx: number) => {
@@ -355,8 +370,11 @@ export function useEstudio() {
       setFaseSimulacro("resultados")
       setPorTiempoSim(true)
       setFinEnSim(null)
+      /* Que se haya cortado el tiempo no borra el trabajo: el examen se rindió
+         igual, y quitarle el XP encima sería patearle al que ya perdió. */
+      racha.sumar(XP.simulacroTerminado, { materia: materia.slug })
     }
-  }, [faseSimulacro, segundosRestantes])
+  }, [faseSimulacro, segundosRestantes, racha, materia.slug])
 
   // === Simulacro ===
   // Sampling proporcional por dificultad + orden creciente.
@@ -448,8 +466,25 @@ export function useEstudio() {
             )
           : [...prev, nueva],
       )
+      /* Cambiar de opinión en el examen no vuelve a sumar: el XP se gana por
+         practicar, no por tocar botones. */
+      if (!yaRespondida) {
+        racha.sumar(
+          (correcta ? XP.aciertoQuiz : XP.errorQuiz) +
+            (seguridad ? XP.calibrar : 0),
+          { materia: materia.slug },
+        )
+      }
     },
-    [preguntasSim, preguntaSimIdx, respuestasSim, TEMAS, estiloSim],
+    [
+      preguntasSim,
+      preguntaSimIdx,
+      respuestasSim,
+      TEMAS,
+      estiloSim,
+      racha,
+      materia.slug,
+    ],
   )
 
   /** Cierra el examen a pedido, con lo que haya contestado hasta ahora. */
@@ -457,7 +492,8 @@ export function useEstudio() {
     setPorTiempoSim(false)
     setFinEnSim(null)
     setFaseSimulacro("resultados")
-  }, [])
+    racha.sumar(XP.simulacroTerminado, { materia: materia.slug })
+  }, [racha, materia.slug])
 
   const siguienteSimulacro = useCallback(() => {
     if (preguntaSimIdx < preguntasSim.length - 1) {
@@ -467,8 +503,9 @@ export function useEstudio() {
          correcciones, no hay nada que revisar. En examen no — ahí entregar es
          una decisión, y se toma con el botón de entregar. */
       setFaseSimulacro("resultados")
+      racha.sumar(XP.simulacroTerminado, { materia: materia.slug })
     }
-  }, [preguntaSimIdx, preguntasSim.length, estiloSim])
+  }, [preguntaSimIdx, preguntasSim.length, estiloSim, racha, materia.slug])
 
   const anteriorSimulacro = useCallback(() => {
     if (preguntaSimIdx > 0) setPreguntaSimIdx((i) => i - 1)

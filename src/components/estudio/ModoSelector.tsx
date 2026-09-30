@@ -1,12 +1,15 @@
 "use client"
 
-import { BookOpen, FileCheck, Mic, Puzzle, Type } from "lucide-react"
+import { BookOpen, FileCheck, Lock, Mic, Puzzle, Type } from "lucide-react"
 import type { Modo } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 interface Props {
   modo: Modo
   onChange: (m: Modo) => void
+  /** Actividades que esta persona todavía no desbloqueó. Se muestran igual,
+      con candado: si no las ve, no sabe qué se estaría perdiendo. */
+  bloqueados?: Set<string>
 }
 
 interface Opcion {
@@ -27,8 +30,9 @@ const ACTIVIDADES: Opcion[] = [
  * sólido. Las tres actividades son alternativas, y por eso van como pastillas
  * chicas y planas al costado — la jerarquía la da el tamaño, no el color.
  */
-export function ModoSelector({ modo, onChange }: Props) {
+export function ModoSelector({ modo, onChange, bloqueados }: Props) {
   const estudioActivo = modo === "estudio"
+  const cerrado = (id: Modo) => bloqueados?.has(id) ?? false
 
   return (
     <div className="mb-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -48,14 +52,24 @@ export function ModoSelector({ modo, onChange }: Props) {
         {ACTIVIDADES.map((op) => {
           const Icon = op.Icon
           const activo = modo === op.id
+          const trabado = cerrado(op.id)
           return (
             <button
               key={op.id}
               onClick={() => onChange(op.id)}
               aria-pressed={activo}
-              className={cn("pastilla", activo && "pastilla-activa")}
+              title={trabado ? "Todavía no lo tenés desbloqueado" : undefined}
+              className={cn(
+                "pastilla",
+                activo && "pastilla-activa",
+                trabado && "opacity-55",
+              )}
             >
-              <Icon className="h-3.5 w-3.5 shrink-0" />
+              {trabado ? (
+                <Lock className="h-3.5 w-3.5 shrink-0" />
+              ) : (
+                <Icon className="h-3.5 w-3.5 shrink-0" />
+              )}
               {op.label}
             </button>
           )

@@ -1,11 +1,13 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { ArrowRight, Check, Mic } from "lucide-react"
+import { ArrowRight, Check, Lock, Mic } from "lucide-react"
 import type { EstudioApi } from "@/lib/hooks/useEstudio"
 import type { ConsignaOral } from "@/lib/types"
 import { consignasDeLaMateria } from "@/lib/oral"
 import { useMicrofono, type MicApi } from "@/lib/hooks/useMicrofono"
+import { useRacha } from "@/lib/hooks/useRacha"
+import { XP } from "@/lib/racha"
 import { cn } from "@/lib/utils"
 import { Estirandose, Estudiando, LunaProta } from "@/components/landing/Personajes"
 import { Confeti } from "./Confeti"
@@ -89,11 +91,29 @@ function useCuentaAtras(segundosTotales: number, alTerminar: () => void) {
   return { restante, corriendo, arrancar: () => setCorriendo(true) }
 }
 
-export function OralMode({ api }: { api: EstudioApi }) {
-  const consignas = useMemo(
+export function OralMode({
+  api,
+  tope = Infinity,
+  onTope,
+}: {
+  api: EstudioApi
+  /** Cuántas consignas puede abrir. Infinity = todas. */
+  tope?: number
+  /** Qué hacer cuando quiere una de las que todavía no tiene. */
+  onTope?: () => void
+}) {
+  const todas = useMemo(
     () => consignasDeLaMateria(api.contenido),
     [api.contenido],
   )
+  /* El recorte es de la LISTA, no del contenido: las consignas que no entran
+     siguen visibles como una fila con candado al final, para que se vea
+     cuántas hay. Esconderlas sería mentir por omisión. */
+  const consignas = useMemo(
+    () => (tope === Infinity ? todas : todas.slice(0, tope)),
+    [todas, tope],
+  )
+  const bloqueadas = todas.length - consignas.length
 
   const [fase, setFase] = useState<Fase>("setup")
   const [consigna, setConsigna] = useState<ConsignaOral | null>(null)
@@ -101,6 +121,7 @@ export function OralMode({ api }: { api: EstudioApi }) {
   /** Índices del punteo que la persona dice haber mencionado. */
   const [dichos, setDichos] = useState<Set<number>>(new Set())
   const [voz, setVoz] = useState<DatosVoz | null>(null)
+  const racha = useRacha()
 
   const empezar = (c: ConsignaOral) => {
     setConsigna(c)
@@ -118,7 +139,14 @@ export function OralMode({ api }: { api: EstudioApi }) {
   }
 
   if (fase === "setup" || !consigna) {
-    return <OralSetup consignas={consignas} onEmpezar={empezar} />
+    return (
+      <OralSetup
+        consignas={consignas}
+        bloqueadas={bloqueadas}
+        onTope={onTope}
+        onEmpezar={empezar}
+      />
+    )
   }
 
   if (fase === "hablando") {
@@ -129,6 +157,13 @@ export function OralMode({ api }: { api: EstudioApi }) {
         onMinutos={setMinutos}
         onTerminar={(v) => {
           setVoz(v)
+          /* El oral suma acá y no en el cierre: el trabajo ya lo hiciste al
+             hablar. Tildar el punteo después es la devolución, no el esfuerzo.
+             `hablo` es lo que marca el día como día de voz en la racha. */
+          racha.sumar(XP.oralTerminado, {
+            hablo: true,
+            materia: api.materia.slug,
+          })
           setFase("punteo")
         }}
         onSalir={otra}
@@ -182,9 +217,13 @@ export function OralMode({ api }: { api: EstudioApi }) {
 // ============================================================
 function OralSetup({
   consignas,
+  bloqueadas,
+  onTope,
   onEmpezar,
 }: {
   consignas: ConsignaOral[]
+  bloqueadas?: number
+  onTope?: () => void
   onEmpezar: (c: ConsignaOral) => void
 }) {
   const [filtro, setFiltro] = useState<"todas" | "desarrollo" | "articulacion">(
@@ -291,6 +330,23 @@ function OralSetup({
             <ArrowRight className="h-4 w-4 shrink-0 opacity-40" />
           </button>
         ))}
+
+        {bloqueadas ? (
+          <button
+            onClick={onTope}
+            className="fila flex w-full items-center gap-4 py-4 text-left opacity-60 transition-opacity hover:opacity-100"
+          >
+            <span className="min-w-0 flex-1">
+              <span className="block text-[16px] leading-snug font-semibold">
+                Hay {bloqueadas} consignas más
+              </span>
+              <span className="mt-1 block text-[13px] font-bold text-[var(--noche)]/35">
+                Incluidas las de articulación, que son las que más se toman
+              </span>
+            </span>
+            <Lock className="h-4 w-4 shrink-0 opacity-50" />
+          </button>
+        ) : null}
       </div>
     </div>
   )

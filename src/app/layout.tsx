@@ -37,12 +37,12 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://estudio-mozzi-i3ao.vercel.app"),
-  title: "Estudio Mozzi · Psicoanálisis Freud (Parcial + Final)",
+  metadataBase: new URL("https://estudio-next-swart.vercel.app"),
+  title: "Estudio Lunar · Psicoanálisis Freud (Parcial + Final)",
   description:
-    "Teoría, quiz y simulacro para Psicoanálisis Freud · Cát. Pino (ex Mozzi) UBA. 19 temas y +120 preguntas: del parcial (prácticos 1 a 9) al final. Con dark mode y progreso guardado.",
-  applicationName: "Estudio Mozzi",
-  authors: [{ name: "Estudio Mozzi" }],
+    "Teoría, quiz, simulacro y examen oral para Psicoanálisis Freud · Cát. Pino (ex Mozzi) UBA. 19 temas y +120 preguntas, del parcial al final, con el progreso guardado.",
+  applicationName: "Estudio Lunar",
+  authors: [{ name: "Estudio Lunar" }],
   keywords: [
     "Psicoanálisis",
     "Freud",
@@ -53,20 +53,21 @@ export const metadata: Metadata = {
     "parcial",
     "final",
     "resumen",
+    "Estudio Lunar",
   ],
   openGraph: {
-    title: "Estudio Mozzi · Psicoanálisis Freud",
+    title: "Estudio Lunar · Psicoanálisis Freud",
     description:
-      "Teoría + Quiz + Simulacro. 19 temas y +120 preguntas, del parcial al final. Cát. Pino (ex Mozzi) UBA.",
+      "Teoría, quiz, simulacro y oral. 19 temas y +120 preguntas, del parcial al final. Cát. Pino (ex Mozzi) UBA.",
     type: "website",
     locale: "es_AR",
-    siteName: "Estudio Mozzi",
+    siteName: "Estudio Lunar",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Estudio Mozzi · Psicoanálisis Freud",
+    title: "Estudio Lunar · Psicoanálisis Freud",
     description:
-      "Teoría + Quiz + Simulacro. 19 temas y +120 preguntas, del parcial al final.",
+      "Teoría, quiz, simulacro y oral. 19 temas y +120 preguntas, del parcial al final.",
   },
 }
 

@@ -28,15 +28,15 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 > 📝 Simulacro para llegar entrenada
 > 📱 Desde el celu, guardando tu progreso
 >
-> Mirá de qué se trata 👉 estudio-mozzi-i3ao.vercel.app
+> Mirá de qué se trata 👉 estudio-next-swart.vercel.app
 >
 > Escribime "QUIERO" y te paso el acceso 💚
 
 ### Versión corta (estado / historia)
-> 📚 Estudio Mozzi — teoría, quiz y simulacro para aprobar Freud (Cát. Pino/Mozzi · UBA). 19 temas, +120 preguntas, todo desde el celu. Miralo 👉 estudio-mozzi-i3ao.vercel.app · Escribime para tenerla 💚
+> 📚 Estudio Mozzi — teoría, quiz y simulacro para aprobar Freud (Cát. Pino/Mozzi · UBA). 19 temas, +120 preguntas, todo desde el celu. Miralo 👉 estudio-next-swart.vercel.app · Escribime para tenerla 💚
 
 ### Versión suave (para grupos que no dejan vender)
-> Chicas, armé un recurso para estudiar Freud (Cát. Pino/Mozzi): teoría, +120 preguntas y un simulacro, todo junto y desde el celu. Por si a alguien le sirve 👉 estudio-mozzi-i3ao.vercel.app · Cualquier cosa me escriben por privado 💚
+> Chicas, armé un recurso para estudiar Freud (Cát. Pino/Mozzi): teoría, +120 preguntas y un simulacro, todo junto y desde el celu. Por si a alguien le sirve 👉 estudio-next-swart.vercel.app · Cualquier cosa me escriben por privado 💚
 
 ### Para Instagram (con hashtags)
 > 📚 Dejá de sufrir Freud 😅 Armé Estudio Mozzi: teoría, +120 preguntas con explicaciones y simulacro de examen para el parcial y final de Psicoanálisis (Cát. Pino/Mozzi, UBA). Todo desde el celu 📱 Link en bio o escribime por DM 💚
@@ -57,7 +57,7 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 > Por transferencia a mi alias [TU ALIAS] 💸 Me pasás el comprobante y en un ratito te activo el acceso.
 
 **"¿Cómo entro / cómo funciona?":**
-> Súper fácil: entrás a estudio-mozzi-i3ao.vercel.app, tocás "Continuar con Google" con tu Gmail, y apenas me pasás el pago te activo. Estudiás desde el celu o la compu 📱💻
+> Súper fácil: entrás a estudio-next-swart.vercel.app, tocás "Continuar con Google" con tu Gmail, y apenas me pasás el pago te activo. Estudiás desde el celu o la compu 📱💻
 
 **"¿Qué incluye?":**
 > 📖 Teoría por tema
@@ -73,13 +73,13 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 > ¡Dale, sin apuro! 😊 Eso sí, está a $10.000 solo por lanzamiento, en breve pasa a $15.000. Cualquier cosa me escribís 💚
 
 **Cuando pagan → activación:**
-> ¡Recibido, gracias! 🎉 Ya te activé. Entrá a estudio-mozzi-i3ao.vercel.app, tocá "Continuar con Google" y si te aparece "Cuenta pendiente" tocá "Ya me activaron". ¡A estudiar! 📚💚
+> ¡Recibido, gracias! 🎉 Ya te activé. Entrá a estudio-next-swart.vercel.app, tocá "Continuar con Google" y si te aparece "Cuenta pendiente" tocá "Ya me activaron". ¡A estudiar! 📚💚
 
 ---
 
 ## ✅ Cómo activar a la que pagó (recordatorio)
 
-1. Entrá a tu panel: https://estudio-mozzi-i3ao.vercel.app/panel
+1. Entrá a tu panel: https://estudio-next-swart.vercel.app/panel
 2. Logueate con havannamoons@gmail.com
 3. En "Esperando aprobación" tocá **"Activar"** al lado de su email. ¡Listo! 🎉
 

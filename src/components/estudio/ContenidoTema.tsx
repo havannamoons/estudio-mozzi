@@ -8,6 +8,10 @@ import { Quiz } from "./Quiz"
 
 interface Props {
   api: EstudioApi
+  /** Tope de preguntas del quiz para esta persona. */
+  tope?: number
+  /** Qué hacer cuando quiere pasar del tope. */
+  onTope?: () => void
 }
 
 /**
@@ -18,7 +22,7 @@ interface Props {
  * así que desentonaba. Ahora comparte el mismo patrón: etiqueta chiquita en
  * versalitas lila, título en Fraunces y una línea que cierra el bloque.
  */
-export function ContenidoTema({ api }: Props) {
+export function ContenidoTema({ api, tope, onTope }: Props) {
   const { temaActivo, tab, cambiarTab, progresoTema } = api
   const prog = progresoTema(temaActivo.id)
   const completo = prog.hechas === prog.total && prog.total > 0
@@ -71,7 +75,7 @@ export function ContenidoTema({ api }: Props) {
       {tab === "teoria" ? (
         <Teoria tema={temaActivo} onIrAlQuiz={() => cambiarTab("quiz")} />
       ) : (
-        <Quiz api={api} />
+        <Quiz api={api} tope={tope} onTope={onTope} />
       )}
     </div>
   )

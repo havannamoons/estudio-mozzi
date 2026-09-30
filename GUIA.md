@@ -9,9 +9,9 @@ Guía práctica para vos (Ro). Todo lo importante en un solo lugar.
 
 | Qué | Link |
 |---|---|
-| **Link para vender** (la landing/presentación) | https://estudio-mozzi-i3ao.vercel.app |
-| **La app** (para estudiar) | https://estudio-mozzi-i3ao.vercel.app/app |
-| **Tu panel** (para activar compradoras) | https://estudio-mozzi-i3ao.vercel.app/panel |
+| **Link para vender** (la landing/presentación) | https://estudio-next-swart.vercel.app |
+| **La app** (para estudiar) | https://estudio-next-swart.vercel.app/app |
+| **Tu panel** (para activar compradoras) | https://estudio-next-swart.vercel.app/panel |
 | Panel de Supabase (base de datos) | https://supabase.com/dashboard/project/esbrpjlwavnwdykygcxk |
 | Google Cloud (login) | https://console.cloud.google.com |
 | Código en GitHub | https://github.com/havannamoons/estudio-mozzi |
@@ -34,7 +34,7 @@ Tu cuenta de administradora: **havannamoons@gmail.com** (es la única que puede 
 ## ✅ Cómo activar una compradora (lo más común)
 
 ### Opción A — Panel (recomendado, desde compu o celu)
-1. Entrá a **tu panel**: https://estudio-mozzi-i3ao.vercel.app/panel
+1. Entrá a **tu panel**: https://estudio-next-swart.vercel.app/panel
 2. Logueate con **havannamoons@gmail.com**.
 3. En **"Esperando aprobación"** vas a ver a quien se registró.
    - Si no aparece, tocá **"Actualizar"**.

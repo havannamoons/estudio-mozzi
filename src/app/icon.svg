@@ -1,12 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#34d399"/>
-      <stop offset="1" stop-color="#059669"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
-  <text x="32" y="35" text-anchor="middle" dominant-baseline="central"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="40" font-weight="700" fill="#ffffff">Ψ</text>
+  <!--
+    Ícono de la pestaña: la luna de Estudio Lunar sobre el verde noche.
+
+    Reemplaza al cuadrado verde esmeralda con la "M" de Mozzi, que venía de la
+    versión vieja y desentonaba: toda la app es lila y crema, y el ícono era
+    verde manzana. La silueta es la misma que la mascota de adentro, recortada
+    de 120x120 a 64x64.
+
+    Sin cara: a 16 píxeles, que es como se ve de verdad en una pestaña, los
+    ojos se convierten en dos manchas sucias. La silueta sola se lee siempre.
+  -->
+  <rect width="64" height="64" rx="15" fill="#2C2440"/>
+  <g transform="translate(9.6 9.6) scale(0.3733)">
+    <path
+      fill="#FFAE24"
+      d="M 74 8
+         C 40 10, 14 36, 14 62
+         C 14 90, 38 112, 70 112
+         C 80 112, 90 109, 97 104
+         C 74 101, 55 84, 55 61
+         C 55 38, 71 17, 95 12
+         C 88 9, 81 8, 74 8 Z"/>
+  </g>
+  <!-- Dos estrellitas, que es el gesto que la marca repite en toda la app. -->
+  <circle cx="48" cy="17" r="2.4" fill="#C3B0EA"/>
+  <circle cx="53.5" cy="27" r="1.5" fill="#C3B0EA" opacity="0.75"/>
 </svg>

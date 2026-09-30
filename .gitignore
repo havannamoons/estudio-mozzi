@@ -44,3 +44,8 @@ next-env.d.ts
 
 # log del servidor de desarrollo
 dev-server.log
+
+# Basura de sesiones de trabajo (no son parte del producto)
+dev.log
+*.bak
+AUDITORIA.html

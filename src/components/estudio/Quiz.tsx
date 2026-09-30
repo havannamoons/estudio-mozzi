@@ -20,9 +20,13 @@ const NIVELES_LABEL: Record<number, { label: string; tone: string }> = {
 
 interface Props {
   api: EstudioApi
+  /** Cuántas preguntas de este tema puede contestar. Infinity = todas. */
+  tope?: number
+  /** Se llama cuando quiere seguir y ya usó las que tenía. */
+  onTope?: () => void
 }
 
-export function Quiz({ api }: Props) {
+export function Quiz({ api, tope = Infinity, onTope }: Props) {
   const {
     temaActivo,
     preguntaActualIdx,
@@ -46,7 +50,11 @@ export function Quiz({ api }: Props) {
   const [eleccionPendiente, setEleccionPendiente] = useState<number | null>(null)
 
 
-  const total = temaActivo.preguntas.length
+  /* El tope de la muestra recorta la tanda, no el contenido: las preguntas
+     siguen existiendo, simplemente todavía no están disponibles. */
+  const totalReal = temaActivo.preguntas.length
+  const total = Math.max(1, Math.min(totalReal, tope))
+  const hayTope = total < totalReal
   const displayIdx = Math.min(Math.max(0, preguntaActualIdx), total - 1)
   const origIdx = originalIdxDe(displayIdx)
   const pregunta = temaActivo.preguntas[origIdx]
@@ -146,6 +154,38 @@ export function Quiz({ api }: Props) {
   // Contestaste todas: en vez de dejarte parada en la última pregunta,
   // aparece el cierre con el puntaje y a dónde seguir.
   if (totalRespondidas >= total && !revisando) {
+    /* Con tope, el cierre no es "terminaste el tema": es "hasta acá llega la
+       muestra". Se dice con el número a la vista, no con un cartel vago. */
+    if (hayTope) {
+      return (
+        <div className="anim-fade rounded-3xl p-8 text-center"
+          style={{ background: "var(--crema)" }}>
+          <p className="serif mb-3 text-[1.9rem] leading-tight">
+            Hasta acá llega la muestra
+          </p>
+          <p className="mx-auto mb-2 max-w-sm text-[16px] leading-relaxed font-medium text-[var(--noche)]/65">
+            Contestaste {totalCorrectas} de {total} bien. Este tema tiene{" "}
+            <strong className="font-extrabold text-[var(--noche)]">
+              {totalReal} preguntas
+            </strong>{" "}
+            en total.
+          </p>
+          <p className="mx-auto mb-7 max-w-sm text-[15px] leading-relaxed font-medium text-[var(--noche)]/45">
+            Así es como corrige y explica cada una. El resto se abre cuando
+            desbloqueás.
+          </p>
+          <button onClick={onTope} className="btn-lunar btn-noche !py-4">
+            Quiero seguir
+          </button>
+          <button
+            onClick={() => setRevisando(true)}
+            className="btn-lunar btn-fantasma mt-2 !py-2 text-[15px] text-[var(--noche)]/45"
+          >
+            Ver mis respuestas
+          </button>
+        </div>
+      )
+    }
     return (
       <QuizTerminado
         api={api}
@@ -180,7 +220,7 @@ export function Quiz({ api }: Props) {
     <div className="anim-fade space-y-4">
       {/* Dots de progreso (en orden de display) */}
       <div className="flex flex-wrap items-center gap-1.5">
-        {ordenTemaActivo.map((origIdxAtPos, i) => {
+        {ordenTemaActivo.slice(0, total).map((origIdxAtPos, i) => {
           const res = r[origIdxAtPos]
           let cls = "bg-[var(--noche)]/12"
           if (res) {
