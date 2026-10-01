@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudio Lunar · las seis publicaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --crema:#FBF6EF;
+  --noche:#2C2440;
+  --lila:#7A4DFF;
+  --lila-claro:#C3B0EA;
+  --lila-palido:#ECE5FA;
+  --dorado:#FFAE24;
+  --coral:#FF5C3D;
+  --menta:#17C79A;
+  --papel:#EDEAF0;
+  --tx2:#615A75;
+  --tx3:#9A93A8;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papel);color:var(--noche);
+  font-family:Nunito,system-ui,sans-serif;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 20px 100px}
+
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0;
+  font-size:clamp(1.9rem,5vw,2.5rem);line-height:1.06;letter-spacing:-.02em}
+.intro{color:var(--tx2);margin:12px 0 0;max-width:60ch}
+.aviso{background:#fff;border:1px solid #DDD6E6;border-radius:14px;
+  padding:16px 18px;margin:22px 0 8px;font-size:.94rem;color:var(--tx2)}
+.aviso strong{color:var(--noche)}
+
+.post{display:grid;grid-template-columns:420px 1fr;gap:28px;
+  align-items:start;margin:44px 0;padding-top:34px;border-top:1px solid #DDD6E6}
+.post:first-of-type{border-top:0}
+@media(max-width:900px){.post{grid-template-columns:1fr}}
+
+/* ---- el marco 1080x1080 escalado ---- */
+.marco{width:420px;height:420px;overflow:hidden;border-radius:14px;
+  box-shadow:0 2px 18px rgba(44,36,64,.13)}
+.lienzo{width:1080px;height:1080px;transform:scale(0.38889);
+  transform-origin:top left;position:relative;overflow:hidden;
+  background:var(--crema);display:flex;flex-direction:column}
+
+/* ---- tipografía dentro del post ---- */
+.lienzo .pad{padding:88px 84px;flex:1;display:flex;flex-direction:column}
+.eyebrow{font-size:26px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--lila)}
+.tit{font-family:Fraunces,serif;font-weight:600;font-size:74px;line-height:1.06;
+  letter-spacing:-.02em;margin:22px 0 0}
+.tit.chico{font-size:60px}
+.txt{font-size:32px;line-height:1.5;color:var(--tx2);font-weight:600;margin:26px 0 0}
+.pieMarca{display:flex;align-items:center;gap:16px;padding:0 84px 66px;
+  font-size:26px;font-weight:800;color:var(--noche)}
+.pieMarca .arroba{color:var(--tx3);font-weight:700}
+
+/* opciones tipo quiz */
+.ops{margin-top:40px;display:flex;flex-direction:column;gap:16px}
+.op{display:flex;gap:18px;align-items:flex-start;background:#fff;
+  border-radius:20px;padding:24px 26px;font-size:28px;font-weight:700;
+  line-height:1.32}
+.op .letra{flex:0 0 42px;height:42px;border-radius:12px;background:var(--lila-palido);
+  color:var(--lila);font-size:24px;font-weight:800;display:flex;
+  align-items:center;justify-content:center}
+.op.ok{background:var(--noche);color:var(--crema)}
+.op.ok .letra{background:var(--dorado);color:var(--noche)}
+
+.dato{display:flex;align-items:baseline;gap:14px;margin-top:22px}
+.dato b{font-family:Fraunces,serif;font-size:66px;font-weight:600;color:var(--lila)}
+.dato span{font-size:28px;font-weight:700;color:var(--tx2)}
+
+.burbuja{background:var(--noche);color:var(--crema);border-radius:34px;
+  padding:34px 38px;font-size:32px;font-weight:700;line-height:1.4;margin-top:34px}
+
+/* ---- columna derecha ---- */
+.meta h2{font-family:Fraunces,serif;font-weight:600;font-size:1.35rem;margin:0}
+.rol{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--lila);background:var(--lila-palido);
+  padding:4px 11px;border-radius:99px;margin-bottom:9px}
+.por{color:var(--tx2);font-size:.95rem;margin:8px 0 16px}
+.cap{background:#fff;border:1px solid #DDD6E6;border-radius:12px;
+  padding:15px 17px;font-size:.92rem;color:var(--noche);white-space:pre-line;
+  line-height:1.55;max-height:320px;overflow:auto}
+.acciones{display:flex;gap:9px;margin-top:11px;flex-wrap:wrap}
+button{font-family:inherit;font-size:.88rem;font-weight:800;cursor:pointer;
+  background:#fff;color:var(--noche);border:1px solid #DDD6E6;border-radius:10px;
+  padding:10px 15px;transition:background .15s}
+button:hover{background:var(--lila-palido);border-color:var(--lila-claro)}
+button.fuerte{background:var(--noche);color:var(--crema);border-color:var(--noche)}
+button.fuerte:hover{background:#3B3157}
+.pie{margin-top:60px;padding-top:22px;border-top:1px solid #DDD6E6;
+  color:var(--tx3);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Las seis publicaciones</h1>
+<p class="intro">Listas para subir. Cada una se descarga como imagen cuadrada de
+1080 por 1080, que es el tamaño que pide Instagram, y abajo tenés el texto para
+copiar y pegar. Las tres preguntas son reales, salidas de tu app.</p>
+
+<div class="aviso">
+  <strong>El orden importa.</strong> Subí la 1 primero y fijala arriba del
+  perfil. Después las otras cinco, una por día o de a dos. Un perfil con seis
+  publicaciones ya no parece abandonado, que es lo único que tiene que lograr
+  antes de que empieces a vender.
+</div>
+
+<!-- ============ 1 ============ -->
+<div class="post">
+  <div class="marco"><div class="lienzo" id="p1">
+    <div class="pad">
+      <span class="eyebrow">Hola</span>
+      <p class="tit">Hice la app que necesitaba para aprobar Freud.</p>
+      <p class="txt">Estaba harta de mil fotocopias sueltas, resúmenes eternos y
+        llegar al parcial sin saber si sabía. Así que armé una sola cosa donde
+        estuviera todo.</p>
+      <div class="burbuja">Soy Ro, curso Psicología en la UBA. Esto lo hice
+        para mí, y después me di cuenta de que le servía a todas.</div>
+    </div>
+    <div class="pieMarca">Estudio Lunar <span class="arroba">· Cát. Pino (ex Mozzi)</span></div>
+  </div></div>
+  <div class="meta">
+    <span class="rol">Publicación 1 · fijada</span>
+    <h2>La presentación</h2>
+    <p class="por">Va primera y se fija arriba. Es la que mira alguien que llega
+      por primera vez. Vende más tu cara que cualquier diseño: la hiciste vos,
+      cursás lo mismo, tenías el mismo problema.</p>
+    <div class="cap" id="c1">Hice la app que necesitaba para aprobar Freud 🌙
+
+Soy Ro, curso Psicología en la UBA. Me cansé de estudiar con mil fotocopias sueltas y resúmenes que no terminaban nunca, y de llegar al parcial sin saber si de verdad sabía.
+
+Así que armé Estudio Lunar: toda la teoría de la Cát. Pino (ex Mozzi) ordenada, preguntas que te corrigen y te explican, y un modo para practicar el oral hablando en voz alta.
+
+Hay una parte abierta para probar sin crear nada. El link está en la bio.
+
+#UBA #Psicología #Psicoanálisis #Freud #CátedraPino #FacuDePsico #EstudiantesUBA</div>
+    <div class="acciones">
+      <button class="fuerte" data-baja="p1" data-nombre="1-presentacion">Descargar imagen</button>
+      <button data-copia="c1">Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 2 ============ -->
+<div class="post">
+  <div class="marco"><div class="lienzo" id="p2">
+    <div class="pad">
+      <span class="eyebrow">¿Te la sabés?</span>
+      <p class="tit chico">El yo es «servidor de tres amos». ¿Cuáles son?</p>
+      <div class="ops">
+        <div class="op"><span class="letra">A</span>El padre, la madre y el analista</div>
+        <div class="op ok"><span class="letra">B</span>El ello, la realidad y el superyó</div>
+        <div class="op"><span class="letra">C</span>El placer, el displacer y la angustia</div>
+      </div>
+    </div>
+    <div class="pieMarca">Estudio Lunar <span class="arroba">· 1 de 128 preguntas</span></div>
+  </div></div>
+  <div class="meta">
+    <span class="rol">Publicación 2 · pregunta</span>
+    <h2>El yo, servidor de tres amos</h2>
+    <p class="por">La respuesta correcta va marcada en oscuro. Si preferís que
+      la gente comente antes de saberla, borrá la clase <code>ok</code> y subila
+      sin marcar, con la respuesta en el primer comentario.</p>
+    <div class="cap" id="c2">¿Te la sabés? 🌙
+
+El yo es «servidor de tres amos». La respuesta es B: el ello, la realidad y el superyó.
+
+El yo media entre tres exigencias que le tiran de lados distintos: las pulsiones del ello, las demandas de la realidad exterior y los mandatos del superyó. Freud lo ilustra con la imagen del jinete y el caballo.
+
+Esta es 1 de las 128 preguntas que tiene Estudio Lunar, todas con su explicación. Probala gratis, link en la bio.
+
+#UBA #Psicología #Psicoanálisis #Freud #CátedraPino #ElYo</div>
+    <div class="acciones">
+      <button class="fuerte" data-baja="p2" data-nombre="2-tres-amos">Descargar imagen</button>
+      <button data-copia="c2">Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 3 ============ -->
+<div class="post">
+  <div class="marco"><div class="lienzo" id="p3">
+    <div class="pad">
+      <span class="eyebrow">¿Te la sabés?</span>
+      <p class="tit chico">Las cuatro características de la pulsión son…</p>
+      <div class="ops">
+        <div class="op"><span class="letra">A</span>Oral, anal, fálica y genital</div>
+        <div class="op ok"><span class="letra">B</span>Esfuerzo, meta, objeto y fuente</div>
+        <div class="op"><span class="letra">C</span>Represión, regresión, sublimación y proyección</div>
+      </div>
+    </div>
+    <div class="pieMarca">Estudio Lunar <span class="arroba">· Cát. Pino (ex Mozzi)</span></div>
+  </div></div>
+  <div class="meta">
+    <span class="rol">Publicación 3 · pregunta</span>
+    <h2>Las cuatro de la pulsión</h2>
+    <p class="por">De las que más se toman, y de las que más se confunden con
+      las fases del desarrollo. Por eso la opción A está ahí.</p>
+    <div class="cap" id="c3">Las cuatro características de la pulsión 🌙
+
+Respuesta: B. Esfuerzo (Drang), meta (Ziel), objeto (Objekt) y fuente (Quelle).
+
+· Esfuerzo: el factor motor, la cantidad de fuerza.
+· Meta: siempre la satisfacción, cancelar el estímulo de la fuente.
+· Objeto: aquello en lo que o mediante lo cual alcanza la meta. Es lo más variable.
+· Fuente: el proceso somático de donde parte.
+
+Ojo con confundirlas con las fases del desarrollo, que es el error más común.
+
+Está explicada así dentro de Estudio Lunar, con todas las demás. Link en la bio.
+
+#UBA #Psicología #Psicoanálisis #Freud #Pulsión #CátedraPino</div>
+    <div class="acciones">
+      <button class="fuerte" data-baja="p3" data-nombre="3-pulsion">Descargar imagen</button>
+      <button data-copia="c3">Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 4 ============ -->
+<div class="post">
+  <div class="marco"><div class="lienzo" id="p4">
+    <div class="pad">
+      <span class="eyebrow">El final es oral</span>
+      <p class="tit">Podés saberlo todo y no poder decirlo.</p>
+      <p class="txt">Leer no es lo mismo que explicar en voz alta. Y en el final
+        no te piden que reconozcas la respuesta correcta: te piden que la
+        produzcas vos, sin nada adelante.</p>
+      <div class="burbuja">Estudio Lunar tiene un modo oral: te da la consigna,
+        hablás, y recién al terminar te muestra lo que había que decir.</div>
+    </div>
+    <div class="pieMarca">Estudio Lunar <span class="arroba">· 38 consignas de oral</span></div>
+  </div></div>
+  <div class="meta">
+    <span class="rol">Publicación 4 · el diferencial</span>
+    <h2>El oral</h2>
+    <p class="por"><strong>Es la más importante de las seis.</strong> Ningún
+      apunte, ningún resumen y ninguna otra app hace esto. Es la única razón por
+      la que alguien paga en vez de pedirle las fotocopias a una compañera.</p>
+    <p class="por">Si te animás, grabá un video de quince segundos contestando
+      una consigna en voz alta. Convierte muchísimo más que la placa.</p>
+    <div class="cap" id="c4">El final es oral, pero estudiamos leyendo 🌙
+
+Podés saberlo todo y no poder decirlo. Leer y reconocer la respuesta correcta es una cosa; producirla vos, en voz alta, sin nada adelante, es otra completamente distinta.
+
+Por eso Estudio Lunar tiene un modo oral: te da la consigna, hablás el tiempo que dura de verdad, y recién cuando terminás te muestra el punteo de lo que había que decir. Ahí ves qué se te escapó.
+
+38 consignas, incluidas las de articulación, que son las que más se toman y las que menos se practican.
+
+Link en la bio.
+
+#UBA #Psicología #Psicoanálisis #Freud #FinalOral #CátedraPino</div>
+    <div class="acciones">
+      <button class="fuerte" data-baja="p4" data-nombre="4-oral">Descargar imagen</button>
+      <button data-copia="c4">Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 5 ============ -->
+<div class="post">
+  <div class="marco"><div class="lienzo" id="p5">
+    <div class="pad">
+      <span class="eyebrow">¿Te la sabés?</span>
+      <p class="tit chico">Los cuatro mecanismos del trabajo del sueño</p>
+      <div class="ops">
+        <div class="op"><span class="letra">A</span>Negación, proyección, introyección y sublimación</div>
+        <div class="op ok"><span class="letra">B</span>Desplazamiento, condensación, figurabilidad y elaboración secundaria</div>
+        <div class="op"><span class="letra">C</span>Represión, regresión, conversión y proyección</div>
+      </div>
+    </div>
+    <div class="pieMarca">Estudio Lunar <span class="arroba">· 19 temas, parcial y final</span></div>
+  </div></div>
+  <div class="meta">
+    <span class="rol">Publicación 5 · pregunta</span>
+    <h2>El trabajo del sueño</h2>
+    <p class="por">Tema clásico y agradecido: todo el mundo se acuerda de dos de
+      los cuatro y se olvida de los otros dos.</p>
+    <div class="cap" id="c5">Los cuatro mecanismos del trabajo del sueño 🌙
+
+Respuesta: B.
+
+· Desplazamiento: corre el acento de una representación a otra.
+· Condensación: sintetiza varias representaciones en una.
+· Puesta en escena (figurabilidad): vuelve imagen lo abstracto.
+· Elaboración secundaria: le da coherencia de relato al final.
+
+Todo el mundo se acuerda de los dos primeros y se olvida de los dos últimos. En el parcial los cuatro valen igual.
+
+En Estudio Lunar está explicado tema por tema, con preguntas que te corrigen. Link en la bio.
+
+#UBA #Psicología #Psicoanálisis #Freud #LaInterpretaciónDeLosSueños #CátedraPino</div>
+    <div class="acciones">
+      <button class="fuerte" data-baja="p5" data-nombre="5-sueno">Descargar imagen</button>
+      <button data-copia="c5">Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 6 ============ -->
+<div class="post">
+  <div class="marco"><div class="lienzo" id="p6">
+    <div class="pad">
+      <span class="eyebrow">Qué tiene adentro</span>
+      <p class="tit">Todo Freud en un solo lugar.</p>
+      <div class="dato"><b>19</b><span>temas, del parcial y del final</span></div>
+      <div class="dato"><b>128</b><span>preguntas que te corrigen y te explican</span></div>
+      <div class="dato"><b>38</b><span>consignas para practicar el oral hablando</span></div>
+      <div class="dato"><b>1</b><span>simulacro con reloj, como el examen</span></div>
+    </div>
+    <div class="pieMarca">Estudio Lunar <span class="arroba">· probala gratis</span></div>
+  </div></div>
+  <div class="meta">
+    <span class="rol">Publicación 6 · el producto</span>
+    <h2>Qué incluye</h2>
+    <p class="por">Los números hacen el trabajo. No hace falta ningún adjetivo:
+      19, 128, 38 y 1 dicen más que "completísimo".</p>
+    <p class="por"><strong>Fijate que no menciona el precio.</strong> A propósito:
+      esta publicación tiene que hacer que entren a probar, no que decidan si
+      les alcanza la plata.</p>
+    <div class="cap" id="c6">Qué tiene adentro Estudio Lunar 🌙
+
+· 19 temas, del parcial y del final
+· 128 preguntas que te corrigen y te explican por qué
+· 38 consignas para practicar el oral hablando en voz alta
+· 1 simulacro con reloj, como el examen de verdad
+· Funciona desde el celu y te guarda el progreso
+
+Hay una parte abierta para probar sin crear cuenta ni dejar nada. Entrá, hacé un tema y fijate si te sirve.
+
+Link en la bio.
+
+#UBA #Psicología #Psicoanálisis #Freud #CátedraPino #FacuDePsico #ParcialDeFreud</div>
+    <div class="acciones">
+      <button class="fuerte" data-baja="p6" data-nombre="6-que-incluye">Descargar imagen</button>
+      <button data-copia="c6">Copiar texto</button>
+    </div>
+  </div>
+</div>
+
+<p class="pie">Las tres preguntas salieron de tu propia app, del archivo de temas.
+Si cambiás una explicación allá, acordate de cambiarla acá también.</p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* Descargar la placa como PNG de 1080x1080.
+     El lienzo está achicado con transform para que entre en pantalla, así que
+     antes de la captura se lo devuelve a tamaño real y después se lo vuelve a
+     achicar. Sin eso sale una imagen chiquita y borrosa. */
+  document.querySelectorAll("[data-baja]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var el = document.getElementById(b.dataset.baja);
+      var previo = el.style.transform;
+      var caja = el.parentElement;
+      var cajaPrevia = { w: caja.style.width, h: caja.style.height };
+
+      b.disabled = true;
+      b.textContent = "Generando…";
+      el.style.transform = "none";
+      caja.style.width = "1080px";
+      caja.style.height = "1080px";
+
+      html2canvas(el, { scale: 1, backgroundColor: "#FBF6EF", logging: false })
+        .then(function (canvas) {
+          var a = document.createElement("a");
+          a.download = "estudio-lunar-" + b.dataset.nombre + ".png";
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        })
+        .catch(function () {
+          b.textContent = "No se pudo, sacale captura";
+        })
+        .finally(function () {
+          el.style.transform = previo;
+          caja.style.width = cajaPrevia.w;
+          caja.style.height = cajaPrevia.h;
+          setTimeout(function () {
+            b.disabled = false;
+            if (b.textContent === "Generando…") b.textContent = "Descargar imagen";
+          }, 400);
+        });
+    });
+  });
+
+  /* Copiar el texto del pie de foto. */
+  document.querySelectorAll("[data-copia]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var t = document.getElementById(b.dataset.copia).textContent;
+      navigator.clipboard.writeText(t).then(
+        function () {
+          b.textContent = "Copiado";
+          setTimeout(function () { b.textContent = "Copiar texto"; }, 1600);
+        },
+        function () { b.textContent = "No se pudo copiar"; },
+      );
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -267,7 +267,7 @@ function EstudioAppInner() {
             </div>
             <section className="min-w-0">
               <ContenidoTema
-                api={api}
+                api={apiConCandado}
                 tope={LIMITES[nivel].preguntasPorTema}
                 onTope={() =>
                   setBloqueo({ tipo: "modo", nombre: "El resto de las preguntas" })

@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudio Lunar · cómo vender</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Archivo:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#FBF7F1; --card:#FFF; --line:#E8DFD3; --sunk:#F4EEE5;
+  --tx:#2C2440; --tx2:#615A75; --tx3:#9A93A8;
+  --lila:#7A4DFF; --lila-s:rgba(122,77,255,.08);
+  --dorado:#E0921F; --dorado-s:rgba(224,146,31,.12);
+  --ok:#128A5E; --ok-s:rgba(18,138,94,.10);
+  --no:#C0304A; --no-s:rgba(192,48,74,.08);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141020; --card:#1D1830; --line:#2F2745; --sunk:#191430;
+  --tx:#F1ECFA; --tx2:#A79FC0; --tx3:#6D6489;
+  --lila:#B49BFF; --lila-s:rgba(180,155,255,.12);
+  --dorado:#FFB03B; --dorado-s:rgba(255,176,59,.13);
+  --ok:#4ADE80; --ok-s:rgba(74,222,128,.12);
+  --no:#FB7185; --no-s:rgba(251,113,133,.11);
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141020; --card:#1D1830; --line:#2F2745; --sunk:#191430;
+  --tx:#F1ECFA; --tx2:#A79FC0; --tx3:#6D6489;
+  --lila:#B49BFF; --lila-s:rgba(180,155,255,.12);
+  --dorado:#FFB03B; --dorado-s:rgba(255,176,59,.13);
+  --ok:#4ADE80; --ok-s:rgba(74,222,128,.12);
+  --no:#FB7185; --no-s:rgba(251,113,133,.11);
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:Archivo,system-ui,sans-serif;font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:740px;margin:0 auto;padding:46px 20px 110px}
+
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0;
+  font-size:clamp(2.1rem,6.5vw,2.9rem);line-height:1.05;letter-spacing:-.02em}
+.sub{color:var(--tx2);margin:14px 0 0;max-width:52ch}
+h2{font-family:Fraunces,serif;font-weight:600;font-size:1.5rem;
+  margin:48px 0 6px;line-height:1.2;scroll-margin-top:60px}
+h2 .n{display:block;font-family:Archivo,sans-serif;font-size:.7rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);
+  font-weight:700;margin-bottom:7px}
+h3{font-size:1.04rem;font-weight:700;margin:22px 0 5px}
+p{margin:0 0 13px}
+
+nav{position:sticky;top:0;background:var(--bg);padding:11px 0;
+  border-bottom:1px solid var(--line);margin-bottom:4px;z-index:5;
+  display:flex;gap:15px;overflow-x:auto}
+nav a{color:var(--tx2);font-size:.81rem;text-decoration:none;white-space:nowrap}
+nav a:hover{color:var(--lila)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:20px 22px;margin-bottom:12px}
+.card p:last-child,.card ul:last-child{margin-bottom:0}
+.card.lila{background:var(--lila-s);border-color:transparent}
+.card.dorada{background:var(--dorado-s);border-color:transparent}
+
+ul,ol{margin:0 0 13px;padding-left:20px}
+li{margin-bottom:8px}
+li::marker{color:var(--tx3)}
+
+.guion{background:var(--sunk);border-left:3px solid var(--lila);
+  border-radius:0 10px 10px 0;padding:15px 18px;margin:14px 0;
+  font-size:.95rem;color:var(--tx2);white-space:pre-line}
+.guion strong{color:var(--tx)}
+
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.93rem}
+th{text-align:left;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--tx3);padding:0 10px 9px 0;border-bottom:1px solid var(--line)}
+td{padding:12px 10px 12px 0;border-bottom:1px solid var(--line);vertical-align:top}
+
+.tag{display:inline-block;font-size:.67rem;letter-spacing:.07em;text-transform:uppercase;
+  font-weight:700;padding:3px 9px;border-radius:99px;margin-right:6px}
+.t-si{background:var(--ok-s);color:var(--ok)}
+.t-no{background:var(--no-s);color:var(--no)}
+
+.dia{display:flex;gap:15px;margin-bottom:15px}
+.dia .q{flex:0 0 74px;font-size:.74rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--lila);padding-top:3px}
+.dia > div:last-child{min-width:0}
+.dia h3{margin:0 0 3px;font-size:1rem}
+.dia p{margin:0;color:var(--tx2);font-size:.94rem}
+
+.pie{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);
+  color:var(--tx3);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Cómo vender Estudio Lunar</h1>
+<p class="sub">Una estrategia para alguien que tiene cinco a diez horas por
+semana, cero clientes hasta ahora, y un producto que ya está terminado.</p>
+
+<nav>
+  <a href="#donde">Dónde</a>
+  <a href="#motor">El motor</a>
+  <a href="#calendario">El calendario</a>
+  <a href="#primeras">Las primeras 5</a>
+  <a href="#grupos">Los grupos</a>
+  <a href="#embudo">El embudo</a>
+  <a href="#plan">Dos semanas</a>
+  <a href="#no">Qué no hacer</a>
+</nav>
+
+<h2 id="donde"><span class="n">01</span>Instagram y WhatsApp, pero no hacen lo mismo</h2>
+<p>La pregunta no es cuál de los dos. Es qué hace cada uno, porque si los usás
+igual no sirve ninguno.</p>
+
+<table>
+  <tr><th></th><th>Instagram</th><th>WhatsApp</th></tr>
+  <tr><td><strong>Para qué sirve</strong></td>
+      <td>Que existas. Es la vidriera que alguien chusmea antes de decidir.</td>
+      <td>Vender. Ahí pasa la plata.</td></tr>
+  <tr><td><strong>A quién llega</strong></td>
+      <td>Gente que no te conoce</td>
+      <td>Gente que ya te conoce</td></tr>
+  <tr><td><strong>Cuánto tarda</strong></td>
+      <td>Meses</td>
+      <td>Días</td></tr>
+  <tr><td><strong>Prioridad</strong></td>
+      <td>Segunda</td>
+      <td><strong>Primera</strong></td></tr>
+</table>
+
+<div class="card lila">
+  <p><strong>El orden importa y va al revés de lo que parece.</strong> La
+    tentación es armar el Instagram lindo primero y vender después. Eso es
+    postergar con buena excusa: podés pasarte tres semanas eligiendo tipografías
+    sin hablar con una sola persona.</p>
+  <p>Pero Instagram vacío mata la venta. Cuando le escribas a alguien, lo primero
+    que va a hacer es mirarte el perfil.</p>
+  <p><strong>La regla: Instagram con seis publicaciones alcanza.</strong> No
+    sesenta. Seis, para que no parezca abandonado. Eso son dos tardes. Después
+    empezás a vender, y el Instagram crece con lo que vaya pasando.</p>
+</div>
+
+<h3>El grupo de WhatsApp propio: todavía no</h3>
+<p>Un grupo vacío es peor que no tener grupo. Se arma <strong>después</strong> de
+las primeras compradoras, y su función no es vender: es que las que ya pagaron
+se queden, se ayuden y traigan a otras.</p>
+<p>Mientras tanto, lo que sí sirve desde hoy es una <strong>lista de
+difusión</strong>: mandás un mensaje y le llega a cada una por separado, como si
+fuera personal. Nadie ve quién más está. Para avisar "mañana sube el precio"
+funciona mucho mejor que un grupo.</p>
+
+<h2 id="motor"><span class="n">02</span>El motor de contenido ya lo tenés escrito</h2>
+<div class="card dorada">
+  <p><strong>Tenés 128 preguntas con su explicación adentro de la app.</strong>
+    Eso son 128 publicaciones. No hay que inventar contenido: hay que sacarlo de
+    adentro del producto y ponerlo afuera.</p>
+</div>
+
+<h3>El formato que funciona</h3>
+<p>Una pregunta de Freud por publicación. Se lee en cinco segundos, invita a
+contestar mentalmente, y la explicación se revela deslizando. El que acierta
+siente que sabe. El que falla quiere la app.</p>
+
+<div class="guion"><strong>Imagen 1:</strong> la pregunta sola, en grande, sobre el fondo crema.
+<strong>Imagen 2:</strong> las cuatro opciones.
+<strong>Imagen 3:</strong> la respuesta con la explicación, la de verdad, la que ya escribiste.
+<strong>Imagen 4:</strong> "esta es 1 de 128. Link en bio."</div>
+
+<h3>Los otros tres formatos, por si te aburre</h3>
+<ul>
+  <li><strong>El oral.</strong> Un video corto tuyo contestando una consigna en
+    voz alta, con la app corrigiéndote. <strong>Es lo único que ninguna otra
+    cosa tiene</strong>, y es lo que más miedo le da a la gente del final.</li>
+  <li><strong>El error típico.</strong> "El 70% confunde represión con
+    sublimación." Enseña algo real y muestra que medís.</li>
+  <li><strong>Tu propia cara.</strong> Vos contando que la hiciste porque
+    estabas harta de las fotocopias. Vende más que cualquier diseño.</li>
+</ul>
+
+<h3>Cuánto publicar, siendo honesta con tus horas</h3>
+<p><strong>Tres por semana, hechas todas juntas un domingo.</strong> No una por
+día. Un calendario que no podés sostener genera culpa y abandono, que es
+exactamente lo que ya te pasó con otros proyectos.</p>
+
+<h2 id="calendario"><span class="n">03</span>El calendario manda sobre todo lo demás</h2>
+<p>Esto no se vende parejo todo el año. Se vende <strong>en dos o tres momentos
+concretos</strong>, y fuera de esos momentos casi no se vende nada por más lindo
+que sea el contenido.</p>
+
+<table>
+  <tr><th>Momento</th><th>Qué pasa</th><th>Qué hacés</th></tr>
+  <tr><td>3 semanas antes del parcial</td>
+      <td>Empieza la ansiedad, todavía no el pánico</td>
+      <td><strong>La ventana buena.</strong> Acá se vende.</td></tr>
+  <tr><td>1 semana antes</td>
+      <td>Pánico. Compran lo que sea.</td>
+      <td>Precio sin descuento. No hace falta.</td></tr>
+  <tr><td>Después del parcial</td>
+      <td>Nadie quiere ver a Freud</td>
+      <td>Silencio. No insistas.</td></tr>
+  <tr><td>3 semanas antes del final</td>
+      <td>Vuelve, y más fuerte</td>
+      <td><strong>Acá pega el oral.</strong> El final es oral.</td></tr>
+</table>
+
+<div class="card">
+  <p><strong>Lo primero que tenés que hacer, hoy:</strong> anotar las fechas
+    reales del segundo parcial y del final de tu cátedra. Todo el resto del plan
+    cuelga de esas dos fechas. Sin eso, esto es un calendario de posteos que no
+    le habla a nadie.</p>
+</div>
+
+<h2 id="primeras"><span class="n">04</span>Las primeras cinco van gratis</h2>
+<div class="card lila">
+  <p>Tenés un problema que ninguna estrategia arregla: <strong>nadie la usó
+    todavía</strong>. Y la gente no compra material de estudio que nadie probó,
+    sobre todo si se lo vende una compañera.</p>
+  <p><strong>Regalá cinco accesos completos</strong> a cinco personas de tu
+    comisión que de verdad estén cursando. No a amigas por compromiso: a gente
+    que la vaya a usar.</p>
+  <p>A cambio pedís dos cosas: que te digan qué está mal, y que te dejen mostrar
+    una captura de ellas usándola.</p>
+  <p><strong>No estás perdiendo cincuenta mil pesos.</strong> Estás comprando la
+    única cosa que no podés fabricar sola, que es la prueba de que sirve. Y de
+    paso te encuentran los errores antes que una clienta que pagó.</p>
+</div>
+
+<h2 id="grupos"><span class="n">05</span>Los grupos de la cátedra, sin que te echen</h2>
+<p>Ahí está tu mercado entero, ya reunido. Es tu ventaja más grande y la forma
+más fácil de quemarte.</p>
+
+<h3>Lo que te hace quedar como spam</h3>
+<p>Entrar y tirar el link con el precio. Te ignoran, y si el grupo tiene reglas
+te echan. Además quedás marcada con las trescientas personas que importan.</p>
+
+<h3>Lo que funciona</h3>
+<ol>
+  <li><strong>Primero das.</strong> Subí algo útil y gratis, sin vender nada. Un
+    resumen de un práctico, tres preguntas con su explicación. Que tenga tu marca
+    abajo, nada más.</li>
+  <li><strong>Después contestás.</strong> Cuando alguien pregunta algo de la
+    materia, contestale bien. Dos o tres veces. Ahí pasás a ser "la que sabe".</li>
+  <li><strong>Recién ahí contás qué hiciste.</strong> Y no como venta:</li>
+</ol>
+
+<div class="guion">Chicas, armé algo para estudiar Freud porque estaba harta de las fotocopias sueltas. Tiene la teoría, preguntas que te corrigen y un modo para practicar el oral hablando.
+
+Hay una parte abierta para probar sin nada, dejo el link por si a alguien le sirve.</div>
+
+<p>Eso no es publicidad, es alguien contando lo que hizo. Y ahora que hay muestra
+gratis, <strong>el link cumple lo que promete</strong>: entran y la usan de
+verdad. Antes se chocaban con un login y te odiaban.</p>
+
+<h2 id="embudo"><span class="n">06</span>El camino completo, de un posteo a la plata</h2>
+<table>
+  <tr><th>Paso</th><th>Dónde</th><th>Qué tiene que pasar</th></tr>
+  <tr><td>1. Te ve</td><td>Grupo o Instagram</td><td>Una pregunta que le interesa</td></tr>
+  <tr><td>2. Entra</td><td>La app, sin cuenta</td><td>Prueba 1 tema y 2 preguntas. <strong>Sin fricción.</strong></td></tr>
+  <tr><td>3. Quiere más</td><td>El candado</td><td>Crea la cuenta. Gratis, todavía sin hablar de plata.</td></tr>
+  <tr><td>4. Se queda sin</td><td>El tercer tema</td><td>Ahí aparece el precio, ya enganchada</td></tr>
+  <tr><td>5. Te escribe</td><td>WhatsApp</td><td>Le contestás vos, no un bot</td></tr>
+  <tr><td>6. Paga</td><td>Transferencia</td><td>La activás en el panel</td></tr>
+</table>
+<p>Ese embudo <strong>ya está construido</strong>. Es lo que hicimos hoy. Lo
+único que falta es meterle gente arriba.</p>
+
+<h2 id="plan"><span class="n">07</span>Las próximas dos semanas</h2>
+
+<div class="dia"><span class="q">Día 1</span><div>
+  <h3>Las fechas y los nombres</h3>
+  <p>Anotá la fecha del parcial y del final. Y escribí diez nombres con apellido
+    de gente que está cursando. En papel.</p>
+</div></div>
+
+<div class="dia"><span class="q">Día 2</span><div>
+  <h3>Las cinco gratis</h3>
+  <p>Elegí cinco de esos diez y regalales el acceso. Pediles que la usen esta
+    semana y que te digan qué está mal.</p>
+</div></div>
+
+<div class="dia"><span class="q">Día 3 y 4</span><div>
+  <h3>El Instagram mínimo</h3>
+  <p>Seis publicaciones, hechas de una sentada, sacadas de las preguntas que ya
+    tenés. Foto de perfil con la luna, bio con el link. Listo, no lo toques más.</p>
+</div></div>
+
+<div class="dia"><span class="q">Día 5 al 8</span><div>
+  <h3>Dar, sin vender</h3>
+  <p>Subí algo útil a los grupos. Contestá dos preguntas de otra gente. Nada de
+    links todavía.</p>
+</div></div>
+
+<div class="dia"><span class="q">Día 9</span><div>
+  <h3>Juntar lo que dijeron las cinco</h3>
+  <p>Arreglá lo que encontraron. Pediles la captura.</p>
+</div></div>
+
+<div class="dia"><span class="q">Día 10</span><div>
+  <h3>Los primeros tres mensajes</h3>
+  <p>Individuales, a tres de los diez nombres. Con fecha de corte del precio.
+    <strong>Tres, no diez.</strong> Si los tres dicen que no, el problema es el
+    mensaje y lo cambiamos antes de quemar los otros siete.</p>
+</div></div>
+
+<div class="dia"><span class="q">Día 11 al 14</span><div>
+  <h3>Los otros siete, y el grupo</h3>
+  <p>Si hubo al menos una venta, mandá el resto. Y recién ahí armá el grupo de
+    WhatsApp con las que ya compraron.</p>
+</div></div>
+
+<h2 id="no"><span class="n">08</span>Qué no hacer</h2>
+<div class="card">
+  <p><span class="tag t-no">no</span><strong>Esperar a tener el Instagram
+    perfecto.</strong> Es la forma más elegante de no vender nunca. Seis
+    publicaciones y salís.</p>
+</div>
+<div class="card">
+  <p><span class="tag t-no">no</span><strong>Armar el grupo de WhatsApp
+    vacío.</strong> Un grupo con tres personas y silencio le dice a todo el
+    mundo que esto no funciona.</p>
+</div>
+<div class="card">
+  <p><span class="tag t-no">no</span><strong>Tirar el link en veinte grupos el
+    mismo día.</strong> Rinde menos que tres mensajes individuales, y te marca.</p>
+</div>
+<div class="card">
+  <p><span class="tag t-no">no</span><strong>Subir material de la cátedra.</strong>
+    Tus resúmenes y tus preguntas son tuyos y podés hacer lo que quieras. Los
+    PDF y los textos de otros, no. Ahí sí te pueden hacer un problema real.</p>
+</div>
+<div class="card">
+  <p><span class="tag t-no">no</span><strong>Bajar el precio porque no vendiste
+    en tres días.</strong> Tres días no es información. Diez mensajes
+    individuales sin una sola respuesta, sí.</p>
+</div>
+
+<h2>Lo único que hay que medir</h2>
+<div class="card lila">
+  <p>No seguidores. No "me gusta". No visitas.</p>
+  <p><strong>Cuánta gente entró a probar la muestra, y cuántas de esas te
+    escribieron.</strong> Si entran muchas y no te escribe ninguna, el problema
+    es el producto o el precio. Si no entra nadie, el problema es el mensaje.</p>
+  <p>Son dos problemas distintos y se arreglan distinto. Por eso hay que
+    separarlos.</p>
+</div>
+
+<p class="pie">Escrito el 29 de septiembre de 2026. Las fechas de parcial y final
+las tenés que poner vos: todo el calendario cuelga de ellas.</p>
+
+</div>
+</body>
+</html>

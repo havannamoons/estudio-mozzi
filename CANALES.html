@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudio Lunar · canales de venta sin agenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#FBF6EF; --card:#FFF; --line:#E6DED2; --sunk:#F3ECE1;
+  --tx:#2C2440; --tx2:#615A75; --tx3:#9A93A8;
+  --lila:#7A4DFF; --lila-s:#ECE5FA;
+  --oro:#D98A00; --oro-s:#FDF0D8;
+  --ok:#0E7A54; --ok-s:#DFF2EA;
+  --no:#C0304A; --no-s:#FBE4E8;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141020; --card:#1E1832; --line:#312846; --sunk:#191430;
+  --tx:#F2EDFA; --tx2:#A79FC0; --tx3:#6D6489;
+  --lila:#B49BFF; --lila-s:#2A2145;
+  --oro:#FFB03B; --oro-s:#33280F;
+  --ok:#4ADE80; --ok-s:#12301F;
+  --no:#FB7185; --no-s:#341620; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141020; --card:#1E1832; --line:#312846; --sunk:#191430;
+  --tx:#F2EDFA; --tx2:#A79FC0; --tx3:#6D6489;
+  --lila:#B49BFF; --lila-s:#2A2145;
+  --oro:#FFB03B; --oro-s:#33280F;
+  --ok:#4ADE80; --ok-s:#12301F;
+  --no:#FB7185; --no-s:#341620; color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:Nunito,system-ui,sans-serif;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:740px;margin:0 auto;padding:44px 20px 110px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0;
+  font-size:clamp(2rem,5.5vw,2.7rem);line-height:1.05;letter-spacing:-.02em}
+.sub{color:var(--tx2);margin:13px 0 0;max-width:52ch}
+h2{font-family:Fraunces,serif;font-weight:600;font-size:1.46rem;
+  margin:44px 0 8px;line-height:1.2;scroll-margin-top:58px}
+h2 small{display:block;font-family:Nunito,sans-serif;font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);
+  font-weight:800;margin-bottom:6px}
+h3{font-size:1.02rem;font-weight:800;margin:20px 0 5px}
+p{margin:0 0 12px}
+nav{position:sticky;top:0;background:var(--bg);padding:10px 0;
+  border-bottom:1px solid var(--line);margin-bottom:4px;z-index:5;
+  display:flex;gap:15px;overflow-x:auto}
+nav a{color:var(--tx2);font-size:.8rem;text-decoration:none;white-space:nowrap}
+nav a:hover{color:var(--lila)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;
+  padding:19px 21px;margin-bottom:11px}
+.card p:last-child,.card ul:last-child,.card ol:last-child{margin-bottom:0}
+.card.lila{background:var(--lila-s);border-color:transparent}
+.card.oro{background:var(--oro-s);border-color:transparent}
+ul,ol{margin:0 0 12px;padding-left:19px}
+li{margin-bottom:7px}
+li::marker{color:var(--tx3)}
+.guion{background:var(--sunk);border-left:3px solid var(--lila);
+  border-radius:0 10px 10px 0;padding:15px 17px;margin:13px 0;
+  font-size:.93rem;color:var(--tx2);white-space:pre-line}
+.guion b{color:var(--tx)}
+table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.92rem}
+th{text-align:left;font-size:.65rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--tx3);padding:0 9px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:11px 9px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.rank{display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:50%;background:var(--lila);color:#fff;
+  font-size:.76rem;font-weight:800;margin-right:9px;vertical-align:middle}
+.et{display:inline-block;font-size:.64rem;font-weight:800;letter-spacing:.09em;
+  text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-left:6px;
+  vertical-align:middle}
+.e-ya{background:var(--ok-s);color:var(--ok)}
+.e-desp{background:var(--oro-s);color:var(--oro)}
+.e-no{background:var(--no-s);color:var(--no)}
+.pie{margin-top:50px;padding-top:19px;border-top:1px solid var(--line);
+  color:var(--tx3);font-size:.84rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Vender sin tener una agenda</h1>
+<p class="sub">Siete canales para llegar a gente que no conocés. Ordenados por
+lo que rinde primero, no por lo que suena mejor.</p>
+
+<nav>
+  <a href="#1">1 · Cuentas de apuntes</a>
+  <a href="#2">2 · Cartel con QR</a>
+  <a href="#3">3 · Grupos abiertos</a>
+  <a href="#4">4 · Video corto</a>
+  <a href="#5">5 · Mercado Libre</a>
+  <a href="#6">6 · Google</a>
+  <a href="#7">7 · Centro de estudiantes</a>
+  <a href="#orden">Qué hago primero</a>
+</nav>
+
+<div class="card lila" style="margin-top:26px">
+  <p><strong>La idea que ordena todo esto:</strong> si no tenés audiencia, hay
+    dos caminos. Pedirle prestada la audiencia a alguien que ya la tiene, o
+    pararte donde tu mercado ya pasa caminando.</p>
+  <p>Los dos primeros canales son exactamente eso, y por eso van primero.</p>
+</div>
+
+<h2 id="1"><small>El mejor</small><span class="rank">1</span>Cuentas de apuntes que ya existen<span class="et e-ya">esta semana</span></h2>
+<p>Hay decenas de cuentas de Instagram que venden o comparten apuntes de la UBA,
+con miles de seguidores que son <strong>exactamente</strong> tu mercado. Tardaron
+años en juntar esa audiencia. Vos tardarías lo mismo.</p>
+<p><strong>No compitas con ellas: asociate.</strong> Ellas tienen público y no
+tienen producto. Vos tenés producto y no tenés público.</p>
+
+<h3>El trato concreto</h3>
+<p>Un código de descuento propio para cada cuenta, y se quedan con el
+<strong>30 o 40%</strong> de cada venta que entre por ahí. No les cuesta nada y
+no arriesgan nada, así que el "sí" es fácil.</p>
+<div class="card oro">
+  <p><strong>Ojo con el detalle que lo hace funcionar:</strong> no les pidas que
+    te promocionen. Ofreceles <strong>probar la app gratis</strong> primero.
+    Nadie recomienda algo que no vio. Que la usen una semana y después hablan
+    de plata.</p>
+</div>
+
+<div class="guion"><b>El mensaje, por privado:</b>
+Hola! Sigo la cuenta hace rato. Soy estudiante de Psico en la UBA y armé una app para estudiar Freud de la Cát. Pino: teoría, preguntas que te corrigen y un modo para practicar el oral hablando.
+
+Te la dejo abierta para que la pruebes, sin compromiso ni nada. Si te parece que le sirve a tu gente, podemos armar algo donde vos te quedes con una parte de lo que se venda con tu código.
+
+Y si no te convence, me decís qué le falta y listo. Eso también me sirve.</div>
+
+<p><strong>Cuántas:</strong> escribile a diez. Si contestan dos y una acepta,
+ganaste: esa cuenta le llega a más gente en un posteo que vos en tres meses.</p>
+
+<h2 id="2"><small>El más barato</small><span class="rank">2</span>Un cartel con QR en la facultad<span class="et e-ya">esta semana</span></h2>
+<p>Tu mercado entero pasa caminando por un edificio, todos los días. Es el único
+lugar del mundo donde el 100% de la gente que te ve está cursando lo que vendés.</p>
+<p>Un cartel A4 con un código QR grande y una pregunta de Freud que dé curiosidad.
+Sale lo que sale imprimir. <strong>Te armé el cartel aparte, listo para imprimir.</strong></p>
+<ul>
+  <li><strong>Dónde:</strong> las carteleras del pasillo, cerca de la
+    fotocopiadora y del aula donde se cursa la materia.</li>
+  <li><strong>Cuándo:</strong> tres semanas antes del parcial. Antes no lo mira
+    nadie.</li>
+  <li><strong>Antes de pegarlo:</strong> fijate qué permite la facultad. Algunas
+    carteleras son libres y otras son del centro de estudiantes. Preguntá,
+    porque que te lo saquen a la hora no sirve de nada.</li>
+</ul>
+
+<h2 id="3"><small>Gratis y lento</small><span class="rank">3</span>Grupos abiertos de Facebook y Telegram<span class="et e-ya">esta semana</span></h2>
+<p>No hace falta conocer a nadie: son públicos y se entra solo. En Argentina los
+grupos de apuntes de la UBA siguen muy vivos, sobre todo en Facebook, que la
+gente da por muerto y sigue lleno de estudiantes buscando material.</p>
+<p><strong>Buscá:</strong> el nombre de la materia, el de la cátedra, "apuntes
+psicología UBA", "Psicología UBA ingresantes".</p>
+<div class="card">
+  <p><strong>La regla que evita que te echen:</strong> las primeras dos veces que
+    escribís, no vendés nada. Contestás la pregunta de alguien, o subís algo
+    útil gratis. Recién la tercera contás qué hiciste.</p>
+  <p>Ahora que hay muestra gratis, el link cumple lo que promete: entran y la
+    usan. Eso cambia todo, porque antes se chocaban con un login y te odiaban.</p>
+</div>
+
+<h2 id="4"><small>El que puede explotar</small><span class="rank">4</span>Un video corto, TikTok o Reels<span class="et e-desp">cuando te animes</span></h2>
+<p>Es el único canal donde alguien sin seguidores puede llegar a miles en una
+semana, porque no muestra lo tuyo a quien te sigue sino a quien le interesa el
+tema.</p>
+<p><strong>El formato que funciona para esto:</strong> quince segundos, vos
+hablando, un solo concepto que la gente confunde.</p>
+<div class="guion"><b>Guión de ejemplo:</b>
+"Si en el parcial te preguntan las cuatro características de la pulsión y vos contestás oral, anal, fálica y genital, está mal.
+
+Esas son las fases. Las características son esfuerzo, meta, objeto y fuente.
+
+Se confunden porque las dos son cuatro cosas y están en el mismo texto. Pero una dice de qué está hecha la pulsión y la otra por dónde pasa."</div>
+<p>Sin edición, sin música, sin efectos. Una chica explicando algo bien.
+<strong>El oral de la app es, además, el video perfecto:</strong> mostrás la
+pantalla, hablás, y se ve cómo te corrige.</p>
+
+<h2 id="5"><small>Tiene tráfico propio</small><span class="rank">5</span>Mercado Libre<span class="et e-desp">después de las primeras ventas</span></h2>
+<p>Suena raro y no lo es: en Argentina se venden apuntes y cursos ahí todo el
+tiempo, y la gente <strong>busca sola</strong>. Ventaja grande: el que compra
+ahí ya tiene la tarjeta cargada, y no tenés que convencer a nadie de transferir
+a una desconocida, que es tu mayor fricción hoy.</p>
+<ul>
+  <li>Título con las palabras que la gente busca de verdad: la materia, la
+    cátedra, la facultad.</li>
+  <li>Entregás el acceso por mensaje después de la compra.</li>
+  <li>Las primeras reseñas valen oro: son la prueba social que no tenés.</li>
+  <li>Revisá la comisión antes de fijar el precio, porque se la lleva del tuyo.</li>
+</ul>
+
+<h2 id="6"><small>Siembra a largo plazo</small><span class="rank">6</span>Que Google te encuentre<span class="et e-desp">un rato, una vez</span></h2>
+<p>Alguien, ahora mismo, está buscando "resumen Freud cátedra Pino". Si tu
+landing tiene esas palabras, con el tiempo aparece.</p>
+<p>No da resultados esta semana ni el mes que viene. Pero es lo único que sigue
+trayendo gente sola, dentro de un año, sin que hagas nada. <strong>Son veinte
+minutos de trabajo, una sola vez.</strong></p>
+
+<h2 id="7"><small>Difícil pero grande</small><span class="rank">7</span>El centro de estudiantes<span class="et e-no">no todavía</span></h2>
+<p>Tienen listas de correo, redes con miles de personas y stands. Si te suman,
+llegás a todo el mundo de una.</p>
+<p><strong>Por qué va último:</strong> son lentos, políticos, y a muchos no les
+cae bien que alguien venda algo a los estudiantes. Además te conviene llegar con
+algo ya probado, no con una promesa. Guardalo para cuando tengas las primeras
+veinte compradoras y algún testimonio.</p>
+
+<h2 id="orden">Qué hago primero, sin vueltas</h2>
+<table>
+  <tr><th>Cuándo</th><th>Qué</th><th>Cuánto tarda</th></tr>
+  <tr><td>Día 1</td><td>Imprimir y pegar el cartel con QR</td><td>Una tarde</td></tr>
+  <tr><td>Día 1 y 2</td><td>Escribirle a 10 cuentas de apuntes</td><td>Una hora</td></tr>
+  <tr><td>Día 3</td><td>Entrar a 5 grupos abiertos y contestar algo útil</td><td>Media hora por día</td></tr>
+  <tr><td>Día 5</td><td>Un video corto, uno solo, y ver qué pasa</td><td>Veinte minutos</td></tr>
+  <tr><td>Día 7</td><td>Las palabras de búsqueda en la landing</td><td>Veinte minutos</td></tr>
+</table>
+
+<div class="card lila">
+  <p><strong>Lo que mirás a los siete días:</strong> cuánta gente entró a probar
+    la muestra, y por dónde entró.</p>
+  <p>Si entraron veinte por el QR y ninguna por Instagram, dejás de hacer
+    Instagram. <strong>Eso es lo que se gana probando cinco canales a la vez en
+    vez de uno</strong>: descubrís cuál es el tuyo, en una semana, en vez de
+    adivinar durante tres meses.</p>
+</div>
+
+<p class="pie">Escrito el 30 de septiembre de 2026. Los canales están ordenados
+por lo que rinde para alguien sin audiencia y sin contactos. Antes de pegar
+carteles o publicar en un grupo, fijate las reglas del lugar.</p>
+
+</div>
+</body>
+</html>

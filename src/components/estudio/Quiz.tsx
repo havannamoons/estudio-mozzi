@@ -53,7 +53,10 @@ export function Quiz({ api, tope = Infinity, onTope }: Props) {
   /* El tope de la muestra recorta la tanda, no el contenido: las preguntas
      siguen existiendo, simplemente todavía no están disponibles. */
   const totalReal = temaActivo.preguntas.length
-  const total = Math.max(1, Math.min(totalReal, tope))
+  /* Si el tema no tiene preguntas, `total` TIENE que quedar en 0: más abajo
+     hay un guardia que depende de eso. Forzar un mínimo de 1 lo salteaba y
+     la pantalla intentaba dibujar una pregunta que no existe. */
+  const total = totalReal === 0 ? 0 : Math.max(1, Math.min(totalReal, tope))
   const hayTope = total < totalReal
   const displayIdx = Math.min(Math.max(0, preguntaActualIdx), total - 1)
   const origIdx = originalIdxDe(displayIdx)
@@ -147,6 +150,20 @@ export function Quiz({ api, tope = Infinity, onTope }: Props) {
     return (
       <div className="glass-strong rounded-2xl p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
         No hay preguntas en este tema todavía.
+      </div>
+    )
+  }
+
+  /* Red de seguridad. Al cambiar de tema, el orden barajado del tema anterior
+     puede sobrevivir un instante al contenido nuevo. Si ese orden apunta a una
+     posición que el tema nuevo no tiene (el primero tiene 9 preguntas y el
+     segundo 8), `pregunta` queda indefinida y la pantalla se rompía al intentar
+     dibujar sus opciones. Mostrar un cartel por una fracción de segundo es
+     mucho mejor que tirar la app abajo. */
+  if (!pregunta) {
+    return (
+      <div className="glass-strong rounded-2xl p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+        Cargando la pregunta…
       </div>
     )
   }

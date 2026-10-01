@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudio Lunar · cartel para imprimir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;600;700;800;900&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --crema:#FBF6EF; --noche:#2C2440; --lila:#7A4DFF;
+  --lila-palido:#ECE5FA; --dorado:#FFAE24; --tx2:#615A75; --tx3:#9A93A8;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E9E5EE;color:var(--noche);
+  font-family:Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+.barra{max-width:210mm;margin:0 auto;padding:16px 10mm;display:flex;
+  justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.barra p{margin:0;color:var(--tx2);font-size:.9rem;max-width:56ch}
+.barra button{font:inherit;font-weight:800;font-size:.9rem;cursor:pointer;
+  background:var(--noche);color:var(--crema);border:0;border-radius:9px;
+  padding:11px 19px}
+.barra button:hover{background:#3B3157}
+
+/* ---------------- la hoja A4 ---------------- */
+.hoja{width:210mm;height:297mm;margin:0 auto 34px;background:var(--crema);
+  box-shadow:0 3px 22px rgba(44,36,64,.16);display:flex;flex-direction:column;
+  overflow:hidden;position:relative}
+
+.cuerpo{flex:1;padding:22mm 18mm 0;display:flex;flex-direction:column}
+
+.eyebrow{font-size:12pt;font-weight:900;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--lila);margin:0}
+
+.gancho{font-family:Fraunces,Georgia,serif;font-weight:600;
+  font-size:34pt;line-height:1.07;letter-spacing:-.02em;margin:9mm 0 0}
+
+.ops{margin:8mm 0 0;display:flex;flex-direction:column;gap:3.5mm}
+.op{display:flex;gap:5mm;align-items:center;background:#fff;border-radius:5mm;
+  padding:5mm 6mm;font-size:13pt;font-weight:700;line-height:1.25}
+.op .l{flex:0 0 9mm;height:9mm;border-radius:2.6mm;background:var(--lila-palido);
+  color:var(--lila);font-size:11pt;font-weight:900;
+  display:flex;align-items:center;justify-content:center}
+
+.resp{margin:7mm 0 0;font-size:12pt;font-weight:800;color:var(--tx2)}
+.resp b{color:var(--noche)}
+
+/* ---- bloque del QR ---- */
+.qrbloque{margin-top:auto;display:flex;gap:8mm;align-items:center;
+  background:var(--noche);color:var(--crema);border-radius:7mm;
+  padding:7mm 8mm;margin-bottom:6mm}
+.qrcaja{flex:0 0 38mm;width:38mm;height:38mm;background:#fff;border-radius:3mm;
+  padding:2.5mm;display:flex;align-items:center;justify-content:center}
+.qrcaja img,.qrcaja canvas{width:100%!important;height:100%!important;display:block}
+.qrtexto p{margin:0}
+.qrtexto .grande{font-family:Fraunces,serif;font-size:20pt;line-height:1.12;
+  font-weight:600}
+.qrtexto .chico{font-size:11pt;font-weight:700;opacity:.72;margin-top:2.5mm}
+
+.marca{display:flex;align-items:baseline;gap:3mm;font-size:11pt;font-weight:900;
+  padding-bottom:4mm}
+.marca span{font-weight:700;color:var(--tx3)}
+
+/* ---- las colitas cortables ---- */
+.colitas{height:30mm;border-top:1.5px dashed #C9C1D4;display:flex}
+.colita{flex:1;border-left:1px dashed #C9C1D4;display:flex;align-items:center;
+  justify-content:center;padding:2mm}
+.colita:first-child{border-left:0}
+.colita span{transform:rotate(-90deg);white-space:nowrap;font-size:7.5pt;
+  font-weight:800;color:var(--noche);letter-spacing:.02em}
+
+/* ---------------- impresión ---------------- */
+@media print{
+  @page{size:A4 portrait;margin:0}
+  body{background:#fff}
+  .barra{display:none}
+  .hoja{box-shadow:none;margin:0;width:210mm;height:297mm;
+    page-break-after:always}
+}
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <p>Imprimí en A4, sin márgenes y con "gráficos de fondo" activado, si no el
+    fondo crema sale en blanco. Son dos carteles distintos: probá los dos y
+    fijate cuál levanta más.</p>
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<!-- ================= CARTEL 1 ================= -->
+<div class="hoja">
+  <div class="cuerpo">
+    <p class="eyebrow">Psicoanálisis · Freud · Cát. Pino</p>
+    <p class="gancho">Si contestás esto mal,<br>el parcial te va a doler.</p>
+
+    <div class="ops">
+      <div class="op"><span class="l">A</span>Oral, anal, fálica y genital</div>
+      <div class="op"><span class="l">B</span>Esfuerzo, meta, objeto y fuente</div>
+      <div class="op"><span class="l">C</span>Represión, regresión y sublimación</div>
+    </div>
+
+    <p class="resp">Las cuatro características de la pulsión son una de esas
+      tres. <b>Las otras dos entran igual en el parcial.</b></p>
+
+    <div class="qrbloque">
+      <div class="qrcaja" id="qr1"></div>
+      <div class="qrtexto">
+        <p class="grande">Probalo gratis,<br>sin crear cuenta</p>
+        <p class="chico">19 temas · 128 preguntas · modo oral</p>
+      </div>
+    </div>
+
+    <p class="marca">ESTUDIO LUNAR <span>· hecho por una estudiante de la facu</span></p>
+  </div>
+
+  <div class="colitas" id="colitas1"></div>
+</div>
+
+<!-- ================= CARTEL 2 ================= -->
+<div class="hoja">
+  <div class="cuerpo">
+    <p class="eyebrow">Psicoanálisis · Freud · Cát. Pino</p>
+    <p class="gancho">El final es oral.<br>Vos estudiás leyendo.</p>
+
+    <p class="resp" style="margin-top:9mm;font-size:13.5pt;line-height:1.5">
+      Podés saberlo todo y no poder decirlo. Reconocer la respuesta correcta es
+      una cosa. Producirla en voz alta, sin nada adelante, es otra.
+      <b>Y es la que te toman.</b></p>
+
+    <div class="ops" style="margin-top:8mm">
+      <div class="op"><span class="l">1</span>Te da la consigna y el tiempo real</div>
+      <div class="op"><span class="l">2</span>Hablás, sin ver nada</div>
+      <div class="op"><span class="l">3</span>Recién ahí te muestra lo que faltó</div>
+    </div>
+
+    <div class="qrbloque">
+      <div class="qrcaja" id="qr2"></div>
+      <div class="qrtexto">
+        <p class="grande">Practicá el oral<br>desde el celu</p>
+        <p class="chico">38 consignas · probalo gratis</p>
+      </div>
+    </div>
+
+    <p class="marca">ESTUDIO LUNAR <span>· hecho por una estudiante de la facu</span></p>
+  </div>
+
+  <div class="colitas" id="colitas2"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LINK = "https://estudio-next-swart.vercel.app";
+  var CORTO = "estudio-next-swart.vercel.app";
+
+  /* El QR se dibuja acá en vez de pegar una imagen: si mañana cambiás el
+     link, cambiás esta línea y listo, sin volver a diseñar el cartel. */
+  function pintarQR(id) {
+    var caja = document.getElementById(id);
+    if (!caja || typeof QRCode === "undefined") {
+      if (caja) caja.innerHTML =
+        '<span style="font-size:8pt;color:#888;text-align:center">' +
+        'No cargó el generador de QR.<br>Revisá la conexión.</span>';
+      return;
+    }
+    new QRCode(caja, {
+      text: LINK,
+      width: 420,
+      height: 420,
+      colorDark: "#2C2440",
+      colorLight: "#ffffff",
+      /* Corrección alta: un cartel se ensucia, se dobla y se despega.
+         Con esto el código sigue leyéndose aunque le falte un pedazo. */
+      correctLevel: QRCode.CorrectLevel.H,
+    });
+  }
+
+  /* Las colitas cortables de abajo. Son ocho: entran justas en A4 y quedan
+     lo bastante anchas para que se puedan arrancar de una. */
+  function pintarColitas(id) {
+    var c = document.getElementById(id);
+    if (!c) return;
+    for (var i = 0; i < 8; i++) {
+      var d = document.createElement("div");
+      d.className = "colita";
+      var s = document.createElement("span");
+      s.textContent = CORTO;
+      d.appendChild(s);
+      c.appendChild(d);
+    }
+  }
+
+  pintarQR("qr1");
+  pintarQR("qr2");
+  pintarColitas("colitas1");
+  pintarColitas("colitas2");
+})();
+</script>
+</body>
+</html>

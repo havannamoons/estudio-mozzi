@@ -116,7 +116,12 @@ export function AdminPanel() {
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
             Esta sección es solo para la administradora. Iniciaste sesión como{" "}
-            <strong className="text-zinc-800 dark:text-zinc-100">{auth.email}</strong>.
+            <strong className="text-zinc-800 dark:text-zinc-100">{auth.email}</strong>,
+            y el panel espera <strong className="text-zinc-800 dark:text-zinc-100">{ADMIN_EMAIL}</strong>.
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+            Cerrá sesión y volvé a entrar eligiendo esa cuenta. Si Chrome entra
+            solo con otra, elegí «Usar otra cuenta» en la pantalla de Google.
           </p>
           <button
             onClick={auth.cerrarSesion}
