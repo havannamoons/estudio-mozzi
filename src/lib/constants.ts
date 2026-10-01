@@ -71,3 +71,13 @@ export const SIMULACRO_SEGUNDOS_POR_PREGUNTA = 75
 
 /** Umbral en el que el reloj pasa a rojo y empieza a latir. */
 export const SIMULACRO_SEGUNDOS_ALERTA = 60
+
+/**
+ * Link de cobro de Mercado Pago. Es reutilizable: se lo mandás a todas, no
+ * hace falta crear uno por venta. Acepta hasta 3 cuotas.
+ *
+ * Ojo: pagar NO activa el acceso solo. Mercado Pago te avisa a vos quién pagó,
+ * y vos la habilitás desde /panel. Por eso, después de pagar, la pantalla le
+ * pide que te mande su Gmail: sin ese dato no la podés encontrar en el panel.
+ */
+export const MERCADOPAGO_LINK = "https://mpago.la/1ShVmu7"

@@ -3,7 +3,12 @@
 Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 Última actualización: 2026-07-17.
 
-> ⚠️ Reemplazá **[TU ALIAS]** por tu alias de transferencia real antes de usar.
+> 💳 Cobro por **link de Mercado Pago**: https://mpago.la/1ShVmu7 (hasta 3 cuotas).
+> Ese link es reutilizable: se lo mandás a todas, no hace falta crear uno por venta.
+>
+> ⚠️ **Siempre pedile el Gmail con el que creó la cuenta en la app.** Mercado Pago te
+> avisa quién pagó, pero con el nombre, y vos necesitás el mail para encontrarla en
+> el panel y activarla. Si no se lo pedís en el mismo mensaje, después la perseguís.
 
 ---
 
@@ -54,7 +59,14 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 > Está a $10.000 de lanzamiento 🙌 (después sube a $15.000). Es un pago único y la tenés para todo el parcial y el final. Y si venís con una compañera, les queda a $8.000 cada una 👯
 
 **"¿Cómo la pago?":**
-> Por transferencia a mi alias [TU ALIAS] 💸 Me pasás el comprobante y en un ratito te activo el acceso.
+> Súper fácil 💳 Te dejo el link de Mercado Pago: https://mpago.la/1ShVmu7
+>
+> Podés pagar con tarjeta hasta en 3 cuotas, o con el dinero que tengas en la cuenta.
+>
+> Cuando lo hagas, pasame el **Gmail con el que entraste a la app** y te activo el acceso en un ratito 💚
+
+**"Ya pagué":**
+> ¡Buenísimo, gracias! 🎉 Pasame el **Gmail con el que creaste la cuenta** en la app y te habilito todo ahora.
 
 **"¿Cómo entro / cómo funciona?":**
 > Súper fácil: entrás a estudio-next-swart.vercel.app, tocás "Continuar con Google" con tu Gmail, y apenas me pasás el pago te activo. Estudiás desde el celu o la compu 📱💻

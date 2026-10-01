@@ -3,7 +3,7 @@
 import { X } from "lucide-react"
 import type { AuthApi } from "@/lib/hooks/useAuth"
 import { Luna, Sentada } from "@/components/landing/Personajes"
-import { WHATSAPP_NUMERO } from "@/lib/constants"
+import { MERCADOPAGO_LINK, WHATSAPP_NUMERO } from "@/lib/constants"
 import { LIMITES, siguientePaso, temasFaltantes, type Nivel } from "@/lib/plan"
 
 /**
@@ -20,7 +20,7 @@ import { LIMITES, siguientePaso, temasFaltantes, type Nivel } from "@/lib/plan"
  *    temas" convence más que "desbloqueá todo el contenido premium".
  */
 
-const MENSAJE = "Hola! Quiero desbloquear Estudio Mozzi 💚"
+const MENSAJE = "Hola! Ya pagué Estudio Lunar. Mi mail es: "
 
 interface Props {
   nivel: Nivel
@@ -120,22 +120,35 @@ export function Paywall({ nivel, motivo, totalTemas, auth, onCerrar }: Props) {
               <li>· Pago único, te queda para siempre</li>
             </ul>
 
+            {/* El pago va primero y es de ella sola: mandar a alguien a escribir
+                por WhatsApp antes de poder comprar tira abajo media venta. */}
+            {MERCADOPAGO_LINK ? (
+              <a href={MERCADOPAGO_LINK} target="_blank" rel="noopener noreferrer"
+                className="btn-lunar btn-noche block w-full !py-4">
+                Pagar y desbloquear
+              </a>
+            ) : null}
+
+            <p className="mt-4 mb-1 text-[14px] leading-relaxed font-medium text-[var(--noche)]/55">
+              Después de pagar, mandame por WhatsApp el{" "}
+              <strong className="font-extrabold text-[var(--noche)]">
+                mail con el que entraste
+              </strong>{" "}
+              y te habilito todo. Es lo único que necesito para encontrarte.
+            </p>
+
             {wa ? (
               <a href={wa} target="_blank" rel="noopener noreferrer"
-                className="btn-lunar btn-noche block w-full !py-4">
-                Quiero desbloquearlo
+                className="btn-lunar btn-suave block w-full !py-3 text-[15px]">
+                Escribirme por WhatsApp
               </a>
-            ) : (
-              <p className="text-[15px] font-bold text-[var(--noche)]/50">
-                Falta cargar el número de contacto.
-              </p>
-            )}
+            ) : null}
 
             <button
               onClick={auth.reintentarChequeo}
               className="btn-lunar btn-fantasma mt-2 !py-2 text-[15px] text-[var(--noche)]/45"
             >
-              Ya pagué, revisá de nuevo
+              Ya me activaron, revisá de nuevo
             </button>
           </>
         )}
