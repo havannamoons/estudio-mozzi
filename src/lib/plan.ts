@@ -67,8 +67,8 @@ export const LIMITES: Record<Nivel, Limites> = {
     modos: ["estudio", "oral", "match", "cloze"],
     oral: 5,
     preguntasPorTema: 5,
-    clozes: 10,
-    pares: 8,
+    clozes: 5,
+    pares: 5,
     etiqueta: "Tenés cuenta, falta desbloquear",
   },
   completo: {
