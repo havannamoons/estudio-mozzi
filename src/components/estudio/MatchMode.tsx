@@ -11,8 +11,22 @@ import { MatchTerminado } from "./MatchTerminado"
 
 const PARES_POR_PARTIDA = 6
 
-export function MatchMode({ api }: { api: EstudioApi }) {
-  const { referentes } = useContenido()
+export function MatchMode({
+  api,
+  tope = Infinity,
+  onTope,
+}: {
+  api: EstudioApi
+  /** De cuántos pares puede salir la partida. Infinity = de todos. */
+  tope?: number
+  onTope?: () => void
+}) {
+  const { referentes: todosLosPares } = useContenido()
+  const referentes = useMemo(
+    () => (tope === Infinity ? todosLosPares : todosLosPares.slice(0, tope)),
+    [todosLosPares, tope],
+  )
+  const paresFaltantes = todosLosPares.length - referentes.length
   const [partida, setPartida] = useState(0)
 
   // Re-samplea pares al cambiar de partida
@@ -82,6 +96,21 @@ export function MatchMode({ api }: { api: EstudioApi }) {
 
   return (
     <div className="anim-fade space-y-4">
+      {paresFaltantes > 0 && (
+        <button
+          onClick={onTope}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left transition-opacity hover:opacity-80"
+          style={{ background: "color-mix(in srgb, var(--lila) 9%, transparent)" }}
+        >
+          <span className="text-[14px] leading-snug font-bold text-[var(--noche)]/70">
+            Estás practicando con {referentes.length} de {todosLosPares.length} pares
+            <span className="font-medium text-[var(--noche)]/45">
+              {" · "}el resto se abre al desbloquear
+            </span>
+          </span>
+          <span className="text-[14px] font-extrabold text-[var(--lila)]">Ver</span>
+        </button>
+      )}
       {/* Header */}
       <div className="glass-strong rounded-2xl p-5 sm:p-7">
         <div className="flex flex-wrap items-start justify-between gap-3">

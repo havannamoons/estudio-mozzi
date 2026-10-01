@@ -33,8 +33,25 @@ function buildOpciones(c: Cloze): string[] {
   return shuffle([c.respuestas[0], ...c.distractores])
 }
 
-export function ClozeMode({ api }: { api: EstudioApi }) {
-  const { clozes } = useContenido()
+export function ClozeMode({
+  api,
+  tope = Infinity,
+  onTope,
+}: {
+  api: EstudioApi
+  /** De cuántos clozes puede salir la partida. Infinity = de todos. */
+  tope?: number
+  onTope?: () => void
+}) {
+  const { clozes: todosLosClozes } = useContenido()
+  /* Se recorta el CONJUNTO, no la partida: cada partida sigue siendo de 8 y
+     sigue siendo al azar, pero sale de un grupo acotado. Sin esto, jugando
+     varias veces se terminan viendo todos. */
+  const clozes = useMemo(
+    () => (tope === Infinity ? todosLosClozes : todosLosClozes.slice(0, tope)),
+    [todosLosClozes, tope],
+  )
+  const clozesFaltantes = todosLosClozes.length - clozes.length
   const racha = useRacha()
   const [partida, setPartida] = useState(0)
 
@@ -157,6 +174,21 @@ export function ClozeMode({ api }: { api: EstudioApi }) {
 
   return (
     <div className="anim-fade space-y-4">
+      {clozesFaltantes > 0 && (
+        <button
+          onClick={onTope}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left transition-opacity hover:opacity-80"
+          style={{ background: "color-mix(in srgb, var(--lila) 9%, transparent)" }}
+        >
+          <span className="text-[14px] leading-snug font-bold text-[var(--noche)]/70">
+            Estás practicando con {clozes.length} de {todosLosClozes.length} clozes
+            <span className="font-medium text-[var(--noche)]/45">
+              {" · "}el resto se abre al desbloquear
+            </span>
+          </span>
+          <span className="text-[14px] font-extrabold text-[var(--lila)]">Ver</span>
+        </button>
+      )}
       {/* Header */}
       <div className="glass-strong rounded-2xl p-5 sm:p-7">
         <div className="flex flex-wrap items-start justify-between gap-3">

@@ -304,8 +304,20 @@ function EstudioAppInner() {
             </section>
           </div>
         )}
-        {api.modo === "match" && <MatchMode api={api} />}
-        {api.modo === "cloze" && <ClozeMode api={api} />}
+        {api.modo === "match" && (
+          <MatchMode
+            api={api}
+            tope={LIMITES[nivel].pares}
+            onTope={() => setBloqueo({ tipo: "modo", nombre: "El resto de los pares" })}
+          />
+        )}
+        {api.modo === "cloze" && (
+          <ClozeMode
+            api={api}
+            tope={LIMITES[nivel].clozes}
+            onTope={() => setBloqueo({ tipo: "modo", nombre: "El resto de los clozes" })}
+          />
+        )}
       {api.modo === "simulacro" && <SimulacroMode api={api} />}
       {api.modo === "oral" && (
         <OralMode

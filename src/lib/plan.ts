@@ -29,9 +29,20 @@ export interface Limites {
   oral: number
   /** Tope de preguntas del quiz dentro de cada tema abierto. */
   preguntasPorTema: number
+  /** De cuántos clozes puede salir cada partida. Infinity = todos. */
+  clozes: number
+  /** De cuántos pares puede salir cada partida de relacionar. */
+  pares: number
   /** Etiqueta corta para mostrar en pantalla. */
   etiqueta: string
 }
+
+/**
+ * Por qué también se topean los clozes y los pares: cada partida saca al azar
+ * del total, así que sin tope alguien con cuenta gratis se lleva los 28 clozes
+ * y los 20 pares jugando varias veces. Se recorta el CONJUNTO del que sale la
+ * partida, no la partida en sí: así sigue habiendo variedad, pero acotada.
+ */
 
 /**
  * Los números.
@@ -47,6 +58,8 @@ export const LIMITES: Record<Nivel, Limites> = {
     modos: ["estudio", "oral"],
     oral: 2,
     preguntasPorTema: 2,
+    clozes: 0,
+    pares: 0,
     etiqueta: "Estás viendo la muestra",
   },
   cuenta: {
@@ -54,6 +67,8 @@ export const LIMITES: Record<Nivel, Limites> = {
     modos: ["estudio", "oral", "match", "cloze"],
     oral: 5,
     preguntasPorTema: 5,
+    clozes: 10,
+    pares: 8,
     etiqueta: "Tenés cuenta, falta desbloquear",
   },
   completo: {
@@ -61,6 +76,8 @@ export const LIMITES: Record<Nivel, Limites> = {
     modos: ["estudio", "oral", "match", "cloze", "simulacro"],
     oral: Infinity,
     preguntasPorTema: Infinity,
+    clozes: Infinity,
+    pares: Infinity,
     etiqueta: "Acceso completo",
   },
 }
