@@ -241,6 +241,34 @@ function EstudioAppInner() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
         <Header onReset={api.modo === "estudio" ? handleReset : undefined} />
+        {/* Qué nivel está viendo. Va a la vista y no escondido en un menú:
+            alguien que no sabe que está en la muestra cree que la app es así
+            de chica, y se va sin entender que hay más. */}
+        {nivel !== "completo" && (
+          <div
+            className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-4 py-3"
+            style={{ background: "color-mix(in srgb, var(--lila) 9%, transparent)" }}
+          >
+            <span className="text-[14px] leading-snug font-bold text-[var(--noche)]/70">
+              {LIMITES[nivel].etiqueta}
+              <span className="font-medium text-[var(--noche)]/45">
+                {" · "}
+                {orden.length - temasBloqueados.size} de {orden.length} temas
+                {" · "}
+                {LIMITES[nivel].preguntasPorTema} preguntas por tema
+              </span>
+            </span>
+            <button
+              onClick={() =>
+                setBloqueo({ tipo: "modo", nombre: "El acceso completo" })
+              }
+              className="btn-lunar btn-lila !px-4 !py-2 text-[14px]"
+            >
+              {nivel === "muestra" ? "Crear mi cuenta" : "Desbloquear todo"}
+            </button>
+          </div>
+        )}
+
         <ModoSelector
           modo={api.modo}
           onChange={apiConCandado.cambiarModo}
