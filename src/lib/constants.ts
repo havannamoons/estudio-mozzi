@@ -81,3 +81,31 @@ export const SIMULACRO_SEGUNDOS_ALERTA = 60
  * pide que te mande su Gmail: sin ese dato no la podés encontrar en el panel.
  */
 export const MERCADOPAGO_LINK = "https://mpago.la/1ShVmu7"
+
+/**
+ * COBRO POR TRANSFERENCIA.
+ *
+ * El link de Mercado Pago cubre tarjeta, débito y "dinero en cuenta", pero la
+ * mayoría de las estudiantes no usa tarjeta: transfiere. Para eso hace falta
+ * tu ALIAS (o CVU), que es otro camino: la plata entra igual a tu cuenta de
+ * Mercado Pago, al instante y sin comisión, pero MP no te avisa "pagó Estudio
+ * Lunar" — te avisa "te transfirieron $10.000". Por eso la pantalla le pide el
+ * comprobante junto con el mail.
+ *
+ * Dónde sacar el alias: app de Mercado Pago → "Tu dinero" → "Datos de tu
+ * cuenta" (ahí están CVU y alias, y podés editar el alias para que sea fácil
+ * de dictar, tipo `estudio.lunar.mp`).
+ *
+ * Si queda vacío, la opción de transferencia NO se muestra: la app sigue
+ * cobrando solo por el link, igual que hoy.
+ */
+export const ALIAS_TRANSFERENCIA = "rooroldaan"
+
+/** Nombre que le va a aparecer al confirmar la transferencia (el titular de la cuenta). */
+export const TITULAR_TRANSFERENCIA = "Rocio Roldan"
+
+/**
+ * Precio que se muestra en la pantalla de cobro, en pesos.
+ * Está acá y no escrito en el texto para que cambiarlo sea un solo lugar.
+ */
+export const PRECIO_ACCESO = 10000
