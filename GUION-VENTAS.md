@@ -74,12 +74,25 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 **"¿Cuánto sale?":**
 > Está a $10.000 de lanzamiento 🙌 (después sube a $15.000). Es un pago único y la tenés para todo el parcial y el final. Y si venís con una compañera, les queda a $8.000 cada una 👯
 
-**"¿Cómo la pago?":**
-> Súper fácil 💳 Te dejo el link de Mercado Pago: https://mpago.la/1ShVmu7
+**"¿Cómo la pago?":** (hay TRES formas, no una)
+> Como te quede más cómodo, hay tres formas 💜
 >
-> Podés pagar con tarjeta hasta en 3 cuotas, o con el dinero que tengas en la cuenta.
+> **1. Transferencia** (la más rápida y sin comisión)
+> Alias: rooroldaan · A nombre de Rocío Roldán · Monto: $10.000
+> Me pasás el comprobante y listo.
 >
-> Cuando lo hagas, pasame el **Gmail con el que entraste a la app** y te activo el acceso en un ratito 💚
+> **2. Tarjeta** (crédito, débito o prepaga): https://mpago.la/1ShVmu7
+>
+> **3. Efectivo** 💵 Con ese mismo link elegís "Efectivo" y te da un código para pagar en **Rapipago o Pago Fácil**. No hace falta tarjeta ni cuenta de banco.
+>
+> Cuando pagues, pasame el **Gmail con el que entraste a la app** y te activo el acceso 💜
+
+> 💵 **El efectivo es el argumento que más te están faltando.** Verificado el 2026-10-02: el link de Mercado Pago ofrece Rapipago y Pago Fácil además de tarjeta. Muchas estudiantes no tienen tarjeta y se caen de la venta justo ahí. Decilo desde el primer mensaje, no esperes a que pregunten.
+
+**"No tengo tarjeta":**
+> ¡No hace falta! 💜 Podés pagar **en efectivo en Rapipago o Pago Fácil**. Entrás acá 👉 https://mpago.la/1ShVmu7 , elegís "Efectivo", te da un código, y lo pagás en cualquier sucursal.
+>
+> O si te queda más fácil, transferencia al alias **rooroldaan** (Rocío Roldán).
 
 **"Ya pagué":**
 > ¡Buenísimo, gracias! 🎉 Pasame el **Gmail con el que creaste la cuenta** en la app y te habilito todo ahora.
