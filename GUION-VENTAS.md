@@ -11,12 +11,16 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 > el panel y activarla. Si no se lo pedís en el mismo mensaje, después la perseguís.
 
 > 🏦 **Cobro por TRANSFERENCIA (el que más se usa).** Casi ninguna estudiante
-> paga con tarjeta: transfiere desde el banco o desde Mercado Pago. Tu alias
-> está en la app de MP → *Tu dinero* → *Datos de tu cuenta* (ahí podés editarlo
-> para que sea fácil de dictar). Entra al instante y sin comisión.
+> paga con tarjeta: transfiere desde el banco o desde Mercado Pago. Entra al
+> instante y sin comisión.
 >
-> Para que aparezca dentro de la app hay que pegarlo en `ALIAS_TRANSFERENCIA`,
-> en `src/lib/constants.ts`. Mientras esté vacío, la app cobra solo por link.
+> ✅ **Ya está configurado y vivo:** alias **`rooroldaan`**, a nombre de
+> *Rocio Roldan*. La app lo muestra sola en la pantalla de pago, con un botón
+> que lo copia. No tenés que dictarlo por WhatsApp.
+>
+> Si algún día lo cambiás en Mercado Pago, hay que actualizarlo en
+> `ALIAS_TRANSFERENCIA` (`src/lib/constants.ts`) y volver a publicar. Si lo
+> dejás vacío, la app vuelve a cobrar solo por link.
 >
 > ⚠️ La transferencia NO te dice quién pagó: MP te avisa "te transfirieron
 > $10.000". Por eso la pantalla le pide **comprobante + mail** en el mismo
