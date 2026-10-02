@@ -109,3 +109,19 @@ export const TITULAR_TRANSFERENCIA = "Rocio Roldan"
  * Está acá y no escrito en el texto para que cambiarlo sea un solo lugar.
  */
 export const PRECIO_ACCESO = 10000
+
+/**
+ * Precio de lanzamiento: hasta cuándo vale `PRECIO_ACCESO`, y cuánto pasa a
+ * costar después. La fecha es el último día INCLUIDO, en formato AAAA-MM-DD.
+ *
+ * Esto NO cambia el precio solo: cuando se pase la fecha hay que subir
+ * `PRECIO_ACCESO` a mano. Sirve para que la pantalla de cobro diga la fecha
+ * sin tener que acordarse de editar el texto, y para que el aviso desaparezca
+ * solo cuando el lanzamiento se termina.
+ *
+ * Si queda vacío, la pantalla no menciona ninguna fecha.
+ */
+export const FIN_LANZAMIENTO = "2026-10-31"
+
+/** Lo que va a costar cuando se termine el lanzamiento. */
+export const PRECIO_DESPUES = 15000

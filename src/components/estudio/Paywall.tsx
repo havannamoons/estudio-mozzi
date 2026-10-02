@@ -8,8 +8,10 @@ import { cn } from "@/lib/utils"
 import { Luna, Sentada } from "@/components/landing/Personajes"
 import {
   ALIAS_TRANSFERENCIA,
+  FIN_LANZAMIENTO,
   MERCADOPAGO_LINK,
   PRECIO_ACCESO,
+  PRECIO_DESPUES,
   TITULAR_TRANSFERENCIA,
   WHATSAPP_NUMERO,
 } from "@/lib/constants"
@@ -62,6 +64,22 @@ export function Paywall({ nivel, motivo, totalTemas, auth, onCerrar }: Props) {
   )
 
   const precio = new Intl.NumberFormat("es-AR").format(PRECIO_ACCESO)
+
+  /* El aviso de precio de lanzamiento se dibuja solo mientras la fecha no
+     pasó. El día después se apaga sin que haya que tocar nada, así nunca
+     queda prometiendo un precio que ya no existe. La fecha se compara en
+     texto (AAAA-MM-DD ordena bien alfabéticamente) para no pelear con zonas
+     horarias: lo que importa es el día acá, no la hora UTC. */
+  const hoy = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Argentina/Buenos_Aires",
+  }).format(new Date())
+  const lanzamientoVigente = Boolean(FIN_LANZAMIENTO) && hoy <= FIN_LANZAMIENTO
+  const finLanzamiento = lanzamientoVigente
+    ? new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long" }).format(
+        new Date(`${FIN_LANZAMIENTO}T12:00:00`),
+      )
+    : ""
+  const precioDespues = new Intl.NumberFormat("es-AR").format(PRECIO_DESPUES)
 
   /* El mail ya lo sabemos si está logueada: va escrito en el mensaje para que
      no tenga que acordarse con cuál entró. Ese dato es el que te deja
@@ -165,6 +183,18 @@ export function Paywall({ nivel, motivo, totalTemas, auth, onCerrar }: Props) {
               <li>· El oral sin tope de preguntas</li>
               <li>· ${precio} una sola vez, te queda para siempre</li>
             </ul>
+
+            {lanzamientoVigente && (
+              <p
+                className="mx-auto mb-6 max-w-xs rounded-2xl px-4 py-3 text-[14px] leading-relaxed font-semibold text-[var(--noche)]/75"
+                style={{
+                  background: "color-mix(in srgb, var(--lila) 16%, transparent)",
+                }}
+              >
+                Precio de lanzamiento hasta el {finLanzamiento}. Después pasa a
+                ${precioDespues}.
+              </p>
+            )}
 
             {hayTransferencia && (
               <div className="grupo-pastillas mb-5">
