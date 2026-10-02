@@ -1,7 +1,7 @@
 import type { ConsignaOral } from "@/lib/types"
 
 /**
- * Consignas para el modo oral de Psicoanálisis (Freud, Cát. Pino).
+ * Consignas para el modo oral de Psicoanálisis (Freud).
  *
  * Los `puntos` NO son un resumen del texto: son lo que el tribunal escucha para
  * decidir si entendiste. Están redactados como se dicen en voz alta, porque el

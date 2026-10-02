@@ -19,7 +19,6 @@ export const MATERIAS: Materia[] = [
     nombre: "Psicoanálisis",
     nombreLargo: "Psicoanálisis · Freud",
     carrera: "Psicología · UBA",
-    catedra: "Cát. Pino (ex Mozzi)",
     descripcion:
       "De las neuropsicosis de defensa al malestar en la cultura. Del parcial al final, con las preguntas que toma la cátedra.",
     datos: "19 temas · 118 preguntas · 5 formas de estudiarlas",

@@ -1,3 +1,8 @@
+/* NO RENOMBRAR ESTA CLAVE, aunque diga "mozzi" y el resto de la app ya no.
+   Es donde vive el progreso guardado en el navegador de cada persona. Hay
+   gente que ya compró y tiene temas hechos acá adentro: cambiar el nombre les
+   borra el avance de un golpe, sin forma de recuperarlo. El nombre feo es el
+   precio de no romperle el progreso a nadie. */
 export const STORAGE_PROGRESO = "estudio_mozzi_v2"
 export const STORAGE_SIMULACRO = "estudio_simulacro_v1"
 export const STORAGE_WELCOME = "estudio_bienvenida_v1"

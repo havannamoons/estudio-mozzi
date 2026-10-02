@@ -79,7 +79,7 @@ export default function OpengraphImage() {
           }}
         >
           <div style={{ fontSize: 28, color: "#a1a1aa" }}>
-            Parcial + Final · Cát. Pino (ex Mozzi) · UBA
+            Parcial + Final · Psicología · UBA
           </div>
           <div
             style={{

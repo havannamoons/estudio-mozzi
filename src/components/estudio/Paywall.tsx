@@ -104,6 +104,64 @@ export function Paywall({ nivel, motivo, totalTemas, auth, onCerrar }: Props) {
     }
   }
 
+  /**
+   * PAGO CON TARJETA, POR EL CAMINO QUE SE ACTIVA SOLO.
+   *
+   * Le pide al servidor un checkout hecho para esta persona: ese checkout
+   * lleva su id adentro, así que cuando MP avisa que entró la plata, la app
+   * sabe a quién habilitar y lo hace sin que nadie mire.
+   *
+   * Si el cobro automático no está configurado todavía, o el servidor falla,
+   * cae al link de siempre y se cobra a mano como hasta ahora. Que nunca
+   * quede sin forma de pagar importa más que la automatización.
+   */
+  const [cargandoPago, setCargandoPago] = useState(false)
+
+  const pagarConTarjeta = async () => {
+    const token = auth.session?.access_token
+
+    /* Sin sesión no se puede activar sola a nadie, porque no hay a quién
+       habilitar. En ese caso conviene que primero entre con Google. */
+    if (!token) {
+      if (MERCADOPAGO_LINK) {
+        window.open(MERCADOPAGO_LINK, "_blank", "noopener")
+        return
+      }
+      push("Entrá con Google primero así te puedo habilitar", "error")
+      return
+    }
+
+    setCargandoPago(true)
+    try {
+      const r = await fetch("/api/pago/crear", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const data = (await r.json()) as { url?: string; error?: string }
+
+      if (r.ok && data.url) {
+        window.location.href = data.url
+        return
+      }
+
+      /* 503 es "todavía sin configurar", no una falla. Cualquier otro error
+         también termina en el link viejo: lo importante es poder cobrar. */
+      if (MERCADOPAGO_LINK) {
+        window.open(MERCADOPAGO_LINK, "_blank", "noopener")
+      } else {
+        push("No pude abrir el pago, escribime por WhatsApp", "error")
+      }
+    } catch {
+      if (MERCADOPAGO_LINK) {
+        window.open(MERCADOPAGO_LINK, "_blank", "noopener")
+      } else {
+        push("No pude abrir el pago, escribime por WhatsApp", "error")
+      }
+    } finally {
+      setCargandoPago(false)
+    }
+  }
+
   return (
     <div
       className="anim-fade fixed inset-0 z-50 flex items-center justify-center p-5"
@@ -279,26 +337,37 @@ export function Paywall({ nivel, motivo, totalTemas, auth, onCerrar }: Props) {
                 {/* El pago va primero y es de ella sola: mandar a alguien a
                     escribirle a una desconocida antes de poder comprar tira
                     abajo media venta. */}
-                {MERCADOPAGO_LINK ? (
-                  <a
-                    href={MERCADOPAGO_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-lunar btn-noche block w-full !py-4"
-                  >
-                    Pagar con tarjeta
-                  </a>
-                ) : null}
+                <button
+                  onClick={pagarConTarjeta}
+                  disabled={cargandoPago}
+                  className="btn-lunar btn-noche block w-full !py-4 disabled:opacity-60"
+                >
+                  {cargandoPago ? "Abriendo el pago…" : "Pagar con tarjeta"}
+                </button>
 
-                <p className="mt-4 mb-1 text-[14px] leading-relaxed font-medium text-[var(--noche)]/55">
-                  Después de pagar, mandame por WhatsApp el{" "}
-                  <strong className="font-extrabold text-[var(--noche)]">
-                    mail con el que entraste
-                  </strong>{" "}
-                  y te habilito todo. Es lo único que necesito para encontrarte.
-                </p>
+                {/* Dos textos distintos según si se le puede activar sola.
+                    Prometer "se activa al instante" a alguien sin cuenta sería
+                    mentirle: sin sesión no hay a quién habilitar. */}
+                {auth.session ? (
+                  <p className="mt-4 mb-1 text-[14px] leading-relaxed font-medium text-[var(--noche)]/55">
+                    Se te activa{" "}
+                    <strong className="font-extrabold text-[var(--noche)]">
+                      sola al pagar
+                    </strong>
+                    , en el momento. No tenés que escribirme ni mandar nada.
+                  </p>
+                ) : (
+                  <p className="mt-4 mb-1 text-[14px] leading-relaxed font-medium text-[var(--noche)]/55">
+                    Después de pagar, mandame por WhatsApp el{" "}
+                    <strong className="font-extrabold text-[var(--noche)]">
+                      mail con el que entraste
+                    </strong>{" "}
+                    y te habilito todo. Si entrás con Google antes de pagar, se
+                    activa solo.
+                  </p>
+                )}
 
-                {waTarjeta ? (
+                {waTarjeta && !auth.session ? (
                   <a
                     href={waTarjeta}
                     target="_blank"

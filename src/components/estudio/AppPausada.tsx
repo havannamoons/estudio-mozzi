@@ -14,7 +14,7 @@ export function AppPausada() {
           No disponible por ahora
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Estudio Mozzi está en pausa temporalmente. Volvé a intentar más tarde.
+          Estudio Lunar está en pausa temporalmente. Volvé a intentar más tarde.
         </p>
         <p className="mt-3 text-xs leading-relaxed text-zinc-500 dark:text-zinc-500">
           Si necesitás acceso, escribime.

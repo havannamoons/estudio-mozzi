@@ -45,7 +45,7 @@ export function Teoria({ tema, onIrAlQuiz }: Props) {
           <div className="mb-2 flex items-center gap-2">
             <Target className="h-4 w-4 shrink-0" />
             <p className="text-[11px] font-extrabold tracking-[0.14em] uppercase">
-              Tip de parcial · Cát. Pino
+              Tip de parcial
             </p>
           </div>
           <p

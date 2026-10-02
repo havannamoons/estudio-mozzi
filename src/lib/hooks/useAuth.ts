@@ -84,6 +84,60 @@ export function useAuth() {
     }
   }, [session, chequearHabilitado])
 
+  /**
+   * LA VUELTA DE MERCADO PAGO.
+   *
+   * Después de pagar, MP devuelve a `/app?pago=listo`. El problema es que el
+   * aviso del webhook y la vuelta de la persona son dos caminos separados que
+   * corren al mismo tiempo, y a veces ella llega primero: si solo se
+   * consultara una vez, se encontraría todavía bloqueada justo después de
+   * haber pagado, que es el peor momento para desconfiar de una app.
+   *
+   * Por eso se pregunta varias veces, cada dos segundos, hasta que aparece
+   * habilitada o se agotan los intentos. Si se agotan, queda el botón de
+   * "ya me activaron, revisá de nuevo" como salida.
+   */
+  const userId = session?.user?.id
+  useEffect(() => {
+    if (!userId) return
+    if (typeof window === "undefined") return
+
+    const params = new URLSearchParams(window.location.search)
+    if (params.get("pago") !== "listo") return
+
+    let intentos = 0
+    let vivo = true
+
+    const preguntar = async () => {
+      if (!vivo) return
+      intentos++
+
+      const { data } = await supabase
+        .from("perfiles")
+        .select("habilitado")
+        .eq("id", userId)
+        .maybeSingle()
+
+      if (!vivo) return
+
+      if (data?.habilitado) {
+        setHabilitado(true)
+        /* Se limpia el parámetro para que al recargar no vuelva a preguntar. */
+        window.history.replaceState({}, "", window.location.pathname)
+        return
+      }
+
+      if (intentos < 8) {
+        setTimeout(preguntar, 2000)
+      }
+    }
+
+    void preguntar()
+    return () => {
+      vivo = false
+    }
+  }, [userId])
+
   return {
     cargando,
     session,

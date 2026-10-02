@@ -5,7 +5,7 @@ import { REFERENTES } from "./referentes"
 import { ORALES } from "./oral"
 
 /**
- * Contenido de Psicoanálisis (Freud · Cát. Pino, ex Mozzi · UBA).
+ * Contenido de Psicoanálisis (Freud · Psicología · UBA).
  * Fue la primera materia de la plataforma — antes vivía suelta en `lib/data/`.
  */
 export const contenido: ContenidoMateria = {

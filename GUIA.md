@@ -1,4 +1,4 @@
-# 📚 Guía de Estudio Mozzi — cómo funciona y cómo venderlo
+# 📚 Guía de Estudio Lunar — cómo funciona y cómo venderlo
 
 Guía práctica para vos (Ro). Todo lo importante en un solo lugar.
 Última actualización: 2026-07-17.

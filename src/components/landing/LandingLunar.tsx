@@ -145,7 +145,7 @@ export function LandingLunar() {
             <h1 className="t-gigante mb-7">Freud, pero jugando.</h1>
             <p className="mb-9 max-w-lg text-[19px] leading-relaxed text-[var(--noche)]/70">
               Preparate el final de Psicoanálisis contestando, no releyendo.
-              Cátedra Pino · UBA.
+              Psicología · UBA.
             </p>
             <div className="flex flex-wrap items-center gap-5">
               <Link href="/app/psicoanalisis" className="btn-lunar btn-dorado">

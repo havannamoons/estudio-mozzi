@@ -1,4 +1,4 @@
-# 💬 Guión de ventas — Estudio Mozzi
+# 💬 Guión de ventas — Estudio Lunar
 
 Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 Última actualización: 2026-07-17.
@@ -42,7 +42,7 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 ### Para WhatsApp / Estado / grupos (el vendedor)
 > 😩 ¿Se viene el parcial de Freud y son mil fotocopias sueltas y resúmenes eternos?
 >
-> Te entiendo. Por eso armé Estudio Mozzi: todo lo de la Cát. Pino (ex Mozzi) ordenado en un solo lugar, para que llegues al examen tranqui y sin trasnochar.
+> Te entiendo. Por eso armé Estudio Lunar: todo Freud ordenado en un solo lugar, para que llegues al examen tranqui y sin trasnochar.
 >
 > 📖 La teoría justa de cada tema (parcial + final)
 > ✍️ +120 preguntas que te corrigen y te explican
@@ -54,22 +54,22 @@ Todo lo que necesitás para vender y responder. Copiá y pegá lo que te sirva.
 > Escribime "QUIERO" y te paso el acceso 💚
 
 ### Versión corta (estado / historia)
-> 📚 Estudio Mozzi — teoría, quiz y simulacro para aprobar Freud (Cát. Pino/Mozzi · UBA). 19 temas, +120 preguntas, todo desde el celu. Miralo 👉 estudio-next-swart.vercel.app · Escribime para tenerla 💚
+> 📚 Estudio Lunar — teoría, quiz y simulacro para aprobar Freud (Psicología, UBA). 19 temas, +120 preguntas, todo desde el celu. Miralo 👉 estudio-next-swart.vercel.app · Escribime para tenerla 💚
 
 ### Versión suave (para grupos que no dejan vender)
-> Chicas, armé un recurso para estudiar Freud (Cát. Pino/Mozzi): teoría, +120 preguntas y un simulacro, todo junto y desde el celu. Por si a alguien le sirve 👉 estudio-next-swart.vercel.app · Cualquier cosa me escriben por privado 💚
+> Chicas, armé un recurso para estudiar Freud: teoría, +120 preguntas y un simulacro, todo junto y desde el celu. Por si a alguien le sirve 👉 estudio-next-swart.vercel.app · Cualquier cosa me escriben por privado 💚
 
 ### Para Instagram (con hashtags)
-> 📚 Dejá de sufrir Freud 😅 Armé Estudio Mozzi: teoría, +120 preguntas con explicaciones y simulacro de examen para el parcial y final de Psicoanálisis (Cát. Pino/Mozzi, UBA). Todo desde el celu 📱 Link en bio o escribime por DM 💚
+> 📚 Dejá de sufrir Freud 😅 Armé Estudio Lunar: teoría, +120 preguntas con explicaciones y simulacro de examen para el parcial y final de Psicoanálisis (Psicología, UBA). Todo desde el celu 📱 Link en bio o escribime por DM 💚
 >
-> #UBA #Psicología #Psicoanálisis #Freud #CátedraPino #FacuDePsico #EstudiantesUBA
+> #UBA #Psicología #Psicoanálisis #Freud #FacuDePsico #EstudiantesUBA
 
 ---
 
 ## 🗣️ Respuestas listas (para cerrar ventas)
 
 **Cuando escriben "QUIERO" / "info":**
-> ¡Hola! 💚 Buenísimo. Estudio Mozzi tiene toda la teoría, +120 preguntas con explicaciones y un simulacro de examen, para el parcial y el final de Freud (Cát. Pino). Está en precio de lanzamiento: $10.000 (después pasa a $15.000) y te queda para siempre. ¿Te la reservo? 😊
+> ¡Hola! 💚 Buenísimo. Estudio Lunar tiene toda la teoría, +120 preguntas con explicaciones y un simulacro de examen, para el parcial y el final de Freud. Está en precio de lanzamiento: $10.000 (después pasa a $15.000) y te queda para siempre. ¿Te la reservo? 😊
 
 **"¿Cuánto sale?":**
 > Está a $10.000 de lanzamiento 🙌 (después sube a $15.000). Es un pago único y la tenés para todo el parcial y el final. Y si venís con una compañera, les queda a $8.000 cada una 👯

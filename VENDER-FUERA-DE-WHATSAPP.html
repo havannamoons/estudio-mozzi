@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vender sin WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --noche: #2c2440;
+    --lila: #7a4dff;
+    --lila-claro: #c3b0ea;
+    --crema: #fbf6ef;
+
+    --fondo: #18132a;
+    --fondo-2: #211a38;
+    --tarjeta: #251d3f;
+    --borde: #372c57;
+    --texto: #f3eff9;
+    --texto-2: #b9aed2;
+    --texto-3: #8679a6;
+    --exito: #5fd3a3;
+    --alerta: #f0a35e;
+    --freno: #ef6f8b;
+  }
+  :root:not([data-theme="dark"]) {
+    @media (prefers-color-scheme: light) {
+      --fondo: #fbf6ef;
+      --fondo-2: #f4ecfb;
+      --tarjeta: #ffffff;
+      --borde: #e4d9f3;
+      --texto: #2c2440;
+      --texto-2: #5b5176;
+      --texto-3: #8d84a3;
+      --exito: #18916a;
+      --alerta: #b96a16;
+      --freno: #c7365a;
+    }
+  }
+  :root[data-theme="light"] {
+    --fondo: #fbf6ef;
+    --fondo-2: #f4ecfb;
+    --tarjeta: #ffffff;
+    --borde: #e4d9f3;
+    --texto: #2c2440;
+    --texto-2: #5b5176;
+    --texto-3: #8d84a3;
+    --exito: #18916a;
+    --alerta: #b96a16;
+    --freno: #c7365a;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 120px; }
+
+  header {
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--borde);
+    margin-bottom: 48px;
+  }
+  .luna {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, var(--lila-claro), var(--lila));
+    box-shadow: 0 0 44px -6px var(--lila);
+    margin-bottom: 26px;
+  }
+  h1 {
+    font-family: Lora, Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(2rem, 5.6vw, 2.9rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+  }
+  .bajada { color: var(--texto-2); font-size: 1.08rem; max-width: 56ch; margin: 0; }
+  .fecha { color: var(--texto-3); font-size: 0.82rem; margin-top: 22px; }
+
+  h2 {
+    font-family: Lora, Georgia, serif;
+    font-weight: 600;
+    font-size: 1.52rem;
+    letter-spacing: -0.01em;
+    margin: 56px 0 8px;
+    display: flex; align-items: center; gap: 11px;
+  }
+  h2 svg { width: 21px; height: 21px; color: var(--lila-claro); flex: none; }
+  .sub { color: var(--texto-3); font-size: 0.93rem; margin: 0 0 24px; }
+
+  p { margin: 0 0 16px; }
+  strong { color: var(--texto); font-weight: 700; }
+  a { color: var(--lila-claro); text-decoration-color: color-mix(in srgb, var(--lila-claro) 40%, transparent); text-underline-offset: 3px; }
+  a:hover { color: var(--lila); }
+
+  .veredicto {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--lila) 20%, var(--tarjeta)), var(--tarjeta));
+    border: 1px solid color-mix(in srgb, var(--lila) 42%, var(--borde));
+    border-radius: 20px;
+    padding: 28px 30px;
+    margin-bottom: 8px;
+  }
+  .veredicto p:last-child { margin-bottom: 0; }
+  .veredicto .et { font-size: 0.85rem; color: var(--lila-claro); font-weight: 600; margin-bottom: 10px; }
+
+  .canal {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 16px;
+    transition: border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+  }
+  .canal:hover {
+    border-color: color-mix(in srgb, var(--lila) 50%, var(--borde));
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px -22px var(--lila);
+  }
+  .canal-top { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+  .orden {
+    font-family: Lora, serif; font-size: 1.5rem; font-weight: 600;
+    color: var(--lila-claro); line-height: 1; flex: none;
+  }
+  .canal h3 { font-size: 1.14rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .canal .porque { color: var(--texto-2); margin: 10px 0 16px; font-size: 0.99rem; }
+  .canal ul { margin: 0 0 16px; padding-left: 20px; color: var(--texto-2); font-size: 0.97rem; }
+  .canal li { margin-bottom: 7px; }
+  .canal li::marker { color: var(--texto-3); }
+
+  .metas { display: flex; gap: 8px; flex-wrap: wrap; }
+  .meta {
+    font-size: 0.79rem; font-weight: 600; padding: 5px 11px; border-radius: 999px;
+    background: var(--fondo-2); color: var(--texto-2); border: 1px solid var(--borde);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .meta svg { width: 13px; height: 13px; }
+  .meta.si { color: var(--exito); border-color: color-mix(in srgb, var(--exito) 34%, transparent); background: color-mix(in srgb, var(--exito) 11%, transparent); }
+  .meta.ojo { color: var(--alerta); border-color: color-mix(in srgb, var(--alerta) 34%, transparent); background: color-mix(in srgb, var(--alerta) 11%, transparent); }
+
+  .descartado { border-style: dashed; opacity: .82; }
+  .descartado .orden { color: var(--freno); }
+  .descartado:hover { border-color: color-mix(in srgb, var(--freno) 46%, var(--borde)); box-shadow: 0 14px 34px -22px var(--freno); }
+
+  .hallazgo {
+    background: var(--fondo-2);
+    border: 1px solid var(--borde);
+    border-left: 3px solid var(--lila);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 20px 0 8px;
+  }
+  .hallazgo p:last-child { margin-bottom: 0; }
+  .cita {
+    font-family: Lora, Georgia, serif; font-style: italic;
+    font-size: 1.06rem; color: var(--texto);
+    margin: 0 0 14px; line-height: 1.55;
+  }
+
+  .paso0 {
+    background: var(--tarjeta);
+    border: 1px solid color-mix(in srgb, var(--exito) 40%, var(--borde));
+    border-radius: 18px; padding: 24px 26px; margin-bottom: 16px;
+  }
+  .flujo {
+    display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+    font-size: 0.86rem; font-weight: 600; color: var(--texto-2);
+    background: var(--fondo-2); border: 1px solid var(--borde);
+    border-radius: 12px; padding: 14px 16px; margin: 4px 0 16px;
+  }
+  .flujo svg { width: 14px; height: 14px; color: var(--texto-3); flex: none; }
+  .flujo code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.84em; background: color-mix(in srgb, var(--lila) 15%, transparent);
+    color: var(--texto); padding: 3px 7px; border-radius: 6px;
+  }
+
+  .cierre {
+    margin-top: 60px; padding-top: 32px; border-top: 1px solid var(--borde);
+    color: var(--texto-2);
+  }
+  .cierre h2 { margin-top: 0; }
+
+  .fuentes { margin-top: 56px; font-size: 0.87rem; color: var(--texto-3); }
+  .fuentes h2 { font-size: 1.1rem; margin-bottom: 14px; }
+  .fuentes ul { padding-left: 19px; }
+  .fuentes li { margin-bottom: 6px; }
+
+  @media (max-width: 560px) {
+    header { padding: 48px 0 32px; }
+    .canal, .paso0, .veredicto, .hallazgo { padding: 20px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="luna"></div>
+  <h1>Vender Estudio Lunar sin pasar por WhatsApp</h1>
+  <p class="bajada">Qué canal te da la primera venta más rápido, qué hay que arreglar antes para que funcione, y el dato de tu propia cátedra que vale más que cualquier canal.</p>
+  <p class="fecha">2 de octubre de 2026</p>
+</header>
+
+<div class="veredicto">
+  <p class="et">Lo primero, porque cambia el orden de todo</p>
+  <p><strong>El cuello de botella no es el canal. Es que cada venta pasa por tus manos.</strong> Hoy alguien paga, te manda el comprobante, y vos la activás a mano desde <code>/panel</code>. Mientras eso siga así, cualquier canal nuevo termina igual: en tu WhatsApp, esperándote.</p>
+  <p>Arreglar eso es una sesión de trabajo y es lo que hace posible todo lo demás. Después, el canal más rápido no es Instagram.</p>
+</div>
+
+<h2><i data-lucide="zap"></i>Paso cero: que cobre sin vos</h2>
+<p class="sub">Una sesión de trabajo. Desbloquea todos los canales de abajo.</p>
+
+<div class="paso0">
+  <p>Mercado Pago avisa por webhook cada vez que un pago cambia de estado, y manda una clave secreta en la notificación para que puedas validar que el aviso es real y no alguien haciéndose pasar por MP.</p>
+  <div class="flujo">
+    <span>Paga</span><i data-lucide="chevron-right"></i>
+    <span>MP avisa</span><i data-lucide="chevron-right"></i>
+    <span>función en Vercel</span><i data-lucide="chevron-right"></i>
+    <code>habilitado = true</code><i data-lucide="chevron-right"></i>
+    <span>entra</span>
+  </div>
+  <p>Tu app ya tiene las dos puntas: el link de MP y la tabla <code>perfiles</code> en Supabase con el flag <code>habilitado</code>. Falta el pedazo del medio.</p>
+  <p><strong>Lo que cambia:</strong> dejás un link en cualquier lado y cobra mientras dormís. Y el pago por transferencia al alias sigue siendo manual igual, porque MP no te dice quién transfirió, así que conviene empujar el link para las ventas de desconocidas y guardar la transferencia para las compañeras que ya te escriben.</p>
+  <div class="metas">
+    <span class="meta si"><i data-lucide="check"></i>Una sesión</span>
+    <span class="meta"><i data-lucide="code"></i>Next.js + MP, hay repo de referencia</span>
+  </div>
+</div>
+
+<h2><i data-lucide="trending-up"></i>Los canales, por velocidad real</h2>
+<p class="sub">Ordenados por cuánto tardás en la primera venta, no por cuál suena mejor.</p>
+
+<div class="canal">
+  <div class="canal-top"><span class="orden">1</span><h3>Studocu y uDocz</h3></div>
+  <p class="porque">El más rápido de todos si no tenés audiencia, porque la audiencia ya está ahí buscando.</p>
+  <ul>
+    <li>Studocu tiene una página propia de <strong>Psicoanálisis Freud, UBA</strong> con 924 apuntes, 850 preparaciones de parcial y 844 resúmenes. Eso es tráfico de tu materia exacta, ya indexado en Google.</li>
+    <li>uDocz tiene la colección <strong>Psicoanálisis UBA</strong> y deja subir material sin costo.</li>
+    <li>La jugada: subís <em>un</em> resumen tuyo que valga de verdad, gratis, con el link a la app adentro. No vendés ahí, atraés desde ahí.</li>
+    <li>El documento tiene que sostenerse solo, porque las dos plataformas moderan lo que entra.</li>
+  </ul>
+  <div class="metas">
+    <span class="meta si"><i data-lucide="check"></i>Gratis</span>
+    <span class="meta si"><i data-lucide="clock"></i>Una tarde</span>
+    <span class="meta"><i data-lucide="moon"></i>Trabaja sin vos</span>
+  </div>
+</div>
+
+<div class="canal">
+  <div class="canal-top"><span class="orden">2</span><h3>Un QR pegado en la facultad</h3></div>
+  <p class="porque">Cero plataforma, cero algoritmo, cero moderación. La audiencia más calificada que vas a conseguir.</p>
+  <ul>
+    <li>Pasillos de Independencia 3065, la fotocopiadora, el centro de estudiantes, la puerta del aula de Prácticos.</li>
+    <li>Todos los que lo ven cursan lo que vendés. Ninguna plataforma te da eso.</li>
+    <li>El QR va directo a la muestra gratis, que ya está armada en tres niveles. El primer tema lo prueba sin cuenta.</li>
+  </ul>
+  <div class="metas">
+    <span class="meta si"><i data-lucide="check"></i>Lo que cuesta imprimir</span>
+    <span class="meta si"><i data-lucide="clock"></i>Esta semana</span>
+  </div>
+</div>
+
+<div class="canal">
+  <div class="canal-top"><span class="orden">3</span><h3>EDI Psicología UBA</h3></div>
+  <p class="porque">Una agrupación activa que ya reparte apuntes digitales a toda la facultad.</p>
+  <ul>
+    <li><a href="https://edipsicouba.net.ar/">edipsicouba.net.ar</a> está vivo, con contenido de 2026, y distribuye material por Linktree.</li>
+    <li>Tienen sección de contacto y una beca de apuntes, así que hay por dónde proponerles.</li>
+    <li>Depende de que te contesten, y eso no lo controlás. Por eso va tercero y no primero.</li>
+  </ul>
+  <div class="metas">
+    <span class="meta si"><i data-lucide="users"></i>Alcance grande de una</span>
+    <span class="meta ojo"><i data-lucide="hourglass"></i>Esperás respuesta</span>
+  </div>
+</div>
+
+<div class="canal">
+  <div class="canal-top"><span class="orden">4</span><h3>Instagram @estudiolunar</h3></div>
+  <p class="porque">El activo que te queda para siempre y el más lento para la primera venta.</p>
+  <ul>
+    <li>Necesita contenido antes de vender nada, y eso toma semanas.</li>
+    <li>Vale arrancarlo igual, en paralelo, con la expectativa correcta: construye marca, no cierra la venta de octubre.</li>
+    <li>El handle seguía libre la última vez que miramos. Agarralo vos antes de que lo tome alguien.</li>
+  </ul>
+  <div class="metas">
+    <span class="meta si"><i data-lucide="infinity"></i>Te queda</span>
+    <span class="meta ojo"><i data-lucide="hourglass"></i>Semanas</span>
+  </div>
+</div>
+
+<div class="canal descartado">
+  <div class="canal-top"><span class="orden"><i data-lucide="x" style="width:22px;height:22px"></i></span><h3>Mercado Libre, que yo descartaría</h3></div>
+  <p class="porque">Suena ideal porque es donde los argentinos compran, y ahí está la trampa.</p>
+  <ul>
+    <li>ML <strong>prohíbe</strong> los productos digitales y las membresías de acceso a sitios y apps.</li>
+    <li>Hay una excepción para titulares de derechos, y vos lo sos de tu propia app. Pero la moderación es automática: te bajan la publicación antes de que nadie lea tu descargo.</li>
+    <li>Las publicaciones de apuntes que ves ahí son papel impreso, que es otra categoría.</li>
+  </ul>
+  <div class="metas">
+    <span class="meta ojo"><i data-lucide="alert-triangle"></i>Te bajan la publicación</span>
+  </div>
+</div>
+
+<h2><i data-lucide="target"></i>El hallazgo que vale más que el canal</h2>
+<p class="sub">Apareció buscando tu cátedra, y es lo mejor que encontré hoy.</p>
+
+<div class="hallazgo">
+  <p class="cita">La Cátedra Pino publica un pozo de cuarenta preguntas una semana antes del parcial, y cuatro de esas cuarenta son las que entran.</p>
+  <p>Eso cambia qué estás vendiendo. <strong>Mientras el pozo de cuarenta esté en la app, el título de todo lo que publiques es ese.</strong> No es una app para estudiar Freud, que no le dice nada a nadie. Es las cuarenta preguntas de Pino con corrección automática, que es exactamente lo que alguien tipea en Google a una semana del parcial.</p>
+  <p>Y te da el calendario: la semana que la cátedra suelta el pozo es la semana en que se vende todo. Todo lo de arriba tiene que estar funcionando antes de ese día.</p>
+  <p><strong>Lo que hay que chequear:</strong> si las preguntas que ya tiene la app se corresponden con el pozo de la cátedra. Mi nota dice que los temas del final los propuse yo de conocimiento general, sin cruzarlos con el programa real. Si el pozo de cuarenta no está adentro, cargarlo es la tarea de mayor retorno del proyecto.</p>
+</div>
+
+<div class="cierre">
+  <h2><i data-lucide="list-checks"></i>El orden que te propongo</h2>
+  <p><strong>Uno.</strong> La activación automática, para que ningún canal vuelva a terminar en tu WhatsApp.</p>
+  <p><strong>Dos.</strong> Verificar el pozo de cuarenta preguntas de Pino, y cargarlo si falta.</p>
+  <p><strong>Tres.</strong> El resumen gratis en Studocu y uDocz, con el link adentro.</p>
+  <p><strong>Cuatro.</strong> El QR en la facu, apuntado a la semana del pozo.</p>
+  <p style="margin-top:22px;color:var(--texto-3)">Instagram y EDI corren en paralelo, sin apurarlos. Ninguno de los dos te trae la venta de octubre.</p>
+</div>
+
+<div class="fuentes">
+  <h2>De dónde salió cada dato</h2>
+  <ul>
+    <li><a href="https://www.studocu.com/es-ar/course/universidad-de-buenos-aires/psicoanalisis-freud/2976854">Studocu, Psicoanálisis Freud UBA</a>, los números de apuntes y resúmenes</li>
+    <li><a href="https://www.udocz.com/collection/446890/psicoanalisis-uba">uDocz, colección Psicoanálisis UBA</a> y <a href="https://ayuda.udocz.com/es/articles/6773381-como-puedo-subir-mis-apuntes">cómo subir apuntes</a></li>
+    <li><a href="https://edipsicouba.net.ar/">EDI Psicología UBA</a>, actividad 2026 y apuntes digitales</li>
+    <li><a href="https://www.mercadolibre.com.ar/ayuda/Cuentas-y-contenido-descargabl_1079">Mercado Libre, cuentas y contenido digital</a>, la prohibición y la excepción</li>
+    <li><a href="https://www.mercadopago.com.ar/developers/es/docs/checkout-api-orders/notifications">Mercado Pago, notificaciones de pago</a> y <a href="https://github.com/goncy/next-mercadopago">el repo de referencia de goncy con Next.js</a></li>
+    <li><a href="https://gbgterapiaonline.com.ar/psicoanalisis-freud-uba/">Formato de parciales por cátedra</a>, de donde sale el pozo de cuarenta de Pino</li>
+  </ul>
+</div>
+
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

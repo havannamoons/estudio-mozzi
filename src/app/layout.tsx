@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://estudio-next-swart.vercel.app"),
   title: "Estudio Lunar · Psicoanálisis Freud (Parcial + Final)",
   description:
-    "Teoría, quiz, simulacro y examen oral para Psicoanálisis Freud · Cát. Pino (ex Mozzi) UBA. 19 temas y +120 preguntas, del parcial al final, con el progreso guardado.",
+    "Teoría, quiz, simulacro y examen oral para Psicoanálisis Freud (Psicología, UBA). 19 temas y +120 preguntas, del parcial al final, con el progreso guardado.",
   applicationName: "Estudio Lunar",
   authors: [{ name: "Estudio Lunar" }],
   keywords: [
@@ -48,8 +48,6 @@ export const metadata: Metadata = {
     "Freud",
     "UBA",
     "Psicología",
-    "Cátedra Pino",
-    "Mozzi",
     "parcial",
     "final",
     "resumen",
@@ -58,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Estudio Lunar · Psicoanálisis Freud",
     description:
-      "Teoría, quiz, simulacro y oral. 19 temas y +120 preguntas, del parcial al final. Cát. Pino (ex Mozzi) UBA.",
+      "Teoría, quiz, simulacro y oral. 19 temas y +120 preguntas, del parcial al final. Psicología, UBA.",
     type: "website",
     locale: "es_AR",
     siteName: "Estudio Lunar",

@@ -16,7 +16,7 @@ export async function generateMetadata({
   const materia = getMateria(slug)
   if (!materia) return {}
   return {
-    title: `${materia.nombreLargo} · Estudio Lunar`,
+    title: `Estudio Lunar · ${materia.nombre}`,
     description: materia.descripcion,
   }
 }
