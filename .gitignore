@@ -49,3 +49,6 @@ dev-server.log
 dev.log
 *.bak
 AUDITORIA.html
+
+# Video y capturas de demo: pesan y se regeneran con el script
+video/
