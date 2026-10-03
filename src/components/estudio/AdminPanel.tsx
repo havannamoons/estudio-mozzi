@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   ShieldX,
   Users,
+  Wallet,
 } from "lucide-react"
 import { useAuth } from "@/lib/hooks/useAuth"
 import { supabase } from "@/lib/supabase"
@@ -20,6 +21,24 @@ interface Perfil {
   email: string | null
   habilitado: boolean
   creado_en: string
+}
+
+/**
+ * Una compra confirmada por Mercado Pago. La escribe el webhook, nunca el
+ * navegador. Es lo único que dice de verdad QUIÉN pagó: la lista de
+ * "pendientes" mezcla compradoras con gente que solo creó la cuenta.
+ */
+interface Venta {
+  id: string
+  email: string | null
+  monto: number | null
+  metodo: string | null
+  creado_en: string
+}
+
+function plata(n: number | null): string {
+  if (n === null || n === undefined) return "—"
+  return "$" + new Intl.NumberFormat("es-AR").format(n)
 }
 
 function fechaCorta(iso: string): string {
@@ -39,6 +58,7 @@ export function AdminPanel() {
   const esAdmin = auth.email === ADMIN_EMAIL
 
   const [perfiles, setPerfiles] = useState<Perfil[] | null>(null)
+  const [ventas, setVentas] = useState<Venta[] | null>(null)
   const [cargandoLista, setCargandoLista] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [accionando, setAccionando] = useState<string | null>(null)
@@ -52,6 +72,17 @@ export function AdminPanel() {
       .order("creado_en", { ascending: false })
     if (error) setError(error.message)
     else setPerfiles((data ?? []) as Perfil[])
+
+    /* Las ventas se piden aparte y su error no se muestra arriba: si la
+       tabla todavía no existe (falta correr sql/ventas.sql), el panel tiene
+       que seguir funcionando igual para aprobar a mano. */
+    const { data: v, error: errorVentas } = await supabase
+      .from("ventas")
+      .select("id, email, monto, metodo, creado_en")
+      .order("creado_en", { ascending: false })
+      .limit(50)
+    setVentas(errorVentas ? null : ((v ?? []) as Venta[]))
+
     setCargandoLista(false)
   }, [])
 
@@ -151,6 +182,7 @@ export function AdminPanel() {
               Panel de aprobaciones
             </h1>
             <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+              {ventas && ventas.length > 0 ? `${ventas.length} compras · ` : ""}
               {pendientes.length} esperando · {activadas.length} activas
             </p>
           </div>
@@ -180,6 +212,57 @@ export function AdminPanel() {
           {error}
         </div>
       )}
+
+      {/* Ventas: lo primero, porque es lo que de verdad hay que mirar */}
+      <section className="glass-strong mb-4 rounded-2xl p-4 sm:p-5">
+        <h2 className="mb-3 flex items-center gap-2 font-serif text-base font-semibold text-zinc-900 dark:text-zinc-50">
+          <Wallet className="h-4 w-4 text-emerald-500" /> Compras cobradas
+        </h2>
+
+        {ventas === null ? (
+          /* La tabla todavía no existe: falta correr sql/ventas.sql en
+             Supabase. Se dice qué hacer en vez de mostrar un error pelado. */
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Todavía no está creada la tabla de ventas. Pegá el contenido de{" "}
+            <code className="rounded bg-black/5 px-1 py-0.5 text-[12px] dark:bg-white/10">
+              sql/ventas.sql
+            </code>{" "}
+            en Supabase → SQL Editor y actualizá esta página.
+          </p>
+        ) : ventas.length === 0 ? (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Todavía no entró ninguna compra por la app. Las que cobres por
+            transferencia no aparecen acá: esas las activás vos abajo.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {ventas.map((v) => (
+              <li
+                key={v.id}
+                className="glass flex items-center justify-between gap-3 rounded-xl p-3"
+              >
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
+                    {v.email ?? "(sin email)"}
+                  </div>
+                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                    {fechaCorta(v.creado_en)}
+                    {v.metodo ? ` · ${v.metodo}` : ""}
+                  </div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <div className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                    {plata(v.monto)}
+                  </div>
+                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                    ya activada
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {/* Pendientes */}
       <section className="glass-strong mb-4 rounded-2xl p-4 sm:p-5">

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { firmaValida, traerPago } from "@/lib/server/mercadopago"
-import { habilitarPerfil } from "@/lib/server/supabase-admin"
+import { habilitarPerfil, registrarVenta } from "@/lib/server/supabase-admin"
 
 /**
  * EL AVISO DE MERCADO PAGO. Acá se habilita a quien pagó, sin que nadie mire.
@@ -111,7 +111,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: r.error }, { status: 500 })
   }
 
-  console.log(`[pago] ${pago.id} aprobado, habilitado ${userId}`)
+  /* Queda anotada la compra para que el panel pueda decir quién compró.
+     Va después de habilitar y nunca puede voltear el webhook: si esto
+     falla, la persona ya tiene su acceso igual. */
+  await registrarVenta({
+    perfilId: userId,
+    email: r.email ?? pago.payer_email,
+    monto: pago.transaction_amount,
+    metodo: pago.metodo,
+    pagoId: String(pago.id),
+  })
+
+  console.log(
+    `[pago] ${pago.id} aprobado (${pago.metodo}), habilitado ${r.email ?? userId}`,
+  )
   return NextResponse.json({ ok: true }, { status: 200 })
 }
 

@@ -47,7 +47,7 @@ export function getSupabaseAdmin() {
  */
 export async function habilitarPerfil(
   userId: string,
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<{ ok: boolean; email?: string | null; error?: string }> {
   const admin = getSupabaseAdmin()
   if (!admin) return { ok: false, error: "falta SUPABASE_SERVICE_ROLE_KEY" }
 
@@ -67,5 +67,46 @@ export async function habilitarPerfil(
     return { ok: false, error: `no existe perfil con id ${userId}` }
   }
 
-  return { ok: true }
+  /* Se devuelve el mail de la APP (el de Google con el que entró), no el de
+     Mercado Pago: pueden ser distintos, y el que sirve para encontrarla en
+     el panel es este. */
+  return { ok: true, email: data[0].email ?? null }
+}
+
+/**
+ * Deja anotada la compra en la tabla `ventas`.
+ *
+ * Esto es lo que hace que el panel pueda decir QUIÉN compró. Hasta que
+ * existió, la lista de "pendientes" mezclaba compradoras con curiosas que
+ * solo habían creado la cuenta, así que no servía para saberlo.
+ *
+ * Si falla, NO se corta el webhook ni se devuelve error: lo importante es
+ * que la persona haya quedado habilitada. Perder el registro es molesto;
+ * dejarla pagando sin acceso es el peor caso del negocio.
+ *
+ * No duplica: `pago_id` es UNIQUE en la tabla, así que el reintento de
+ * Mercado Pago choca contra esa restricción y no anota dos veces.
+ */
+export async function registrarVenta(venta: {
+  perfilId: string
+  email: string | null
+  monto: number | null
+  metodo: string
+  pagoId: string
+}): Promise<void> {
+  const admin = getSupabaseAdmin()
+  if (!admin) return
+
+  const { error } = await admin.from("ventas").insert({
+    perfil_id: venta.perfilId,
+    email: venta.email,
+    monto: venta.monto,
+    metodo: venta.metodo,
+    pago_id: venta.pagoId,
+  })
+
+  /* 23505 = clave duplicada. Es el reintento de MP, no un problema. */
+  if (error && error.code !== "23505") {
+    console.error("[pago] no pude anotar la venta:", error.message)
+  }
 }

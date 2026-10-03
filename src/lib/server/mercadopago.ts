@@ -108,6 +108,31 @@ export type PagoMP = {
   external_reference: string | null
   transaction_amount: number | null
   payer_email: string | null
+  /** Cómo pagó, ya en castellano y listo para mostrar. */
+  metodo: string
+}
+
+/**
+ * MP devuelve el medio de pago en inglés y en clave. Se traduce acá para
+ * que el panel muestre algo legible sin tener que interpretarlo cada vez.
+ */
+function nombreDelMetodo(tipo: string | null | undefined): string {
+  switch (tipo) {
+    case "credit_card":
+      return "Tarjeta de crédito"
+    case "debit_card":
+      return "Tarjeta de débito"
+    case "prepaid_card":
+      return "Tarjeta prepaga"
+    case "ticket":
+      return "Efectivo (Rapipago o Pago Fácil)"
+    case "bank_transfer":
+      return "Transferencia"
+    case "account_money":
+      return "Dinero en Mercado Pago"
+    default:
+      return tipo ?? "Sin especificar"
+  }
 }
 
 /** Trae el pago de la API de MP. El aviso solo trae el id, nunca el estado. */
@@ -132,6 +157,7 @@ export async function traerPago(
     external_reference?: string | null
     transaction_amount?: number | null
     payer?: { email?: string | null }
+    payment_type_id?: string | null
   }
 
   return {
@@ -140,6 +166,7 @@ export async function traerPago(
     external_reference: p.external_reference ?? null,
     transaction_amount: p.transaction_amount ?? null,
     payer_email: p.payer?.email ?? null,
+    metodo: nombreDelMetodo(p.payment_type_id),
   }
 }
 
