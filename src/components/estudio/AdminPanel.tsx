@@ -1,20 +1,22 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import {
-  Check,
-  Clock,
-  LogOut,
-  RefreshCw,
-  ShieldCheck,
-  ShieldX,
-  Users,
-  Wallet,
-} from "lucide-react"
+import { Check, Clock, LogOut, Moon, RefreshCw, Wallet } from "lucide-react"
 import { useAuth } from "@/lib/hooks/useAuth"
 import { supabase } from "@/lib/supabase"
 import { ADMIN_EMAIL } from "@/lib/constants"
-import { BlobsBackground } from "./BlobsBackground"
+
+/**
+ * EL PANEL DE RO.
+ *
+ * Es la única pantalla de la app que no ve nadie más que ella, y aun así
+ * está con la marca puesta: abrirla veinte veces por día en medio de una
+ * venta y encontrarse con algo que parece de otra app cansa.
+ *
+ * Todo cuelga de `.lunar`, que es donde viven las variables de color de la
+ * marca (--lila, --crema, --noche…). Si algo queda afuera de ese div, sus
+ * colores no resuelven y se dibuja transparente.
+ */
 
 interface Perfil {
   id: string
@@ -26,7 +28,7 @@ interface Perfil {
 /**
  * Una compra confirmada por Mercado Pago. La escribe el webhook, nunca el
  * navegador. Es lo único que dice de verdad QUIÉN pagó: la lista de
- * "pendientes" mezcla compradoras con gente que solo creó la cuenta.
+ * "esperando" mezcla compradoras con gente que solo creó la cuenta.
  */
 interface Venta {
   id: string
@@ -34,11 +36,6 @@ interface Venta {
   monto: number | null
   metodo: string | null
   creado_en: string
-}
-
-function plata(n: number | null): string {
-  if (n === null || n === undefined) return "—"
-  return "$" + new Intl.NumberFormat("es-AR").format(n)
 }
 
 function fechaCorta(iso: string): string {
@@ -51,6 +48,11 @@ function fechaCorta(iso: string): string {
   } catch {
     return iso
   }
+}
+
+function plata(n: number | null): string {
+  if (n === null || n === undefined) return "—"
+  return "$" + new Intl.NumberFormat("es-AR").format(n)
 }
 
 export function AdminPanel() {
@@ -73,9 +75,9 @@ export function AdminPanel() {
     if (error) setError(error.message)
     else setPerfiles((data ?? []) as Perfil[])
 
-    /* Las ventas se piden aparte y su error no se muestra arriba: si la
-       tabla todavía no existe (falta correr sql/ventas.sql), el panel tiene
-       que seguir funcionando igual para aprobar a mano. */
+    /* Las ventas se piden aparte y su error no se muestra arriba: si la tabla
+       todavía no existe (falta correr sql/ventas.sql), el panel tiene que
+       seguir funcionando igual para dar acceso a mano. */
     const { data: v, error: errorVentas } = await supabase
       .from("ventas")
       .select("id, email, monto, metodo, creado_en")
@@ -106,252 +108,273 @@ export function AdminPanel() {
     setAccionando(null)
   }
 
-  // ---- Estados de carga / acceso ----
+  // ---- Mientras resuelve la sesión ----
   if (auth.cargando) {
-    return <Contenedor><Aviso>Cargando…</Aviso></Contenedor>
+    return (
+      <Hoja>
+        <Tarjeta centrada>
+          <Luna />
+          <p className="text-[15px] font-medium text-[var(--noche)]/55">
+            Un segundo…
+          </p>
+        </Tarjeta>
+      </Hoja>
+    )
   }
 
+  // ---- Sin sesión ----
   if (!auth.session) {
     return (
-      <Contenedor>
-        <div className="glass-strong animate-scale-in rounded-3xl p-6 text-center sm:p-8">
-          <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/12 text-emerald-600 dark:text-emerald-400">
-            <ShieldCheck className="h-7 w-7" />
-          </div>
-          <h1 className="font-serif text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Panel de vendedora
+      <Hoja>
+        <Tarjeta centrada>
+          <Luna />
+          <h1 className="mb-2 font-serif text-[26px] leading-tight font-semibold text-[var(--noche)]">
+            Tu panel
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-            Ingresá con tu cuenta para activar compradoras.
+          <p className="mb-7 text-[15px] leading-relaxed font-medium text-[var(--noche)]/60">
+            Entrá con tu cuenta para ver quién compró y darles acceso.
           </p>
           <button
             onClick={auth.loginConGoogle}
-            className="btn-press mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-emerald-900/20 transition-all hover:from-emerald-400 hover:to-emerald-500"
+            className="btn-lunar btn-noche w-full !py-4"
           >
             Continuar con Google
           </button>
-        </div>
-      </Contenedor>
+        </Tarjeta>
+      </Hoja>
     )
   }
 
+  // ---- Entró con otra cuenta ----
   if (!esAdmin) {
     return (
-      <Contenedor>
-        <div className="glass-strong animate-scale-in rounded-3xl p-6 text-center sm:p-8">
-          <div className="mx-auto mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/12 text-red-600 dark:text-red-400">
-            <ShieldX className="h-7 w-7" />
-          </div>
-          <h1 className="font-serif text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-            No autorizada
+      <Hoja>
+        <Tarjeta centrada>
+          <Luna />
+          <h1 className="mb-2 font-serif text-[26px] leading-tight font-semibold text-[var(--noche)]">
+            Esta no es tu cuenta
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-            Esta sección es solo para la administradora. Iniciaste sesión como{" "}
-            <strong className="text-zinc-800 dark:text-zinc-100">{auth.email}</strong>,
-            y el panel espera <strong className="text-zinc-800 dark:text-zinc-100">{ADMIN_EMAIL}</strong>.
+          <p className="mb-2 text-[15px] leading-relaxed font-medium text-[var(--noche)]/60">
+            Entraste como{" "}
+            <strong className="font-bold text-[var(--noche)]">{auth.email}</strong>
+            , y el panel es de{" "}
+            <strong className="font-bold text-[var(--noche)]">{ADMIN_EMAIL}</strong>.
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-            Cerrá sesión y volvé a entrar eligiendo esa cuenta. Si Chrome entra
-            solo con otra, elegí «Usar otra cuenta» en la pantalla de Google.
+          <p className="mb-7 text-[13.5px] leading-relaxed font-medium text-[var(--noche)]/45">
+            Salí y volvé a entrar eligiendo esa cuenta. Si Chrome entra solo con
+            otra, tocá «Usar otra cuenta» en la pantalla de Google.
           </p>
           <button
             onClick={auth.cerrarSesion}
-            className="btn-press mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+            className="btn-lunar btn-suave w-full !py-3"
           >
-            <LogOut className="h-4 w-4" /> Cerrar sesión
+            <LogOut className="h-4 w-4" />
+            Salir
           </button>
-        </div>
-      </Contenedor>
+        </Tarjeta>
+      </Hoja>
     )
   }
 
-  // ---- Panel admin ----
+  // ---- El panel ----
   const pendientes = (perfiles ?? []).filter((p) => !p.habilitado)
-  const activadas = (perfiles ?? []).filter((p) => p.habilitado)
+  const conAcceso = (perfiles ?? []).filter((p) => p.habilitado)
 
   return (
-    <Contenedor ancho>
-      {/* Header */}
-      <div className="glass-strong mb-4 flex items-center justify-between gap-3 rounded-2xl p-4 sm:p-5">
+    <Hoja ancho>
+      {/* Encabezado */}
+      <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl bg-white/55 p-4 backdrop-blur sm:p-5">
         <div className="flex items-center gap-3">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/12 text-emerald-600 dark:text-emerald-400">
-            <Users className="h-5 w-5" />
+          <div
+            className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-2xl"
+            style={{
+              background:
+                "radial-gradient(circle at 33% 30%, var(--lila-claro), var(--lila))",
+            }}
+          >
+            <Moon className="h-5 w-5 text-white" />
           </div>
-          <div>
-            <h1 className="font-serif text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-              Panel de aprobaciones
+          <div className="min-w-0">
+            <h1 className="font-serif text-[19px] leading-tight font-semibold text-[var(--noche)]">
+              Tu panel
             </h1>
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-              {ventas && ventas.length > 0 ? `${ventas.length} compras · ` : ""}
-              {pendientes.length} esperando · {activadas.length} activas
+            <p className="text-[12px] font-medium text-[var(--noche)]/45">
+              {ventas && ventas.length > 0
+                ? `${ventas.length} ${ventas.length === 1 ? "compra" : "compras"} · `
+                : ""}
+              {pendientes.length} esperando · {conAcceso.length} con acceso
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-none items-center gap-1.5">
           <button
             onClick={cargar}
             disabled={cargandoLista}
-            className="btn-press glass inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-zinc-600 hover:bg-white/10 disabled:opacity-40 dark:text-zinc-300"
+            className="btn-lunar btn-fantasma !px-3 !py-2 text-[13px] disabled:opacity-40"
             aria-label="Actualizar"
           >
-            <RefreshCw className={cargandoLista ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} />
+            <RefreshCw
+              className={cargandoLista ? "h-4 w-4 animate-spin" : "h-4 w-4"}
+            />
             <span className="hidden sm:inline">Actualizar</span>
           </button>
           <button
             onClick={auth.cerrarSesion}
-            className="btn-press glass inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-zinc-600 hover:bg-white/10 dark:text-zinc-300"
+            className="btn-lunar btn-fantasma !px-3 !py-2 text-[13px]"
           >
-            <LogOut className="h-3.5 w-3.5" />
+            <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Salir</span>
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="mb-4 rounded-xl border-l-4 border-l-red-500/60 bg-red-500/5 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+        <div
+          className="mb-4 rounded-2xl px-4 py-3 text-[14px] font-medium"
+          style={{
+            background: "color-mix(in srgb, #ef6f8b 12%, transparent)",
+            color: "#9c2c46",
+          }}
+        >
           {error}
         </div>
       )}
 
-      {/* Ventas: lo primero, porque es lo que de verdad hay que mirar */}
-      <section className="glass-strong mb-4 rounded-2xl p-4 sm:p-5">
-        <h2 className="mb-3 flex items-center gap-2 font-serif text-base font-semibold text-zinc-900 dark:text-zinc-50">
-          <Wallet className="h-4 w-4 text-emerald-500" /> Compras cobradas
-        </h2>
-
+      {/* Compras: primero, porque es lo único que hay que mirar de verdad */}
+      <Seccion icono={<Wallet className="h-4 w-4" />} titulo="Compras cobradas">
         {ventas === null ? (
-          /* La tabla todavía no existe: falta correr sql/ventas.sql en
-             Supabase. Se dice qué hacer en vez de mostrar un error pelado. */
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <Vacio>
             Todavía no está creada la tabla de ventas. Pegá el contenido de{" "}
-            <code className="rounded bg-black/5 px-1 py-0.5 text-[12px] dark:bg-white/10">
+            <code className="rounded bg-[var(--lila-palido)] px-1.5 py-0.5 text-[12.5px] font-semibold text-[var(--lila)]">
               sql/ventas.sql
             </code>{" "}
-            en Supabase → SQL Editor y actualizá esta página.
-          </p>
+            en Supabase y actualizá esta página.
+          </Vacio>
         ) : ventas.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <Vacio>
             Todavía no entró ninguna compra por la app. Las que cobres por
-            transferencia no aparecen acá: esas las activás vos abajo.
-          </p>
+            transferencia no caen acá: a esas les das acceso vos, abajo.
+          </Vacio>
         ) : (
           <ul className="space-y-2">
             {ventas.map((v) => (
-              <li
-                key={v.id}
-                className="glass flex items-center justify-between gap-3 rounded-xl p-3"
-              >
+              <Fila key={v.id}>
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                    {v.email ?? "(sin email)"}
+                  <div className="truncate text-[15px] font-semibold text-[var(--noche)]">
+                    {v.email ?? "(sin mail)"}
                   </div>
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                  <div className="text-[12px] font-medium text-[var(--noche)]/45">
                     {fechaCorta(v.creado_en)}
                     {v.metodo ? ` · ${v.metodo}` : ""}
                   </div>
                 </div>
-                <div className="shrink-0 text-right">
-                  <div className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                <div className="flex-none text-right">
+                  <div className="text-[15px] font-extrabold text-[var(--lila)]">
                     {plata(v.monto)}
                   </div>
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                    ya activada
+                  <div className="text-[12px] font-medium text-[var(--noche)]/45">
+                    ya entró
                   </div>
                 </div>
-              </li>
+              </Fila>
             ))}
           </ul>
         )}
-      </section>
+      </Seccion>
 
-      {/* Pendientes */}
-      <section className="glass-strong mb-4 rounded-2xl p-4 sm:p-5">
-        <h2 className="mb-3 flex items-center gap-2 font-serif text-base font-semibold text-zinc-900 dark:text-zinc-50">
-          <Clock className="h-4 w-4 text-emerald-500" /> Esperando aprobación
-        </h2>
+      {/* Esperando */}
+      <Seccion
+        icono={<Clock className="h-4 w-4" />}
+        titulo="Esperando que les des acceso"
+      >
         {perfiles === null ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Cargando lista…</p>
+          <Vacio>Buscando…</Vacio>
         ) : pendientes.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            No hay nadie esperando. 🎉
-          </p>
+          <Vacio>No hay nadie esperando. 🌙</Vacio>
         ) : (
           <ul className="space-y-2">
             {pendientes.map((p) => (
-              <li
-                key={p.id}
-                className="glass flex items-center justify-between gap-3 rounded-xl p-3"
-              >
+              <Fila key={p.id}>
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                    {p.email ?? "(sin email)"}
+                  <div className="truncate text-[15px] font-semibold text-[var(--noche)]">
+                    {p.email ?? "(sin mail)"}
                   </div>
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                    Se registró el {fechaCorta(p.creado_en)}
+                  <div className="text-[12px] font-medium text-[var(--noche)]/45">
+                    Se hizo la cuenta el {fechaCorta(p.creado_en)}
                   </div>
                 </div>
                 <button
                   onClick={() => cambiarAcceso(p.id, true)}
                   disabled={accionando === p.id}
-                  className="btn-press inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-emerald-900/20 transition-all hover:from-emerald-400 hover:to-emerald-500 disabled:opacity-50"
+                  className="btn-lunar btn-noche flex-none !px-4 !py-2.5 text-[14px] disabled:opacity-50"
                 >
                   <Check className="h-4 w-4" />
-                  {accionando === p.id ? "Activando…" : "Activar"}
+                  {accionando === p.id ? "Dándole…" : "Darle acceso"}
                 </button>
-              </li>
+              </Fila>
             ))}
           </ul>
         )}
-      </section>
+      </Seccion>
 
-      {/* Activadas */}
-      <section className="glass-strong rounded-2xl p-4 sm:p-5">
-        <h2 className="mb-3 flex items-center gap-2 font-serif text-base font-semibold text-zinc-900 dark:text-zinc-50">
-          <ShieldCheck className="h-4 w-4 text-emerald-500" /> Activadas
-        </h2>
-        {activadas.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Todavía ninguna.</p>
+      {/* Con acceso */}
+      <Seccion icono={<Moon className="h-4 w-4" />} titulo="Ya tienen acceso">
+        {conAcceso.length === 0 ? (
+          <Vacio>Todavía ninguna.</Vacio>
         ) : (
           <ul className="space-y-2">
-            {activadas.map((p) => (
-              <li
-                key={p.id}
-                className="glass flex items-center justify-between gap-3 rounded-xl p-3"
-              >
+            {conAcceso.map((p) => (
+              <Fila key={p.id}>
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
-                      {p.email ?? "(sin email)"}
+                  <div className="flex items-center gap-2">
+                    <span className="truncate text-[15px] font-semibold text-[var(--noche)]">
+                      {p.email ?? "(sin mail)"}
                     </span>
                     {p.email === ADMIN_EMAIL && (
-                      <span className="shrink-0 rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-[9px] font-semibold tracking-wide text-emerald-700 uppercase dark:text-emerald-300">
+                      <span className="flex-none rounded-full bg-[var(--lila-palido)] px-2 py-0.5 text-[11px] font-bold text-[var(--lila)]">
                         vos
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                    Activa
+                  <div className="text-[12px] font-medium text-[var(--noche)]/45">
+                    Tiene todo
                   </div>
                 </div>
                 {p.email !== ADMIN_EMAIL && (
                   <button
                     onClick={() => cambiarAcceso(p.id, false)}
                     disabled={accionando === p.id}
-                    className="btn-press inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-zinc-500 hover:text-red-600 disabled:opacity-50 dark:text-zinc-400 dark:hover:text-red-400"
+                    className="btn-lunar btn-fantasma flex-none !px-3 !py-2 text-[13px] text-[var(--noche)]/40 disabled:opacity-50"
                   >
-                    {accionando === p.id ? "…" : "Quitar acceso"}
+                    {accionando === p.id ? "…" : "Sacarle el acceso"}
                   </button>
                 )}
-              </li>
+              </Fila>
             ))}
           </ul>
         )}
-      </section>
-    </Contenedor>
+      </Seccion>
+    </Hoja>
   )
 }
 
-function Contenedor({
+/* ---------- Piezas ---------- */
+
+/** La luna de la marca. Es el único adorno del panel y alcanza. */
+function Luna() {
+  return (
+    <div
+      className="mx-auto mb-6 h-12 w-12 rounded-full"
+      style={{
+        background:
+          "radial-gradient(circle at 33% 30%, var(--lila-claro), var(--lila))",
+        boxShadow: "0 0 36px -6px var(--lila)",
+      }}
+    />
+  )
+}
+
+function Hoja({
   children,
   ancho,
 }: {
@@ -359,25 +382,69 @@ function Contenedor({
   ancho?: boolean
 }) {
   return (
-    <>
-      <BlobsBackground />
+    <div className="lunar min-h-[100svh]" style={{ background: "var(--crema)" }}>
       <main
         className={
           ancho
-            ? "mx-auto max-w-2xl px-4 py-6 sm:py-8"
+            ? "mx-auto max-w-2xl px-4 py-6 sm:py-9"
             : "mx-auto flex min-h-[100svh] max-w-md flex-col justify-center px-4 py-8"
         }
       >
         {children}
       </main>
-    </>
+    </div>
   )
 }
 
-function Aviso({ children }: { children: React.ReactNode }) {
+function Tarjeta({
+  children,
+  centrada,
+}: {
+  children: React.ReactNode
+  centrada?: boolean
+}) {
   return (
-    <div className="glass-strong rounded-3xl p-10 text-center text-sm text-zinc-500 dark:text-zinc-400">
+    <div
+      className={`rounded-3xl bg-white/65 p-7 backdrop-blur sm:p-9 ${centrada ? "text-center" : ""}`}
+      style={{ boxShadow: "0 18px 48px -32px var(--noche)" }}
+    >
       {children}
     </div>
+  )
+}
+
+function Seccion({
+  icono,
+  titulo,
+  children,
+}: {
+  icono: React.ReactNode
+  titulo: string
+  children: React.ReactNode
+}) {
+  return (
+    <section className="mb-4 rounded-2xl bg-white/55 p-4 backdrop-blur sm:p-5">
+      <h2 className="mb-3 flex items-center gap-2 font-serif text-[17px] font-semibold text-[var(--noche)]">
+        <span className="text-[var(--lila)]">{icono}</span>
+        {titulo}
+      </h2>
+      {children}
+    </section>
+  )
+}
+
+function Fila({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--crema)]/70 p-3.5">
+      {children}
+    </li>
+  )
+}
+
+function Vacio({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[14.5px] leading-relaxed font-medium text-[var(--noche)]/50">
+      {children}
+    </p>
   )
 }
